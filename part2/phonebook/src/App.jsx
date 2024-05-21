@@ -4,6 +4,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import axios from 'axios'
+import contactService from './services/contacts'
 
 function App() {
  const [persons, setPersons] = useState([])
@@ -11,13 +12,17 @@ function App() {
  const [newNumber, setNewNumber] = useState('')
  const [search, setSearch] = useState('')
 
+
+
+ const deletePersonOf = (id) => {
+  console.log(`importance of ${id}`)
+ }
  useEffect(() => {
-  console.log('effect')
-  axios
-   .get('http://localhost:3001/persons')
-   .then(response => {
+  contactService
+   .getAll()
+   .then(initialContacts => {
     console.log('completed')
-    setPersons(response.data)
+    setPersons(initialContacts)
   }) 
  }, [])
 
@@ -28,7 +33,7 @@ function App() {
 
  const addContact = (event) => {
   event.preventDefault()
-    const contactObject = {  name: newName, number: newNumber} 
+    const contactObject = {  name: newName, number: newNumber, id: persons.length + 1} 
     console.log(contactObject)
 
  
@@ -45,6 +50,9 @@ persons.forEach(person => {
   }
 });
   if(!found && contactObject.name !== '' && contactObject.number !== ''){
+    contactService
+    .create(contactObject)
+    .then()
     setPersons([...persons,contactObject]);
     setNewName('');
     setNewNumber('');
@@ -63,6 +71,7 @@ persons.forEach(person => {
   console.log('la persona es', contactObject)
   console.log('en personas esta', persons)
  }
+
 
 
  const searchContact = (event) => {
@@ -111,7 +120,7 @@ handleChangeSearch={handleChangeSearch}
     />
 
     <h2>Numbers</h2>
-    <Persons coincidences={coincidences}/>
+    <Persons  coincidences={coincidences} deletePerson={deletePersonOf}/>
     </div>
 )
 }
