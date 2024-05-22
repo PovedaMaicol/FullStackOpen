@@ -3,7 +3,6 @@ import './App.css'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
-import axios from 'axios'
 import contactService from './services/contacts'
 
 function App() {
@@ -15,8 +14,22 @@ function App() {
 
 
  const deletePersonOf = (id) => {
-  console.log(`importance of ${id}`)
+  if(window.confirm("Are you sure you want to delete this contact?")){
+    console.log(`Deleting person with id ${id}`)
+    contactService
+    .destroy(id)
+    .then(() => {
+      setPersons(persons.filter(person => person.id !== id))
+    })
+    .catch(error => {
+      console.error('There was an error deleting the person', error)
+    })
+  }
+
  }
+
+
+ // GET ALL
  useEffect(() => {
   contactService
    .getAll()
@@ -26,36 +39,63 @@ function App() {
   }) 
  }, [])
 
- // guardar el nuevo nombre en un objeto
- // prevenir la recarga del formulario
- // guardar el objeto que tiene el nuevo nombre en persons
- // seteo newName  en ''
 
+ // UPDATE
+ const updateContact = (id) => {
+  const contact = persons.find(per => per.id === id)
+  const changedContact = {...contact, number: newNumber}
+
+  contactService
+  .update(id, changedContact)
+  .then(() => {
+    console.log(`this is the ${id}`)
+    setPersons(persons.map(person => person.id !== id ? person : changedContact))
+    setNewName('');
+  setNewNumber('')
+  })
+  .catch(error => {
+   console.log(error)
+  })
+  
+}
+
+// POST
  const addContact = (event) => {
   event.preventDefault()
-    const contactObject = {  name: newName, number: newNumber, id: persons.length + 1} 
+    const contactObject = {  name: newName, number: newNumber} 
     console.log(contactObject)
-
- 
 
 let found = false;
 
 persons.forEach(person => {
-  if(normalize(person.name) === contactObject.name.toUpperCase().trim().replace(/\s+/g, '')) {
+
+//
+  if(normalize(person.name) === normalize(newName)) {
+
+    if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)){
+     const idToUpdate = person.id;
+     updateContact(idToUpdate)
+    
+
     contactObject.name = '';
     setNewName('');
     setNewNumber('')
-    alert(`${newName} is already added to phonebook`);
     found = true;
   }
+}
 });
   if(!found && contactObject.name !== '' && contactObject.number !== ''){
     contactService
     .create(contactObject)
-    .then()
-    setPersons([...persons,contactObject]);
-    setNewName('');
-    setNewNumber('');
+    .then(returnedContacts => {
+      setPersons([...persons,returnedContacts]);
+      setNewName('');
+      setNewNumber('');
+    })
+    .catch(error => {
+      console.error('There was an error creating the contact', error)
+    })
+   
   }else{
     setNewName('');
     setNewNumber('');
@@ -99,6 +139,7 @@ persons.forEach(person => {
     console.log(event.target.value)
     setSearch(event.target.value)
   }
+
 
  return (
   <div>
