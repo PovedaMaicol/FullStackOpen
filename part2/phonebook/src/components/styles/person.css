@@ -1,0 +1,10 @@
+.grid-container {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 1fr 1fr;
+    grid-column: 20px;
+    grid-row: wopx;
+}

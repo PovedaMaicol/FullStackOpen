@@ -4,13 +4,14 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import contactService from './services/contacts'
+import Notification from './components/Notification'
 
 function App() {
  const [persons, setPersons] = useState([])
  const [newName, setNewName] = useState('')
  const [newNumber, setNewNumber] = useState('')
  const [search, setSearch] = useState('')
- const [errorMessage, setErrorMessage] = useState('Some error hapened...')
+ const [notificationMessage, setNotificationMessage] = useState(null)
 
 
 
@@ -55,6 +56,10 @@ function App() {
   setNewNumber('')
   })
   .catch(error => {
+    setNotificationMessage('This contact is not saved to the phonebook')
+    setTimeout(() => {
+    setNotificationMessage(null)
+    }, 5000)
    console.log(error)
   })
   
@@ -64,7 +69,7 @@ function App() {
  const addContact = (event) => {
   event.preventDefault()
     const contactObject = {  name: newName, number: newNumber} 
-    console.log(contactObject)
+    
 
 let found = false;
 
@@ -92,6 +97,10 @@ persons.forEach(person => {
       setPersons([...persons,returnedContacts]);
       setNewName('');
       setNewNumber('');
+      setNotificationMessage(`Added ${contactObject.name}`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
     })
     .catch(error => {
       console.error('There was an error creating the contact', error)
@@ -143,16 +152,18 @@ persons.forEach(person => {
 
 
  return (
-  <div>
+  <div className='app'>
+    <div className='contenedor-phonebook'>
     <h2>Phonebook</h2>
+    <Notification message={notificationMessage}/>
 <Filter 
 searchContact={searchContact} 
 search={search} 
 handleChangeSearch={handleChangeSearch}
 />
 
-<h2>Add a contatc</h2>
-
+{/* <h2>Add a contatc</h2> */}
+<br/>
     <PersonForm 
     addContact={addContact}
     newName={newName}
@@ -163,6 +174,7 @@ handleChangeSearch={handleChangeSearch}
 
     <h2>Numbers</h2>
     <Persons  coincidences={coincidences} deletePerson={deletePersonOf}/>
+    </div>
     </div>
 )
 }
