@@ -1,10 +1,60 @@
 .grid-container {
+    width: 100%;
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: auto;
-    grid-template-rows: 1fr 1fr;
-    grid-column: 20px;
-    grid-row: wopx;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(auto-fill);
+    row-gap: 1em;
+    column-gap: 1em;
+}
+
+.grid-container li {
+background-color: rgba(238, 241, 219, 0.486);
+text-align: center;
+display: flex;
+flex-direction: column;
+justify-content:center;
+align-items: center;
+border-radius: 10px;
+padding: 10px;
+
+}
+
+.identificador {
+    width: 50px;
+    height: 50px;
+    background-color: blueviolet;
+    border-radius: 50%;
+    text-align: center;
+    align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 8px;
+}
+.grid-container div {
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center; 
+    width: 100%; 
+   
+}
+
+.grid-container div i {
+    background-color: rgba(255, 0, 0, 0.484);
+}
+
+.contact-info {
+   
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-name {
+    font-weight: 600;
+}
+.contact-number {
+  
+    font-weight: lighter;
 }
