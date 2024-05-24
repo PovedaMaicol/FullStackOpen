@@ -4,6 +4,11 @@
     align-items:center;
 }
 
+.container-addcontact h1 {
+    height: 150px;
+    width: 150px;
+}
+
 .reg-but {
 
    
@@ -41,16 +46,26 @@
 }
 
 .reg-name,
-.reg-num {
+.reg-num,
+.reg-gmail,
+.reg-birthday {
     width: 90%;
     height: 7vh;
     display: flex;
     align-items: center;
 }
 
+.reg-icon {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
 .reg-name i,
 .reg-num i,
-.reg-but i {
+.reg-but i,
+.reg-gmail i,
+.reg-birthday i{
     width: 10%;
     font-size: 23px;
 }
@@ -59,9 +74,11 @@
     font-size: 25px;
 }
 .reg-name input,
-.reg-num input {
+.reg-num input,
+.reg-gmail input,
+.reg-birthday input {
     margin: 0;
-    padding: 0;
+    padding:0px 10px 0px 10px;
     width: 90%;
     height: inherit;
     background-color: hsl(220, 12%, 95%);

@@ -5,16 +5,24 @@ import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import contactService from './services/contacts'
 import Notification from './components/Notification'
+import {Routes,Route, useNavigate} from 'react-router-dom'
+
 
 function App() {
  const [persons, setPersons] = useState([])
  const [newName, setNewName] = useState('')
  const [newNumber, setNewNumber] = useState('')
+ const [newMail, setNewMail] = useState('')
+ const [newBirthday, setNewBirthday] = useState('')
  const [search, setSearch] = useState('')
+ const [idUpdate, setIdUpdate] = useState()
+ const [isEdit, setIsEdit] = useState(false)
  const [notificationMessage, setNotificationMessage] = useState(null)
+ const navigate = useNavigate();
 
 
 
+ 
  const deletePersonOf = (id) => {
   if(window.confirm("Are you sure you want to delete this contact?")){
     console.log(`Deleting person with id ${id}`)
@@ -42,7 +50,37 @@ function App() {
  }, [])
 
 
- // UPDATE
+ 
+ // UPDATE TODO
+ const updatePersonOf = (person) => {
+  setIdUpdate(person.id)
+  alert('this is person')
+  doRegister()
+  setNewName(person.name)
+  setNewMail(person.gmail)
+  setNewNumber(person.number)
+  setNewBirthday(person.birthday)
+  setIsEdit(true)
+  console.log(person, person.id)
+
+  // const cont = persons.find(p => p.id === id)
+  // console.log(cont)
+  // setNewName(cont.name)
+  // setNewNumber(cont.number)
+  // setNewMail(cont.gmail)
+  // setNewBirthday(cont.birthday)
+  // const updateCont = {name: newName, number: newNumber, gmail: newMail, birthday: newBirthday}
+
+  // contactService
+  // .update(id, updateCont)
+  // .then(() => {
+  //   console.log(`this is the ${id}`)
+  //   setPersons(persons.map(person => person.id !== id ? person : updateCont))
+  // })
+ }
+
+
+ // UPDATE POR REPEAT
  const updateContact = (id) => {
   const contact = persons.find(per => per.id === id)
   const changedContact = {...contact, number: newNumber}
@@ -68,47 +106,72 @@ function App() {
 // POST
  const addContact = (event) => {
   event.preventDefault()
-    const contactObject = {  name: newName, number: newNumber} 
-    
 
-let found = false;
 
-persons.forEach(person => {
+  if(isEdit) {
+    const updateCont = {name: newName, number: newNumber, gmail: newMail, birthday: newBirthday}
 
-//
-  if(normalize(person.name) === normalize(newName)) {
-
-    if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)){
-     const idToUpdate = person.id;
-     updateContact(idToUpdate)
-    
-
-    contactObject.name = '';
-    setNewName('');
-    setNewNumber('')
-    found = true;
-  }
-}
-});
-  if(!found && contactObject.name !== '' && contactObject.number !== ''){
     contactService
-    .create(contactObject)
-    .then(returnedContacts => {
-      setPersons([...persons,returnedContacts]);
-      setNewName('');
-      setNewNumber('');
-      setNotificationMessage(`Added ${contactObject.name}`)
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 5000)
+    .update(idUpdate, updateCont)
+    .then(() => {
+      console.log(`this is the ${idUpdate}`)
+      setPersons(persons.map(person => person.id !== idUpdate ? person : updateCont))
+      doHome()
+      setNewName('')
+      setNewMail('')
+      setNewNumber('')
+      setNewBirthday('')
     })
-    .catch(error => {
-      console.error('There was an error creating the contact', error)
-    })
+  } else {
+    const contactObject = {  name: newName, number: newNumber, gmail: newMail, birthday: newBirthday } 
+    
+
+    let found = false;
+    
+    persons.forEach(person => {
+    
+    //
+      if(normalize(person.name) === normalize(newName)) {
+    
+        if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)){
+         const idToUpdate = person.id;
+         updateContact(idToUpdate)
+        
+    
+        contactObject.name = '';
+        setNewName('');
+        setNewNumber('')
+        found = true;
+      }
+    }
+    });
+      if(!found && contactObject.name !== '' && contactObject.number !== ''){
+        contactService
+        .create(contactObject)
+        .then(returnedContacts => {
+          setPersons([...persons,returnedContacts]);
+          setNewName('');
+          setNewNumber('');
+          setNewMail('');
+          setNewBirthday('')
+          setNotificationMessage(`Added ${contactObject.name}`)
+          setIsEdit(false)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
+          navigate("/")
+           
+        })
+        .catch(error => {
+          console.error('There was an error creating the contact', error)
+        })
+       
+      }else{
+        setNewName('');
+        setNewNumber('');
+
+  }
    
-  }else{
-    setNewName('');
-    setNewNumber('');
   }
 
 // persons.forEach(persona => {
@@ -118,7 +181,7 @@ persons.forEach(person => {
 
   
 
-  console.log('la persona es', contactObject)
+  // console.log('la persona es', contactObject)
   console.log('en personas esta', persons)
  }
 
@@ -149,31 +212,96 @@ persons.forEach(person => {
     console.log(event.target.value)
     setSearch(event.target.value)
   }
+  const handleChangeMail = (event) => {
+    console.log(event.target.value)
+    setNewMail(event.target.value)
+  }
+  const handleChangeBirthday = (event) => {
+    console.log(event.target.value)
+    setNewBirthday(event.target.value)
+  }
+
+
+// navegar a rutas
+  const doHome = () => {
+    navigate("/")
+  } 
+
+  const doRegister = () => {
+    
+      navigate("register")
+    
+  }
+
+ 
 
 
  return (
   <div className='app'>
     <div className='contenedor-phonebook'>
-    <h2>Phonebook</h2>
-    <Notification message={notificationMessage}/>
-<Filter 
-searchContact={searchContact} 
-search={search} 
-handleChangeSearch={handleChangeSearch}
-/>
+   
+
+    
+   
+  
+      <Routes>
+        <Route 
+          path='/' 
+            element={
+            <div>
+               <h2>Phonebook</h2>
+              <Filter 
+              searchContact={searchContact} 
+              search={search} 
+              handleChangeSearch={handleChangeSearch}
+              doRegister={doRegister}
+              />
+              <br/>
+              <Notification message={notificationMessage}/>
+              <br/>
+              <Persons  
+              coincidences={coincidences} deletePerson={deletePersonOf} updatePerson={updatePersonOf}
+              />
+            </div>
+            } 
+            />
+
+            <Route 
+            path='register' 
+            element={
+            <PersonForm 
+            addContact={addContact}
+            newName={newName}
+            handleChangeName={handleChangeName}
+            newNumber={newNumber}
+            handleChangeNuber={handleChangeNuber}
+            newMail={newMail}
+            handleChangeMail={handleChangeMail}
+            newBirthday={newBirthday}
+            handleChangeBirthday={handleChangeBirthday}
+            doHome={doHome}
+          
+       
+            />
+            }
+            />
+
+      </Routes>
+  
+
 
 {/* <h2>Add a contatc</h2> */}
-<br/>
+{/* <br/>
     <PersonForm 
     addContact={addContact}
     newName={newName}
     handleChangeName={handleChangeName}
     newNumber={newNumber}
     handleChangeNuber={handleChangeNuber}
-    />
+    /> */}
 
-    <h2>Numbers</h2>
-    <Persons  coincidences={coincidences} deletePerson={deletePersonOf}/>
+    {/* <h2>Numbers</h2> */}
+    
     </div>
     </div>
 )

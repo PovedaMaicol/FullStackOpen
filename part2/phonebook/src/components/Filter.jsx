@@ -1,6 +1,6 @@
 import React from 'react'
 import './styles/filter.css'
-const Filter = ({searchContact, search, handleChangeSearch}) => {
+const Filter = ({searchContact, search, handleChangeSearch, doRegister}) => {
   return (
     <form className='fr-search'  onSubmit={searchContact}>
       <div className='container-search'>
@@ -9,7 +9,7 @@ const Filter = ({searchContact, search, handleChangeSearch}) => {
       </div>
 
       <div className='container-add'>
-      <i className="fa-solid fa-plus"></i>
+      <i className="fa-solid fa-plus" onClick={doRegister}></i>
       </div>
     </form>
   )

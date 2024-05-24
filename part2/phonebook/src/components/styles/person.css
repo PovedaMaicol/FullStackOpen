@@ -41,8 +41,15 @@ padding: 10px;
    
 }
 
-.grid-container div i {
-    background-color: rgba(255, 0, 0, 0.484);
+
+.bx-edit {
+    background-color: rgba(255, 166, 0, 0.402);
+    border-radius: 5px;
+    padding: 2px;
+}
+.borrar {
+    background-color: rgba(255, 0, 0, 0.336);
+    border-radius: 5px;
 }
 
 .contact-info {
@@ -57,4 +64,8 @@ padding: 10px;
 .contact-number {
   
     font-weight: lighter;
+}
+
+.contact-mail {
+    font-size: 10px;
 }
