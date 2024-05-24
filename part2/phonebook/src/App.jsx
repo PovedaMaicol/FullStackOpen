@@ -6,6 +6,7 @@ import Persons from './components/Persons'
 import contactService from './services/contacts'
 import Notification from './components/Notification'
 import {Routes,Route, useNavigate} from 'react-router-dom'
+import CardPerson from './components/CardPerson'
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
  const [search, setSearch] = useState('')
  const [idUpdate, setIdUpdate] = useState()
  const [isEdit, setIsEdit] = useState(false)
+ const [isContact, setIsContact] = useState()
  const [notificationMessage, setNotificationMessage] = useState(null)
  const navigate = useNavigate();
 
@@ -228,9 +230,16 @@ function App() {
   } 
 
   const doRegister = () => {
-    
-      navigate("register")
-    
+      navigate("register") 
+  }
+
+  const doContact = (person) => {
+    // console.log(person)
+    navigate("contact")
+    console.log(`this is the person ${person}`)
+    setIsContact(person)
+    console.log('contact is', isContact)
+ 
   }
 
  
@@ -260,7 +269,8 @@ function App() {
               <Notification message={notificationMessage}/>
               <br/>
               <Persons  
-              coincidences={coincidences} deletePerson={deletePersonOf} updatePerson={updatePersonOf}
+              coincidences={coincidences} deletePerson={deletePersonOf} updatePerson={updatePersonOf} doContact={doContact}
+            
               />
             </div>
             } 
@@ -279,12 +289,11 @@ function App() {
             handleChangeMail={handleChangeMail}
             newBirthday={newBirthday}
             handleChangeBirthday={handleChangeBirthday}
-            doHome={doHome}
-          
-       
-            />
+            doHome={doHome} />
             }
             />
+
+<Route path='contact' element={<CardPerson doHome={doHome}  contact={isContact}/>}/>
 
       </Routes>
   
