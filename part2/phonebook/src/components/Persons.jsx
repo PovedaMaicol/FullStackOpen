@@ -20,7 +20,8 @@ const Persons = ({coincidences, deletePerson,updatePerson, doContact}) => {
 
 </div>
 
-  <h1 className='identificador' onClick={() => doContact(person)}>{person.name[0]}</h1>
+<i className='bx bxs-user-circle identificador'  onClick={() => doContact(person)} ></i>
+  {/* <h1 className='identificador'>{person.name[0]}</h1> */}
     
   <div className='contact-info'> 
   <span className='contact-name'>{person.name}</span> 

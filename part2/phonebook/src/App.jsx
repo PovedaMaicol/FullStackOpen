@@ -56,7 +56,6 @@ function App() {
  // UPDATE TODO
  const updatePersonOf = (person) => {
   setIdUpdate(person.id)
-  alert('this is person')
   doRegister()
   setNewName(person.name)
   setNewMail(person.gmail)
@@ -65,20 +64,6 @@ function App() {
   setIsEdit(true)
   console.log(person, person.id)
 
-  // const cont = persons.find(p => p.id === id)
-  // console.log(cont)
-  // setNewName(cont.name)
-  // setNewNumber(cont.number)
-  // setNewMail(cont.gmail)
-  // setNewBirthday(cont.birthday)
-  // const updateCont = {name: newName, number: newNumber, gmail: newMail, birthday: newBirthday}
-
-  // contactService
-  // .update(id, updateCont)
-  // .then(() => {
-  //   console.log(`this is the ${id}`)
-  //   setPersons(persons.map(person => person.id !== id ? person : updateCont))
-  // })
  }
 
 
@@ -133,7 +118,7 @@ function App() {
     persons.forEach(person => {
     
     //
-      if(normalize(person.name) === normalize(newName)) {
+      if(normalize(person.name) === normalize(newName) && newNumber) {
     
         if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)){
          const idToUpdate = person.id;
@@ -144,6 +129,7 @@ function App() {
         setNewName('');
         setNewNumber('')
         found = true;
+        doHome()
       }
     }
     });
@@ -257,8 +243,9 @@ function App() {
         <Route 
           path='/' 
             element={
-            <div>
-               <h2>Phonebook</h2>
+            <>
+            
+               <br/>
               <Filter 
               searchContact={searchContact} 
               search={search} 
@@ -272,7 +259,7 @@ function App() {
               coincidences={coincidences} deletePerson={deletePersonOf} updatePerson={updatePersonOf} doContact={doContact}
             
               />
-            </div>
+            </>
             } 
             />
 

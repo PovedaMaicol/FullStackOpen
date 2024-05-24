@@ -9,12 +9,14 @@ body {
   flex-wrap: wrap;
   margin: 0;
   padding: 0;
+  position: absolute;
 
 }
 .app {
   display: flex;
   justify-content: center;
- 
+  width: 100vw;
+ flex-wrap: wrap;
 }
 .contenedor-phonebook {
 
@@ -26,6 +28,30 @@ body {
   border: 5px solid white;
 }
 h2 {
+margin: 0;
+padding: 0;
+font-size:large;
+text-align: center;
+
+}
 
 
+@media only screen and (min-width: 768px) {
+  /* Estilos para tablets en posición horizontal y dispositivos de escritorio */
+  /* Puedes agregar aquí tus estilos para tablets y dispositivos de escritorio */
+  body {
+   justify-content: center;
+   background-color: rgba(73, 73, 129, 0.486);
+   padding-top: 10px;
+  }
+  .contenedor-phonebook {
+    width: 350px;
+    height: 600px;
+    border:10px solid black;
+    border-radius: 20px;
+    overflow: auto;
+    background-color: white;
+
+  }
+  
 }

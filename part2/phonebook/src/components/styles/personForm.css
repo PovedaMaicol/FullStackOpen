@@ -1,7 +1,9 @@
+
 .container-addcontact{
     display: flex;
     flex-direction: column;
     align-items:center;
+ 
 }
 
 .container-addcontact h1 {
@@ -18,7 +20,9 @@
   
    
 }
-
+.identificador {
+    background-color: rgba(129, 74, 239, 0.354);
+}
 .reg-but div {
     display: flex;
     align-items:center;
@@ -43,7 +47,10 @@
     height: 5vh;
     border-radius: 20px;
     padding: 0px 10px 0px 10px;
+    cursor: pointer;
 }
+
+
 
 .reg-name,
 .reg-num,
@@ -70,6 +77,10 @@
     font-size: 23px;
 }
 
+.reg-but i {
+    cursor: pointer;
+}
+
 .reg-num i {
     font-size: 25px;
 }
@@ -86,3 +97,15 @@
     border: none;
     border-radius: 5PX;
 }
+
+@media only screen and (min-width: 768px) {
+ .reg-but {
+    
+    margin: 0;
+    padding: 0;
+ }
+ .ocultar {
+    display: none;
+ }
+  }
+  
