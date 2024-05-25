@@ -4,12 +4,13 @@ import './styles/cardPerson.css';
 const CardPerson = ({ doHome, contact = {} }) => {
   return (
     <>
-     
-      <button onClick={doHome}>Back</button>
-      
+     <br/>
+     <i className='bx bx-x' onClick={doHome}></i>
+      <br/>
+<br/>
       <div className="cabezote-contacto">
         <i className='bx bxs-user-circle' ></i>
-        <br/>
+     
         <h2>{contact.name ? contact?.name : 'Does not register'}</h2>
       </div>
 

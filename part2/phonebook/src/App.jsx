@@ -245,7 +245,7 @@ function App() {
             element={
             <>
             
-               <br/>
+               
               <Filter 
               searchContact={searchContact} 
               search={search} 

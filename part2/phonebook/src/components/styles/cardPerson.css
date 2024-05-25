@@ -10,9 +10,14 @@ margin: 0;
 padding: 0;
 }
 
+.bx {
+    cursor: pointer;
+    font-size: 23px;
+}
+
 .cabezote-contacto i {
 
-   
+   color: rgba(129, 74, 239, 0.354);
     font-size: 180px;
     /* color: wheat; */
   
@@ -30,7 +35,7 @@ flex-direction: column;
 .cabezote-contacto h2 {
     margin: 0;
     padding: 0;
-    font-weight: 300;
+    font-weight: 800;
 }
 
 .body-contacto {
@@ -44,6 +49,7 @@ flex-direction: column;
 .body-contacto h4 {
     padding-left: 20px;
     padding-top: 20px;
+    font-size:medium;
 }
 .body-contacto li {
   
