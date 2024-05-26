@@ -7,9 +7,17 @@ const App = () => {
   const [search, setSearch] = useState('') // maneja el valor de input
   const [getCountries, setGetCountries] = useState([]) // maneja la lista de paises obtenidos 
   const [selectCountry, setSelectCountry] = useState(null)
+
+  // estado Clima ciudad
+  const [selectWeather, setSelectWeather] = useState({})
   const saveCountry = (countri) => {
   setSelectCountry(countri)
   }
+
+  const APIkey = import.meta.env.VITE_API_KEY;
+
+  // weather map
+  // const APIkey = '2334bfb071c9ea1cf54cb6aad47f423f';
 
 
 
@@ -17,6 +25,7 @@ const App = () => {
     console.log('el efecto corre cuando cambia el valor de search', search)
   if (search) {
     console.log('cuando ahi algo en search se carga la api')
+    setSelectCountry(null)
     axios
       .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
       .then(response => {
@@ -32,6 +41,36 @@ const App = () => {
      setGetCountries([])
 }
 }, [search]);
+
+useEffect(() => {
+  const fetchWeather = (city) => {
+    axios
+      .get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIkey}`)
+      .then(response => {
+        console.log(response.data)
+        setSelectWeather(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching weather data:', error);
+      });
+  };
+
+  if (getCountries.length === 1) {
+    console.log('cuando se traiga un solo país se ejecuta el efecto', getCountries);
+    let city = getCountries[0].capital[0].toLowerCase();
+    console.log(city);
+    fetchWeather(city);
+  }
+
+  if (selectCountry) {
+    console.log('cuando selectCountry sea true se ejecuta el efecto', selectCountry);
+    let city = selectCountry.capital[0].toLowerCase();
+    console.log(city);
+    fetchWeather(city);
+  }
+}, [getCountries, selectCountry]);
+
+
   
 
   const handleChange = (event) => {
@@ -47,23 +86,35 @@ const App = () => {
       {
 
        getCountries.length === 1 ? (
-        getCountries.map(countri => 
-          <div key={countri.name.common}>
-            <h2>{countri.name.common}</h2>
+        getCountries.map(country => 
+          <div key={country.name.common}>
+            <h2>{country.name.common}</h2>
             <br/>
-            <h4>capital {countri.capital}</h4>
-            <h4>area: {countri.area}</h4>
+            <h4>capital {country.capital}</h4>
+            <h4>area: {country.area}</h4>
             <br/>
             <ul>
               <h4>Languages</h4>
               {
-                Object.values(countri.languages).map((lang, i) => (
+                Object.values(country.languages).map((lang, i) => (
                   <li key={i}>{lang}</li>
                 ))
               }
             </ul>
             <br/>
-            <img src={countri.flags.svg} style={{ width: '300px' }}/>
+            <img src={country.flags.svg} style={{ width: '300px' }}/>
+            <br/>
+            <h2>{`Weather in ${country.name.common}`}</h2>
+            <h4>{`Temperature: ${Math.floor((selectWeather?.main?.temp - 273.15) * 100) / 100} Celsius`}</h4>
+
+            <figure>
+                <img
+                  className='weather_img'
+                  src={`https://openweathermap.org/img/wn/${selectWeather?.weather?.[0]?.icon}@2x.png`}
+                  alt='weather-icon'
+                />
+              </figure>
+            <h4>{`Wind ${selectWeather?.wind?.speed} m/s`}</h4>
           </div>
         ))  
         :
@@ -73,11 +124,11 @@ const App = () => {
           <h2>Too many matches, specify another filter</h2>
         )
         :
-        
-        getCountries.map(countri => 
+        (
+          getCountries.map(countri => 
             <li key={countri.name.common}>{countri.name.common}<button onClick={() => saveCountry(countri)}>show</button></li>
           )
-      }
+        )}
 
 {selectCountry && (
           <div>
@@ -94,6 +145,15 @@ const App = () => {
                 <li key={index}>{lang}</li>
               ))}
             </ul>
+            <h2>{`Weather in ${selectCountry.name.common}`}</h2>
+            <h4>{`temperature ${selectWeather?.main.temp} Celcius`}</h4>
+            <figure>
+                <img 
+                className='weather_img'
+                src={`https://openweathermap.org/img/wn/${selectWeather?.weather?.[0].icon}@2x.png`} alt='weather-icon' 
+                />
+            </figure>
+            <h4>{`Wind ${selectWeather?.wind?.speed} m/s`}</h4>
           </div>
         )}
     </ul>
