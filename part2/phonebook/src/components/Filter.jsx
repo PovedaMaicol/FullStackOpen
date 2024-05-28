@@ -3,7 +3,7 @@ import './styles/filter.css'
 const Filter = ({searchContact, search, handleChangeSearch, doRegister}) => {
   return (
  
-
+<div className='cont-form'>
  <form className='fr-search'  onSubmit={searchContact}>
       <div className='container-search'>
       <i className='bx bx-search'></i>
@@ -17,7 +17,7 @@ const Filter = ({searchContact, search, handleChangeSearch, doRegister}) => {
 
      
     </form> 
-   
+    </div>
    
   )
 }

@@ -86,3 +86,13 @@ box-shadow: 1px 9px 9px 0px rgba(199,197,199,1);
 .icons {
 
 }
+
+@media only screen and (min-width: 768px) {
+
+    .ocultar {
+        display: none;
+       
+    }
+
+
+}

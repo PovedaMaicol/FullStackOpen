@@ -254,7 +254,7 @@ function App() {
               />
               <br/>
               <Notification message={notificationMessage}/>
-              <br/>
+              <br className='ocultar'/>
               <Persons  
               coincidences={coincidences} deletePerson={deletePersonOf} updatePerson={updatePersonOf} doContact={doContact}
             
@@ -279,7 +279,6 @@ function App() {
             doHome={doHome} />
             }
             />
-
 <Route path='contact' element={<CardPerson doHome={doHome}  contact={isContact}/>}/>
 
       </Routes>

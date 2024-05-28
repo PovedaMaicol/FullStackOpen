@@ -3,7 +3,8 @@ import './styles/person.css'
 const Persons = ({coincidences, deletePerson,updatePerson, doContact}) => {
   console.log(coincidences)
   return (
-
+<>
+<br className='ocultar'/>
     <ul className='grid-container'>
       {
         coincidences.map(person => 
@@ -39,6 +40,7 @@ const Persons = ({coincidences, deletePerson,updatePerson, doContact}) => {
         )
       }
     </ul>
+    </>
   )
 
 }

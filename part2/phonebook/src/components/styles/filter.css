@@ -1,11 +1,24 @@
 
+.cont-form {
+    padding: 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgb(255, 255, 255);
+    z-index: 5;
+   
+}
+
 .fr-search {
     display: flex;
     width: 100%;
-  
+ position: sticky;
+  top: 0;
+  left: 0;
     color: gray;
-    margin: 0;
-    padding: 0;
+    /* margin: 0; */
+    padding: 0 5px 0 px;
     height: 5vh;
 
     justify-content: space-between;
@@ -73,4 +86,15 @@ box-shadow: 1px 9px 9px 0px rgba(199,197,199,1);
 
 @media only screen and (min-width: 768px) {
 
+    .cont-form {
+        width: 100%;
+        position: static;
+        padding: 0;
+       
+    }
+
+    .fr-search {
+        position:static;
+        width: 100%;
+    }
 }
