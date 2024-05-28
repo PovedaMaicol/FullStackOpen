@@ -1,6 +1,12 @@
 const express = require('express')
 const app = express()
 
+// importo morgan 
+const morgan = require('morgan')
+
+// configuro morgan formato'tiny'
+app.use(morgan('tiny'))
+
 app.use(express.json())
 let persons = [
     {
@@ -18,6 +24,8 @@ let persons = [
         "birthday": "",
     }
 ]
+
+
 
 app.get('/info', (request, response) => {
     const now = new Date();
@@ -95,7 +103,38 @@ console.log('lo que ahi en body es', body)
     response.json(person);
 });
 
+// MIDLEWARE
+const unknownEndpoint = (request, response) => {
+    response.status(404).send({ error: 'unknown endpoint' })
+  }
+  
+  app.use(unknownEndpoint)
+
 
 const PORT = 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ¿QUE ES MORGAN?
+// registra información sobre las solicitudes que llegan a el servidor(metodo HTTP, url, estado de respuesta, tiempo de respuesta)
+
+// ¿QUE HACE MORGAN?
+// intercepta cada solicitud HTTP (POST, PUT, DELETE, ETC) y registra datos sobre la solcitud, en este ejecicio estoy usando el formato 'tiny' de morgan, los datos que se registran los imprime en consola
