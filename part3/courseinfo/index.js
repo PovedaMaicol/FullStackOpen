@@ -11,7 +11,8 @@ let notes = [
     {
       id: 1,
       content: "HTML is easy",
-      important: true
+      important: true,
+      date: new Date()
     },
     {
       id: 2,

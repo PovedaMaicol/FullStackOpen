@@ -254,7 +254,7 @@ function App() {
               />
               <br/>
               <Notification message={notificationMessage}/>
-              <br className='ocultar'/>
+              <br cla/>
               <Persons  
               coincidences={coincidences} deletePerson={deletePersonOf} updatePerson={updatePersonOf} doContact={doContact}
             
