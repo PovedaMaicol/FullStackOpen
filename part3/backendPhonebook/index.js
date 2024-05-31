@@ -1,35 +1,22 @@
+require('dotenv').config();
 const express = require('express')
+const cors = require('cors')
+const Contact = require('./models/contact')
+
+
+
+
 const app = express()
 
-app.use(express.static('dist'))
-
-const cors = require('cors')
 
 app.use(cors())
-
-// importo morgan 
+// app.use(express.static('dist'))
+app.use(express.json())
+// importo morgan - configuro en formato 'tiny' 
 const morgan = require('morgan')
-
-// configuro morgan formato'tiny'
 app.use(morgan('tiny'))
 
-app.use(express.json())
-let persons = [
-    {
-        "id": 1, 
-        "name": "julian",
-        "number": "111111",
-        "gmail": "",
-        "birthday": ""
-    },
-    {
-        "id": 2,
-        "name": "Pedro",
-        "number": "3144142323",
-        "gmail": "",
-        "birthday": "",
-    }
-]
+
 
 
 
@@ -41,25 +28,19 @@ app.get('/info', (request, response) => {
     ${now}
     </div>`)
 })
-//GET ALL
+
+//GET ALL - MONGO
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+   Contact.find({}).then(contacts => {
+    response.json(contacts)
+   })
 })
 
-//GET ONE
+//GET ONE - MONGO
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-   
-
-    const person = persons.find(person => person.id === id)
-    
-
-    if(person){
-        response.json(person)
-    } else {
-        response.statusMessage = "Current id does not match"
-        response.status(404).end()
-    }
+  Contact.findById(request.params.id).then(contact => {
+    response.json(contact)
+  })
 })
 
 // Delete
@@ -72,41 +53,29 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
-// POST
+
+
+// POST - MONGO
 app.post('/api/persons', (request, response) => {
-    const body = request.body;
-    const normalize = (text) => text.toUpperCase().trim().replace(/\s+/g, '');
-console.log('lo que ahi en body es', body)
+    const body = request.body
+    // const normalize = (text) => text.toUpperCase().trim().replace(/\s+/g, '');
+    console.log('en body ahi: ', body, 'en body.content: ', body.content)
     if (!body.name || !body.number ) {
         return response.status(400).json({
             error: 'content missing (name and number required)'
-        });
+        })
     }
 
-    const nameRepeat = persons.find(person => normalize(person.name) === normalize(body.name))
-
-    if(nameRepeat) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        });
-    }
-
-    
-    const person = {
+    const contact = new Contact({
         name: body.name,
         number: body.number,
         gmail: body.gmail,
         birthday: body.birthday,
-        id: getRandomInt(5000)
-    
-    };
+    })
 
-    persons = persons.concat(person);
-
-    response.json(person);
+    contact.save().then(savedContact => {
+        response.json(savedContact)
+    })
 });
 
 // MIDLEWARE
