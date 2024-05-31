@@ -213,6 +213,11 @@ function App() {
 // navegar a rutas
   const doHome = () => {
     navigate("/")
+    setNewName('')
+    setNewMail('')
+    setNewNumber('')
+    setNewBirthday('')
+    setIsEdit(false)
   } 
 
   const doRegister = () => {
