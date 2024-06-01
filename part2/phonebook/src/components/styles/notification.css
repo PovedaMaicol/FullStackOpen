@@ -1,3 +1,14 @@
+
+.container-not {
+  
+    position: fixed;
+    top: 10vh;
+    left: 0;
+    width: 100%;
+
+    z-index: 5;
+}
+
 .notification {
     background-color: hsl(220, 12%, 95%);
     color: black;
@@ -6,10 +17,21 @@
     height: 50px;
     border-radius: 10px;
     text-align: center;
+    font-size: 12px;
     display: flex;
     align-items: center;
     margin: 0 auto;
- 
+ position:sticky;
 justify-content: center;
 
+}
+
+
+@media only screen and (min-width: 768px) {
+    .container-not {
+        position: static;
+    }
+    .notification {
+        position: static;
+    }
 }

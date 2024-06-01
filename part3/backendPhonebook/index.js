@@ -63,16 +63,15 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 // UPDATE - MONGO - findByIdAndUpdate
 app.put('/api/persons/:id', (request, response, next) => {
-    const body = request.body
+    const { name, number, gmail, birthday } = request.body
 
-    const contact = {
-        name: body.name,
-        number: body.number,
-        gmail: body.gmail,
-        birthday: body.birthday
-    }
 
-    Contact.findByIdAndUpdate(request.params.id, contact, { new: true })
+    Contact.findByIdAndUpdate(
+        request.params.id, 
+        { name, number, gmail, birthday }, 
+        { new: true, runValidators: true, context: 'query' }
+    )
+    
     .then(updateContact => {
         response.json(updateContact)
     })
@@ -82,15 +81,8 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 
 // POST - MONGO
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body
-    // const normalize = (text) => text.toUpperCase().trim().replace(/\s+/g, '');
-    console.log('en body ahi: ', body)
-    if (!body.name || !body.number ) {
-        return response.status(400).json({
-            error: 'content missing (name and number required)'
-        })
-    }
 
     const contact = new Contact({
         name: body.name,
@@ -99,9 +91,11 @@ app.post('/api/persons', (request, response) => {
         birthday: body.birthday,
     })
 
-    contact.save().then(savedContact => {
+    contact.save()
+    .then(savedContact => {
         response.json(savedContact)
     })
+    .catch(error => next(error))
 });
 
 // MIDLEWARE PARA RUTAS DESCONOCIDAS
@@ -117,6 +111,8 @@ const errorHandler = (error, request, response, next) => {
 
     if (error.name === 'CastError') {
         return response.status(400).send({error: 'malfortted id'})
+    } else if(error.name === 'ValidationError') {
+        return response.status(400).json({error: error.message})
     }
     next(error)
 }

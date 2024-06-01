@@ -6,9 +6,12 @@ const Notification = ({message}) => {
         return null
     }
   return (
-    <div className='notification'>
+    <div className='container-not'>
+ <div className='notification'>
         {message}
         </div>
+    </div>
+   
   )
 }
 

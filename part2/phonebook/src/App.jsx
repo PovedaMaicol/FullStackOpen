@@ -151,7 +151,12 @@ function App() {
            
         })
         .catch(error => {
-          console.error('There was an error creating the contact', error)
+          console.log('error es: ', error, 'error.response.data.error es: ', error.response.data.error )
+          setNotificationMessage(error.response.data.error)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
+          // console.error('There was an error creating the contact', error.response.data.error)
         })
        
       }else{
@@ -257,9 +262,9 @@ function App() {
               handleChangeSearch={handleChangeSearch}
               doRegister={doRegister}
               />
-              <br/>
+           <br/>
               <Notification message={notificationMessage}/>
-              <br cla/>
+              <br/>
               <Persons  
               coincidences={coincidences} deletePerson={deletePersonOf} updatePerson={updatePersonOf} doContact={doContact}
             
@@ -272,6 +277,7 @@ function App() {
             path='register' 
             element={
             <PersonForm 
+            notificationMessage={notificationMessage}
             addContact={addContact}
             newName={newName}
             handleChangeName={handleChangeName}

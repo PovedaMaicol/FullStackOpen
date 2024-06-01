@@ -17,12 +17,16 @@ input[type=number] {
     display: flex;
     flex-direction: column;
     align-items:center;
+    width: 100%;
+
  
 }
 
 .container-addcontact h1 {
     height: 150px;
     width: 150px;
+    margin: 0;
+    padding: 0;
 }
 
 .reg-but {
@@ -34,6 +38,10 @@ input[type=number] {
   
    
 }
+
+.reg-but div i {
+    margin-right: 15px;
+}
 .identificador {
     background-color: rgba(129, 74, 239, 0.354);
 }
@@ -42,10 +50,13 @@ input[type=number] {
     align-items:center;
     margin: 0;
     padding: 0;
+    /* width: 50%; */
+    /* background-color: orange; */
+    /* justify-content: space-between; */
 }
 
-.reg-but div i {
-    padding-right: 10px;
+.cerrar {
+    /* padding-right: 15px; */
 }
 .reg-but div h2 {
     font-weight: 200;
@@ -112,7 +123,33 @@ input[type=number] {
     border-radius: 5PX;
 }
 
-@media only screen and (min-width: 768px) {
+
+@media only screen and (min-width: 600px) and (max-width: 1024px) {
+    .reg-but {
+    
+        margin: 0;
+        padding: 0;
+     }
+
+     .reg-but div {
+        margin: 0;
+        padding: 0;
+     }
+
+     .reg-but button {
+        height: 30px;
+     }
+    
+    .reg-name,
+.reg-num,
+.reg-gmail,
+.reg-birthday {
+   /* background-color: red; */
+   height: 40px;
+}
+}
+
+/* @media only screen and (min-width: 768px) {
  .reg-but {
     
     margin: 0;
@@ -121,5 +158,12 @@ input[type=number] {
  .ocultar {
     display: none;
  }
-  }
+ 
+.reg-name,
+.reg-num,
+.reg-gmail,
+.reg-birthday {
+    height: 5vh;
+}
+  } */
   

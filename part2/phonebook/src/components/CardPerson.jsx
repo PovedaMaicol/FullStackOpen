@@ -41,7 +41,6 @@ const CardPerson = ({ doHome, contact = {} }) => {
 
           <li>
           <i className='bx bx-calendar-event'></i>
-            {contact?.birthday}
             <div><h4>{contact.birthday ? contact?.birthday : 'Does not register'}</h4><span>Birthday</span></div>
           </li>
          <br/>
