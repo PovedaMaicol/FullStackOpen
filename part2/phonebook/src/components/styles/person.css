@@ -1,7 +1,7 @@
 .grid-container {
     width: 100%;
     list-style: none;
-  
+  margin: 40px 0 0 0;
     padding: 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -92,6 +92,9 @@ box-shadow: 1px 9px 9px 0px rgba(199,197,199,1);
     .ocultar {
         display: none;
        
+    }
+    .grid-container {
+        margin: 10px 0 0 0;
     }
 
 

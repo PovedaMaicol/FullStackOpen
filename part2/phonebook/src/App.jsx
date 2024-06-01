@@ -19,7 +19,7 @@ function App() {
  const [idUpdate, setIdUpdate] = useState()
  const [isEdit, setIsEdit] = useState(false)
  const [isContact, setIsContact] = useState()
- const [notificationMessage, setNotificationMessage] = useState(null)
+const [notificationMessage, setNotificationMessage] = useState('nulls')
  const navigate = useNavigate();
 
 
@@ -262,9 +262,9 @@ function App() {
               handleChangeSearch={handleChangeSearch}
               doRegister={doRegister}
               />
-           <br/>
+           
               <Notification message={notificationMessage}/>
-              <br/>
+              
               <Persons  
               coincidences={coincidences} deletePerson={deletePersonOf} updatePerson={updatePersonOf} doContact={doContact}
             

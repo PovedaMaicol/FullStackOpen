@@ -3,20 +3,28 @@ import './styles/cardPerson.css';
 
 const CardPerson = ({ doHome, contact = {} }) => {
   return (
-    <>
-     <br/>
-     <i className='bx bx-x' onClick={doHome}></i>
-      <br/>
-<br/>
+    <div className="cont-card">
+
+
       <div className="cabezote-contacto">
+     <i className='bx bx-x cerrar' onClick={doHome}></i>
+      
+
+      <div className="inferior">
+        <section>
         <i className='bx bxs-user-circle' ></i>
-     
-        <h2>{contact.name ? contact?.name : 'Does not register'}</h2>
+        <br/>
+      <h2>{contact.name ? contact?.name : 'Does not register'}</h2>
+        </section>
+   
+      </div>
+      
       </div>
 
+<br/>
       <div className="body-contacto">
-        <h4>Contact Information</h4>
-        <ul>
+        <h4 className="titular">Contact Information</h4>
+        <ul className="ul-data">
 
         <li>
             <i className='bx bx-phone'></i>
@@ -46,7 +54,7 @@ const CardPerson = ({ doHome, contact = {} }) => {
          <br/>
         </ul>
       </div>
-    </>
+    </div>
   );
 };
 

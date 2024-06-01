@@ -1,6 +1,6 @@
 
 .cont-form {
-    padding: 15px;
+    padding: 15px 15px 0 15px;
     position: fixed;
     top: 0;
     left: 0;
@@ -94,7 +94,8 @@ box-shadow: 1px 9px 9px 0px rgba(199,197,199,1);
     }
 
     .fr-search {
-        position:static;
+        position: static;
         width: 100%;
+        height: 40px;
     }
 }

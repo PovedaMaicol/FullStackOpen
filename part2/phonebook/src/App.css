@@ -74,7 +74,7 @@ text-align: center;
     height: 600px;
     border:10px solid black;
     border-radius: 20px;
-    overflow: auto;
+    overflow:auto;
     background-color: white;
 
   }

@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import './styles/personForm.css';
 
 import Notification from './Notification';
@@ -40,7 +39,7 @@ const PersonForm = ({ addContact, newName, handleChangeName, newNumber, handleCh
       <br />
       <div className='reg-num'>
         <i className='bx bx-phone'></i>
-        <input placeholder='Number'  value={newNumber} onChange={handleChangeNuber} />
+        <input placeholder='Number'  type='tel' value={newNumber} onChange={handleChangeNuber} />
       </div>
       <br />
       <div className='reg-gmail'>

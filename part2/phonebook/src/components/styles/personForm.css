@@ -16,15 +16,17 @@ input[type=number] {
 .container-addcontact{
     display: flex;
     flex-direction: column;
-    align-items:center;
+    align-items: center;
     width: 100%;
+    height: 100%;
 
- 
+    justify-content: space-between;
+
 }
 
 .container-addcontact h1 {
-    height: 150px;
-    width: 150px;
+    height: 180px;
+    width: 180px;
     margin: 0;
     padding: 0;
 }
@@ -38,7 +40,9 @@ input[type=number] {
   
    
 }
-
+.cerrar {
+    font-size: 23px;
+}
 .reg-but div i {
     margin-right: 15px;
 }
