@@ -17,21 +17,17 @@ const PersonForm = ({ addContact, newName, handleChangeName, newNumber, handleCh
         </div>
         <button type="submit" onClick={doHome2}>Add</button>
       </div>
+
+
       <Notification message={notificationMessage}/>
      
-      <br className='ocultar'/>
-      <br  className='ocultar'/>
-      <br />
-      <br />
-   
-      <br />
+     
       <div className='reg-icon'>
-        
+        <br className='ocultar'/>
         <h1 className='identificador'>{newName[0]}</h1>
       </div>
-      <br />
-      <br />
-      <br />
+
+      <div className='reg-form'>
       <div className='reg-name'>
         <i className="fa-regular fa-user"></i>
         <input placeholder='Name' value={newName} onChange={handleChangeName} />
@@ -49,8 +45,11 @@ const PersonForm = ({ addContact, newName, handleChangeName, newNumber, handleCh
       <br />
       <div className='reg-birthday'>
         <i className='bx bx-calendar-event'></i>
-        <input type='date' value={newBirthday} onChange={handleChangeBirthday} />
+        <input type='date' placeholder='birthday' value={newBirthday} onChange={handleChangeBirthday} />
       </div>
+
+      </div>
+     
     </form>
   
   );

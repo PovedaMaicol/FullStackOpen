@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import './styles/cardPerson.css';
+import { useParams } from "react-router-dom";
+import contactService from '../services/contacts';
 
-const CardPerson = ({ doHome, contact = {} }) => {
+
+const CardPerson = ({ doHome, person = {} }) => {
+  const {id} = useParams();
+ 
+  
+
+
+
+ 
   return (
     <div className="cont-card">
 
@@ -14,7 +24,7 @@ const CardPerson = ({ doHome, contact = {} }) => {
         <section>
         <i className='bx bxs-user-circle' ></i>
         <br/>
-      <h2>{contact.name ? contact?.name : 'Does not register'}</h2>
+      <h2>{person.name ? person?.name : 'Does not register'}</h2>
         </section>
    
       </div>
@@ -28,7 +38,7 @@ const CardPerson = ({ doHome, contact = {} }) => {
 
         <li>
             <i className='bx bx-phone'></i>
-            <div><h4>{contact.number ? contact?.number : 'Does not register'}</h4><span>Number phone</span></div>
+            <div><h4>{person.number ? person.number : 'Does not register'}</h4><span>Number phone</span></div>
             
           </li>
 
@@ -36,20 +46,20 @@ const CardPerson = ({ doHome, contact = {} }) => {
 
           <li>
           <i className='bx bx-user'></i>
-          <div><h4>{contact.name ? contact?.name : 'Does not register'}</h4><span>Name</span></div>
+          <div><h4>{person.name ? person.name : 'Does not register'}</h4><span>Name</span></div>
             </li>
 <br/>
 
           <li>
             <i className='bx bx-envelope'></i>
-            <div><h4>{contact.gmail ? contact?.gmail : 'Does not register'}</h4><span>Email</span></div>
+            <div><h4>{person.gmail ? person.gmail : 'Does not register'}</h4><span>Email</span></div>
           </li>
 
           <br/>
 
           <li>
           <i className='bx bx-calendar-event'></i>
-            <div><h4>{contact.birthday ? contact?.birthday : 'Does not register'}</h4><span>Birthday</span></div>
+            <div><h4>{person.birthday ? person.birthday : 'Does not register'}</h4><span>Birthday</span></div>
           </li>
          <br/>
         </ul>
