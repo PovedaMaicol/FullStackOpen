@@ -194,10 +194,9 @@ function App() {
   };
 
   const doContact = (person) => {
-    const id = typeof person === 'string' ? person : person.id;
     setPerson(person)
     console.log(person)
-    navigate(`/contact/${id}`);
+    navigate(`/contact`);
   };
   
   return (
@@ -242,7 +241,7 @@ function App() {
               />
             }
           />
-          <Route path='/contact/:id' element={<CardPerson doHome={doHome} person={person} />} />
+          <Route path='/contact' element={<CardPerson doHome={doHome} person={person} />} />
         </Routes>
       </div>
     </div>

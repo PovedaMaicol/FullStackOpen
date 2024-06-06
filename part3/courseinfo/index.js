@@ -2,7 +2,9 @@ require('dotenv').config();
 const express = require('express') // importamos express
 const cors = require('cors')
 const Note = require('./models/note')
-const app = express()
+const app = require('./app')
+const config = require('./utils/config')
+const logger = require('./utils/logger')
 
 
 // middlewares
