@@ -1,5 +1,6 @@
 const config = require('./utils/config')
 const express = require('express')
+require('express-async-errors') // esto es para no usar el catch en los metodos
 const app = express()
 const cors = require('cors')
 const notesRouter = require('./controllers/notes')
