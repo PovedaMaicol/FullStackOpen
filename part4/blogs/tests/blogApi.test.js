@@ -39,6 +39,15 @@ test('a valid blog can be added', async () => {
         likes: 7
     }
 
+    if(!newBlog.likes) {
+        newBlog.likes = 0
+        console.log(newBlog)
+
+        assert.strictEqual(newBlog.likes, 0)
+    }
+
+    console.log(newBlog)
+
     await api
     .post('/api/blogs')
     .send(newBlog)
@@ -49,22 +58,46 @@ test('a valid blog can be added', async () => {
     assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
 })
 
-test.only('checking that likes are defined', async () => {
-const newBlog = {
-    title: 'The blog',
-    author: 'Alberto Gamero',
-    url: 'String',
-  
-}
-newBlog.likes ? newBlog.likes : newBlog.likes = 0
-console.log(newBlog)
 
-// await api
-// .post('/api/notes')
-// .send(newBlog)
+test.only('title or url is not defined', async() => {
+    const newBlogWithoutTitle = {
+        author: 'Author',
+        url: 'http://example.com',
+        likes: 5
+    }
 
-assert.strictEqual(newBlog.likes, 0)
+    const newBlogWithoutUrl = {
+        title: 'No URL Blog',
+        author: 'Author',
+        likes: 5
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(newBlogWithoutTitle)
+    .expect(400)
+
+    await api
+    .post('/api/blogs')
+    .send(newBlogWithoutUrl)
+    .expect(400)
 })
+// test.only('checking that likes are defined', async () => {
+// const newBlog = {
+//     title: 'The blog',
+//     author: 'Alberto Gamero',
+//     url: 'String',
+  
+// }
+// newBlog.likes ? newBlog.likes : newBlog.likes = 0
+// console.log(newBlog)
+
+// // await api
+// // .post('/api/notes')
+// // .send(newBlog)
+
+// assert.strictEqual(newBlog.likes, 0)
+// })
 
 // cerrar conexion
 after(async () => {
