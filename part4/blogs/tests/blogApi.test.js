@@ -31,6 +31,30 @@ test('blogs have id property', async () => {
     assert.strictEqual(response.body.length, contents.length)
 })
 
+test.only('check if the property likes is defined', async() => {
+    const newBlog = {
+        title: 'Bucaros campeon',
+        author: 'dudamel',
+        url: 'String'
+    }
+
+    
+    const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+
+    // Verifica que la respuesta tenga la propiedad likes con valor 0
+    assert.strictEqual(response.body.likes, 0)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    const savedBlog = blogsAtEnd.find(blog => blog.title === 'Bucaros campeon')
+
+    assert.strictEqual(savedBlog.likes, 0)
+})
+
 test('a valid blog can be added', async () => {
     const newBlog = {
         title: 'The blog',
@@ -38,15 +62,6 @@ test('a valid blog can be added', async () => {
         url: 'String',
         likes: 7
     }
-
-    if(!newBlog.likes) {
-        newBlog.likes = 0
-        console.log(newBlog)
-
-        assert.strictEqual(newBlog.likes, 0)
-    }
-
-    console.log(newBlog)
 
     await api
     .post('/api/blogs')
