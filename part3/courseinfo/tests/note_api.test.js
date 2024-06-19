@@ -10,6 +10,7 @@ const helper = require('./test_helper')
 
 const User = require('../models/user')
 const Note = require('../models/note')
+const { request } = require('node:http')
 
 describe('when there is initially some notes saved', () => {
   beforeEach(async () => {
@@ -73,7 +74,7 @@ describe('when there is initially some notes saved', () => {
     test('succeeds with valid data', async () => {
       const newNote = {
         content: 'async/await simplifies making async calls',
-        important: true,
+        important: true
       }
 
       await api
