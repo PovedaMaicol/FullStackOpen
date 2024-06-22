@@ -13,6 +13,10 @@ const tokenExtractor = (request, response, next) => {
   
 }
 
+const userExtractor = (request, response, next) => {
+  
+}
+
 const requestLogger = (request, response, next) => {
   logger.info('Method:', request.method)
   logger.info('Path:  ', request.path)
