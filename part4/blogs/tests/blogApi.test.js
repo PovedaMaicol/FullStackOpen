@@ -159,6 +159,25 @@ describe('when there is initially one user in db', () => {
     assert.strictEqual(usersAtEnd.length, usersAtStart.length)
   })
 })
+
+describe('adding a blog without a valid token returns the status code 401 unauthorized', () => {
+  test('fails with status code 401 if no token is provided', async () => {
+    const newBlog = {
+      title: 'Unauthorized Test Blog',
+      author: 'Test Author',
+      url: 'http://testblog.com',
+      likes: 5
+    }
+
+    const result = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(401)
+    .expect('Content-Type', /application\/json/)
+
+    assert.strictEqual(result.body.error, 'Invalid or missing token');
+  })
+})
 after(async () => {
     await User.deleteMany({})
     await mongoose.connection.close()
