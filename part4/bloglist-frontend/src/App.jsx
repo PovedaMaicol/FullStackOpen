@@ -8,7 +8,7 @@ const App = () => {
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
-  const [logged, setLogged] = useState(false)
+ 
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -26,7 +26,10 @@ const App = () => {
   }, [])
 
   
-
+  const handleLogout = () => {
+    window.localStorage.clear()
+    setUser(null)
+  }
   const handleLogin = async (event) => {
     event.preventDefault()
     console.log('logging in with', username, password)
@@ -92,7 +95,7 @@ const App = () => {
       {user === null ?
       loginForm() :
       <div>
-      <p>{user.name} logged-in<button >Logout</button></p>
+      <p>{user.name} logged-in<button onClick={handleLogout}>Logout</button></p>
       {blogsList()}
       </div>
 
