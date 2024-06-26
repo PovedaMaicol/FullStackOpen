@@ -2,13 +2,18 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import AddBlog from './components/AddBlog'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
- 
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -32,12 +37,17 @@ const App = () => {
   }
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('logging in with', username, password)
+    // console.log('logging in with', username, password)
 
     try {
       const user = await loginService.login({
         username, password,
       })
+
+      setNotificationMessage(`approved login`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 3000)
 
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user)
     )
@@ -46,11 +56,48 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setNotificationMessage('Wrong credentials')
       setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+        setNotificationMessage(null)
+      }, 3000)
     }
+  }
+
+// añadir un blog
+  const addNewBlog =  (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: title,
+      author: author,
+      url: url
+    }
+
+
+    // solicitud post
+    blogService
+    .create(blogObject)
+    .then(returnedBlog => {
+      setBlogs(blogs.concat(returnedBlog))
+
+
+      setNotificationMessage(`A new blog '${title}' by ${author} added`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 3000)
+
+
+      setAuthor('')
+      setTitle('')
+      setUrl('')
+      
+    })
+    .catch( error => {
+      console.log(error)
+      setNotificationMessage('Fill all the boxes')
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 3000)
+    })
   }
 
 
@@ -91,10 +138,21 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification
+      message={notificationMessage}/>
       
       {user === null ?
       loginForm() :
       <div>
+      <AddBlog
+      addNewBlog={addNewBlog}
+      title={title}
+      author={author}
+      url={url}
+      setTitle={setTitle}
+      setAuthor={setAuthor}
+      setUrl={setUrl}
+      />
       <p>{user.name} logged-in<button onClick={handleLogout}>Logout</button></p>
       {blogsList()}
       </div>
