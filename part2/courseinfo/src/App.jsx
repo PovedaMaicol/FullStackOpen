@@ -6,6 +6,10 @@ import axios from 'axios'
 import noteService from './services/notes'
 import Footer from './components/Footer'
 import loginService from './services/login'
+import Login from './services/login'
+import LoginUser from './components/LoginUser'
+import Togglable from './components/Togglable'
+import NoteForm from './components/NoteForm'
 
 
 
@@ -18,6 +22,16 @@ const [errorMessage, setErrorMessage] = useState(null)
 const [username, setUsername] = useState('') 
 const [password, setPassword] = useState('') 
 const [user, setUser] = useState(null)
+const [loginVisible, setLoginVisible] = useState(false)
+
+useEffect(() => {
+  const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+  if(loggedUserJSON) {
+    const user = JSON.parse(loggedUserJSON)
+    setUser(user)
+    noteService.setToken(user.token)
+  }
+}, [])
 
 // solicitud GET
 useEffect(() => {
@@ -28,14 +42,6 @@ useEffect(() => {
   })
 }, [])
 
-useEffect(() => {
-  const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
-  if(loggedUserJSON) {
-    const user = JSON.parse(loggedUserJSON)
-    setUser(user)
-    noteService.setToken(user.token)
-  }
-}, [])
 // añadir una nota
 const addNote = (event) => {
   event.preventDefault()
@@ -56,7 +62,7 @@ const addNote = (event) => {
 
 // cambiar el estado de la nota IMPORTANT/NOT IMPORTANT
 const toggleImportanceOf = id => {
-  const url = `http://localhost:3001/notes/${id}`
+  // const url = `http://localhost:3001/notes/${id}`
   const note = notes.find(n => n.id === id)
   const changedNote = {...note, important: !note.important }
   console.log(`importance of ${id} needs to be toggled`)
@@ -109,6 +115,11 @@ const handleLogin = async (event) => {
     }, 5000)
   }
 }
+// cerrar login 
+const handleLogout = () => {
+  window.localStorage.clear()
+  setUser(null)
+}
 
 
 
@@ -119,29 +130,32 @@ const handleLogin = async (event) => {
   notes.filter(note => note.important)
 
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-          <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
+ // login visible - no visible
+
+ const loginForm = () => {
+  const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+  const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
+  return (
+    <div>
+      <div style={hideWhenVisible}>
+        <button onClick={() => setLoginVisible(true)}>log in</button>
       </div>
-      <div>
-        password
-          <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
+      <div style={showWhenVisible}>
+        <LoginUser
+          handleLogin={handleLogin}
+          setUsername={setUsername}
+          setPassword={setPassword}
+          username={username}
+          password={password}
         />
+        <button onClick={() => setLoginVisible(false)}>cancel</button>
       </div>
-      <button type="submit">login</button>
-    </form>      
+    </div>
   )
+}
+
+
 
   const noteForm = () => (
     <form onSubmit={addNote}>
@@ -158,15 +172,19 @@ const handleLogin = async (event) => {
       <h1>Notes</h1>
       <Notification message={errorMessage}/>
 
-      {user === null ?
-      loginForm() :
-      <div>
-      <p>{user.name} logged-in</p>
-      {noteForm()}
-    </div>
-    }
-
-<h2>Notes</h2>
+      {!user && loginForm()}
+      {user && <div>
+       <p>{user.name} logged in</p>
+       <button onClick={handleLogout}>exit</button>
+       <Togglable buttonLabel="new note">
+        <NoteForm
+          onSubmit={addNote}
+          value={newNote}
+          handleChange={handleNoteChange}
+        />
+      </Togglable>
+      </div>
+     } 
 
       <div>
         <button onClick={() => setShowAll(!showAll)}>
@@ -178,12 +196,7 @@ const handleLogin = async (event) => {
           <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)}/>
         )}
       </ul>
-      <form onSubmit={addNote}>
-        <input 
-        value={newNote} 
-        onChange={handleNoteChange}/>
-        <button type="submit">save</button>
-      </form>  
+     
       <Footer/> 
     </div>
   )
