@@ -7,6 +7,7 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 const middleware = require('../utils/middleware')
+const { response } = require('express')
 
 // aislar token 
 // const getTokenFrom = request => {
@@ -88,17 +89,23 @@ try {
 })
 
 blogsRouter.put('/:id', async (request, response) => {
-    const body = request.body
-
-    const blog = {
-        title: body.title,
-        author: body.author,
-        url: body.url,
-        likes: body.likes
+    const body = request.body;
+  
+    const updatedBlog = {
+      title: body.title,
+      author: body.author,
+      url: body.url,
+      likes: body.likes,
+      user: body.user
+    };
+  
+    try {
+      const blog = await Blog.findByIdAndUpdate(request.params.id, updatedBlog, { new: true });
+      response.status(200).json(blog);
+    } catch (error) {
+      console.error(error);
+      response.status(500).json({ error: 'An error occurred while updating the blog.' });
     }
-        await 
-        Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-        response.status(200).end()
-     
-})
+  });
+  
   module.exports = blogsRouter;

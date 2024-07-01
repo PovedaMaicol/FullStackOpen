@@ -1,8 +1,9 @@
 import React from 'react'
 
-const AddBlog = ({addNewBlog, title, author, url, setTitle, setAuthor, setUrl}) => {
+const AddBlog = ({addNewBlog, title, author, url, setTitle, setAuthor, setUrl, setFormVisible}) => {
   return (
     <form onSubmit={addNewBlog}>
+      <h2>Create new Blog</h2>
     <div>
       title:
         <input
@@ -30,7 +31,9 @@ const AddBlog = ({addNewBlog, title, author, url, setTitle, setAuthor, setUrl}) 
         onChange={({ target }) => setUrl(target.value)}
       />
     </div>
-    <button type="submit">Add</button>
+    <button type="submit" onClick={() => setFormVisible(false)}>Add</button>
+    <button onClick={(e) => { e.preventDefault(); setFormVisible(false); }}>Cancel</button>
+
   </form>  
   )
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import './App.css'
 import Note from './components/Note'
 import Notification from './components/Notification'
@@ -23,6 +23,7 @@ const [username, setUsername] = useState('')
 const [password, setPassword] = useState('') 
 const [user, setUser] = useState(null)
 const [loginVisible, setLoginVisible] = useState(false)
+const noteFormRef = useRef()
 
 useEffect(() => {
   const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
@@ -42,22 +43,25 @@ useEffect(() => {
   })
 }, [])
 
-// añadir una nota
-const addNote = (event) => {
-  event.preventDefault()
-  const noteObject = {
-    content: newNote,
-    important: Math.random() < 0.5
-  }
+// // añadir una nota
+// const addNote = (event) => {
+//   event.preventDefault()
+//   const noteObject = {
+//     content: newNote,
+//     important: Math.random() < 0.5
+//   }
 
 // solicitud POST
+const addNote = (noteObject) => {
+  noteFormRef.current.toggleVisibility()
   noteService
   .create(noteObject)
   .then(returnedNote => {
     setNotes(notes.concat(returnedNote))
-    setNewNote('')
   })
+
 }
+
 
 
 // cambiar el estado de la nota IMPORTANT/NOT IMPORTANT
@@ -157,15 +161,15 @@ const handleLogout = () => {
 
 
 
-  const noteForm = () => (
-    <form onSubmit={addNote}>
-      <input
-        value={newNote}
-        onChange={handleNoteChange}
-      />
-      <button type="submit">save</button>
-    </form>  
-  )
+  // const noteForm = () => (
+  //   <form onSubmit={addNote}>
+  //     <input
+  //       value={newNote}
+  //       onChange={handleNoteChange}
+  //     />
+  //     <button type="submit">save</button>
+  //   </form>  
+  // )
 
   return (
     <div>
@@ -176,11 +180,9 @@ const handleLogout = () => {
       {user && <div>
        <p>{user.name} logged in</p>
        <button onClick={handleLogout}>exit</button>
-       <Togglable buttonLabel="new note">
+       <Togglable buttonLabel="new note" ref={noteFormRef}>
         <NoteForm
-          onSubmit={addNote}
-          value={newNote}
-          handleChange={handleNoteChange}
+       createNote={addNote}
         />
       </Togglable>
       </div>

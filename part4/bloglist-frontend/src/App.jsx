@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import AddBlog from './components/AddBlog'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -14,6 +15,8 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const [notificationMessage, setNotificationMessage] = useState(null)
+  const [formVisible, setFormVisible] = useState(false)
+
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -34,6 +37,7 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.clear()
     setUser(null)
+    setFormVisible(false)
   }
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -62,6 +66,8 @@ const App = () => {
       }, 3000)
     }
   }
+
+
 
 // añadir un blog
   const addNewBlog =  (event) => {
@@ -100,6 +106,24 @@ const App = () => {
     })
   }
 
+    // update likes
+    const handleLike = async (blog) => {
+      const updatedBlog = {...blog, likes: blog.likes + 1, user: blog.user.id || blog.user}
+    
+    try {
+      const returnedBlog = await blogService.update(blog.id, updatedBlog)
+      setBlogs(blogs.map(b => (b.id === blog.id ? returnedBlog : b)))
+      setNotificationMessage(`You liked '${blog.title}'`);
+      setTimeout(() => setNotificationMessage(null), 3000);
+
+    } catch (error) {
+      console.error('Error updating blog:', error)
+      setNotificationMessage('Error while liking the blog');
+      setTimeout(() => setNotificationMessage(null), 3000);
+    }
+  }
+  
+  
 
   
   const loginForm = () => (
@@ -125,15 +149,57 @@ const App = () => {
       <button type="submit">login</button>
     </form>      
   )
+const ordenarLike = (a, b) => b.likes - a.likes ;
 
   const blogsList = () => (
     <div>
-     {blogs.map(blog =>
-      <Blog key={blog.id} blog={blog} />
+     {[...blogs].sort(ordenarLike).map(blog =>
+      <Blog key={blog.id} blog={blog} handleLike={handleLike} />
     )}
+    
     </div>
    
   )
+
+
+
+
+  const blogsForm = () => {
+    const hideWhenVisible = { display: formVisible ? 'none' : '' }
+    const showWhenVisible = { display: formVisible ? '' : 'none' }
+
+
+    return (
+      <div>
+      <div style={hideWhenVisible}>
+      <p>{user.name} logged-in<button onClick={handleLogout}>Logout</button></p>
+
+      <button onClick={() => setFormVisible(true)}>Add blog</button>
+      {blogsList()}
+      </div>
+   
+
+{/*       
+      <p>{user.name} logged-in<button onClick={handleLogout}>Logout</button></p> */}
+      <div style={showWhenVisible}>
+      <AddBlog
+      addNewBlog={addNewBlog}
+      title={title}
+      author={author}
+      url={url}
+      setTitle={setTitle}
+      setAuthor={setAuthor}
+      setUrl={setUrl}
+      setFormVisible={setFormVisible}
+      />
+  {/* <button onClick={() => setFormVisible(false)}>Cancel</button>
+      */}
+      </div>
+
+
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -143,19 +209,8 @@ const App = () => {
       
       {user === null ?
       loginForm() :
-      <div>
-      <AddBlog
-      addNewBlog={addNewBlog}
-      title={title}
-      author={author}
-      url={url}
-      setTitle={setTitle}
-      setAuthor={setAuthor}
-      setUrl={setUrl}
-      />
-      <p>{user.name} logged-in<button onClick={handleLogout}>Logout</button></p>
-      {blogsList()}
-      </div>
+      blogsForm()
+    
 
     }
 
