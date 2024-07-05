@@ -47,7 +47,7 @@ const destroy = async (id) => {
     headers: { Authorization: token },
   }
 
-  const response = await axios.delete(`${baseUrl}/${id}`)
+  const response = await axios.delete(`${baseUrl}/${id}`, config)
   return response.data
   }
 

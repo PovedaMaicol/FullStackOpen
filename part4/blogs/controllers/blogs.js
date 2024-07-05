@@ -30,7 +30,7 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
         }
     
         const user = request.user;
-
+console.log('el user es ',user)
         if(!user) {
             return response.status(401).json({ error: 'Invalid or missing token' });
         }
@@ -70,10 +70,21 @@ try {
     const user = request.user;
     const blogId = request.params.id;
 
+    console.log('el user es', user)
+    console.log('el blog es', blogId)
     // busco el blog por id
+
+    if (!blogId) {
+        return response.status(400).json({ error: 'blog id is missing' })
+    }
+
     const blog = await Blog.findById(blogId)
     if(!blog) {
         return response.status(404).json({ error: 'blog not found' });
+    }
+
+    if(!user) {
+        return response.status(404).json({ error: 'unauthorized' });
     }
 
     // valido si el usuario es propietario del blog
