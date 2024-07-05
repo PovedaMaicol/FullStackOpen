@@ -1,5 +1,6 @@
 // en el controlador van las rutas
-
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const blogsRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
 
@@ -7,7 +8,7 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 const middleware = require('../utils/middleware')
-const { response } = require('express')
+const { response, request } = require('express')
 
 // aislar token 
 // const getTokenFrom = request => {
@@ -60,6 +61,9 @@ blogsRouter.get('/', async (request, response) => {
     response.json(blogs)
 })
 
+// get one
+
+
 blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
 
 try {
@@ -73,7 +77,7 @@ try {
     }
 
     // valido si el usuario es propietario del blog
-    if(blog.user.toString() !== user._id.toString()){
+    if(blog.user.toString() !== user.id.toString()){
         return response.status(403).json({ error: 'forbidden' });
     }
     // Eliminar el blog
@@ -100,7 +104,7 @@ blogsRouter.put('/:id', async (request, response) => {
     };
   
     try {
-      const blog = await Blog.findByIdAndUpdate(request.params.id, updatedBlog, { new: true });
+      const blog = await Blog.findByIdAndUpdate(request.params.id, updatedBlog, { new: true }).populate('user', { username: 1, name: 1 });;
       response.status(200).json(blog);
     } catch (error) {
       console.error(error);

@@ -22,9 +22,33 @@ const create = async newObject => {
 }
 
 const update = async (id, updateBlog) => {
-const response = await axios.put(`${baseUrl}/${id}`, updateBlog)
+  const dire = `${baseUrl}/${id}`;
+  console.log(dire);
+  console.log('updateBlog:', updateBlog);
 
-return response.data
-}
+  const config = {
+    headers: { Authorization: token },
+  };
 
-export default { getAll, create, update,setToken }
+  try {
+    const response = await axios.put(dire, updateBlog, config);
+    return response.data;
+  } catch (error) {
+    console.error(`Error updating blog: ${error}`);
+    throw error;
+  }
+};
+
+
+
+const destroy = async (id) => {
+
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  const response = await axios.delete(`${baseUrl}/${id}`)
+  return response.data
+  }
+
+export default { getAll, create, update, destroy, setToken }

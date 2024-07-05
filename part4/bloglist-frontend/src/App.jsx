@@ -123,6 +123,20 @@ const App = () => {
     }
   }
   
+// delete blog
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this blog?")) {
+      console.log(`Deleting blog with id ${id}`);
+      blogService
+        .destroy(id)
+        .then(() => {
+          setBlogs(blogs.filter(blog => blog.id !== id));
+        })
+        .catch(error => {
+          console.error('There was an error deleting this blog', error);
+        });
+    }
+  };
   
 
   
@@ -154,7 +168,7 @@ const ordenarLike = (a, b) => b.likes - a.likes ;
   const blogsList = () => (
     <div>
      {[...blogs].sort(ordenarLike).map(blog =>
-      <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+      <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete} user={user}/>
     )}
     
     </div>
