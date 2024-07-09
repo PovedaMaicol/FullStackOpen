@@ -1,6 +1,7 @@
 import React from 'react'
 
 const AddBlog = ({addNewBlog, title, author, url, setTitle, setAuthor, setUrl, setFormVisible}) => {
+  
   return (
     <form onSubmit={addNewBlog}>
       <h2>Create new Blog</h2>
@@ -10,6 +11,7 @@ const AddBlog = ({addNewBlog, title, author, url, setTitle, setAuthor, setUrl, s
         type="text"
         value={title}
         name="Title"
+        placeholder='title'
         onChange={({ target }) => setTitle(target.value)}
       />
     </div>
@@ -19,6 +21,7 @@ const AddBlog = ({addNewBlog, title, author, url, setTitle, setAuthor, setUrl, s
         type="text"
         value={author}
         name="Author"
+        placeholder='author'
         onChange={({ target }) => setAuthor(target.value)}
       />
     </div>
@@ -28,6 +31,7 @@ const AddBlog = ({addNewBlog, title, author, url, setTitle, setAuthor, setUrl, s
         type="text"
         value={url}
         name="Url"
+        placeholder='url'
         onChange={({ target }) => setUrl(target.value)}
       />
     </div>
