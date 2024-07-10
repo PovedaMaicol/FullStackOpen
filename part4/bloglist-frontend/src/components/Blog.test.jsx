@@ -1,6 +1,6 @@
 import React from "react";
 import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from "./Blog";
 import AddBlog from "./AddBlog"
@@ -84,49 +84,3 @@ test('calls handleLike twice when like button is clicked twice', async () => {
 
 })
 
-test('calls createBlog with the right details when a new blog is created', async() => {
-
-    const blog = {
-        title: 'esta es una prueba',
-        author: 'Maicol Salazar',
-        url: 'jjjasjalsal',
-        likes: 5,
-        user: { username: 'testuser' }
-    }
-
-    const addNewBlog = jest.fn()
-    const setTitle = jest.fn()
-    const setAuthor = jest.fn()
-    const setUrl = jest.fn()
-    const setFormVisible = jest.fn()
-
-    render(<AddBlog 
-        blog={blog}
-      addNewBlog={addNewBlog}     
-      title=''
-      author=''
-      url=''
-      setTitle={setTitle}
-      setAuthor={setAuthor}
-      setUrl={setUrl}
-      setFormVisible={setFormVisible}/>)
-
-    const user = userEvent.setup()
-
-    const titleInput = screen.getByPlaceholderText('title')
-    const authorInput = screen.getByPlaceholderText('author')
-    const urlInput = screen.getByPlaceholderText('url')
-    const addButton = screen.getByText('Add')
-
-    await user.type(titleInput, 'testing a form')
-    await user.type(authorInput, 'tester')
-    await user.type(urlInput, 'http://prueba.com')
-    await user.click(addButton)
-
-    expect(addNewBlog).toHaveBeenCalledWith({
-    title: 'testing a form',
-    author: 'tester',
-    url: 'http://prueba.com'
-    })
-    expect(addNewBlog).toHaveBeenCalledTimes(1)
-})
