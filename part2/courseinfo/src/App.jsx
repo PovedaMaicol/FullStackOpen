@@ -66,8 +66,20 @@ const addNote = (noteObject) => {
 
 // cambiar el estado de la nota IMPORTANT/NOT IMPORTANT
 const toggleImportanceOf = id => {
+
+  if (!id) {
+    console.error('ID is undefinded or null');
+  }
   // const url = `http://localhost:3001/notes/${id}`
+  console.log(`toggleImportanceOf called with id: ${id}`);
+  console.log('Current notes state:', notes);
+
   const note = notes.find(n => n.id === id)
+
+  if (!note) {
+    console.error(`note with id: ${id}, not found`)
+    return;
+  }
   const changedNote = {...note, important: !note.important }
   console.log(`importance of ${id} needs to be toggled`)
 
