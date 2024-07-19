@@ -18,6 +18,18 @@ describe('Note app', () => {
         
     })
 
+    test('front page can be opened', async ({ page }) => { 
+      const locator = await page.getByText('Notes')
+      await expect(locator).toBeVisible()
+      await expect(page.getByText('Note app, Department of Computer Science, University of Helsinki 2024')).toBeVisible()
+    })
+
+    test('login form can be opened', async ({page}) => {
+      await loginWith(page, 'mluukkai', 'salainen')
+
+       await expect(page.getByText('Matti Luukkainen logged in')).toBeVisible()
+   })
+
     test('login fails with wrong password', async ({ page }) => {
         await loginWith(page, 'mluukkai', 'wrong')
     
@@ -29,45 +41,33 @@ describe('Note app', () => {
         await expect(page.getByText('Matti Luukkainen logged in')).not.toBeVisible()
       })
 
-    
-    test('front page can be opened', async ({ page }) => { 
-        const locator = await page.getByText('Notes')
-        await expect(locator).toBeVisible()
-        await expect(page.getByText('Note app, Department of Computer Science, University of Helsinki 2024')).toBeVisible()
-      })
-
-    test('login form can be opened', async ({page}) => {
-       await loginWith(page, 'mluukkai', 'salainen')
-
-        await expect(page.getByText('Matti Luukkainen logged in')).toBeVisible()
-    })
-    
-
-
+  
     describe('when logged in', () => {
-        beforeEach(async ({page}) => {
-
-      await loginWith(page, 'mluukkai', 'salainen')
-        })
-
-        
-
-        test('a new note can be created', async ({ page }) => {
-        
+      beforeEach(async ({ page }) => {
+        await loginWith(page, 'mluukkai', 'salainen')
+      })
+    
+      test('a new note can be created', async ({ page }) => {
         await createNote(page, 'a note created by playwright', true)
-        await expect(await page.getByText('a note created by playwright')).toBeVisible()
+        await expect(page.getByText('a note created by playwright')).toBeVisible()
+      })
+    
+      describe('and a note exists', () => {
+        beforeEach(async ({ page }) => {
+          await createNote(page, 'first note', true)
+          await createNote(page, 'second note', true)
+    
+          await createNote(page, 'third note', true)
         })
-
-
-        describe('and a note exists', () => {
-            beforeEach(async ({ page }) => {
-              await createNote(page, 'another note by playwright', true)
-            })
+    
+        test('importance can be changed', async ({ page }) => {
+    await page.pause()
+          const otherNoteText = await page.getByText('second note')
+          const otherdNoteElement = await otherNoteText.locator('..')
         
-            test('importance can be changed', async ({ page }) => {
-              await page.getByRole('button', { name: 'make not important' }).click()
-              await expect(await page.getByText('make important')).toBeVisible()
-            })
-          })  
-    })
+          await otherdNoteElement.getByRole('button', { name: 'make not important' }).click()
+          await expect(otherdNoteElement.getByText('make important')).toBeVisible()
+        })
+      })
+    }) 
 })
