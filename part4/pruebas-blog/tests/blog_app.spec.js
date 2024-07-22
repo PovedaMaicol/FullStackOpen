@@ -11,6 +11,13 @@ describe('Blog app', () => {
             password: 'salainen'
         }
     })
+    await request.post('http://localhost:3003/api/users', {
+      data: {
+          name: 'user',
+          username: 'user',
+          password: 'user123'
+      }
+  })
     await page.goto('http://localhost:5173')
     // await request.post('/api/users')
 
@@ -50,19 +57,43 @@ describe('Blog app', () => {
   describe('When logged in', () => {
     beforeEach(async ({ page }) => {
       await loginWith(page, 'mluukkai', 'salainen')
+      await createBlog(page, 'is this', 'juan', 'xxssda')
     })
   
     test('a new blog can be created', async ({ page }) => {
-    //   await page.getByRole('button', { name: 'Add blog'}).click()
-    //   await page.getByTestId('title').fill('is this')
-    //   await page.getByTestId('author').fill('juan')
-    //   await page.getByTestId('url').fill('zzzzzzwwww')
-    //   await page.getByRole('button', { name: 'Add'}).click()
-
-    await createBlog(page, 'is this', 'juan', 'xxssda')
-
       await expect(page.getByText(`A new blog 'is this' by juan added`)).toBeVisible()
     })
+
+    test('a blog can be edited', async ({ page }) => {
+
+    await page.getByRole('button', { name: 'view' }).click()
+    await page.getByRole('button', { name: 'like '}).click()
+
+    await expect(page.getByText('1')).toBeVisible()
+
+    })
+
+    test('a blog can be deleted', async ({ page }) => {
+      page.on('dialog', async dialog => {
+        console.log(`Dialog message: ${dialog.message()}`); // Para depuración
+        await dialog.accept(); // Aceptar el diálogo
+      });
+
+      await page.getByRole('button', { name: 'view' }).click()
+      await page.getByRole('button', { name: 'like '}).click()
+      await page.getByRole('button', { name: 'Delete'}).click()
+
+      await page.waitForTimeout(1000)
+
+      await expect(page.getByText('is this - juan')).not.toBeVisible({ timeout: 10000 });
+    })
+
+    test('dont can delete a blog other user', async ({ page }) => {
+      await page.getByRole('button', { name: 'Logout'}).click()
+      await loginWith(page, 'user', 'user123')
+    })
+
+  
   })
 
 

@@ -24,7 +24,7 @@ let view = isOpen ? 'hide' : 'view'
            {blog.user && blog.user.username}<br/>
         
            {blog.user.username === user.username && (
-        <button onClick={() => handleDelete(blog.id)}>Eliminar</button>
+        <button onClick={() => handleDelete(blog.id)}>Delete</button>
       )}
            </>
       )
