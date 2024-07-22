@@ -91,6 +91,9 @@ describe('Blog app', () => {
     test('dont can delete a blog other user', async ({ page }) => {
       await page.getByRole('button', { name: 'Logout'}).click()
       await loginWith(page, 'user', 'user123')
+      await page.getByRole('button', { name: 'view' }).click()
+
+      await expect(page.getByRole('Delete')).not.toBeVisible()
     })
 
   
