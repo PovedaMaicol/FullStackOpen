@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "dotenv": "^16.4.5",
-    "params": "^0.1.1"
+    "params": "^0.1.1",
+    "redux": "^5.0.1"
   }
 }
