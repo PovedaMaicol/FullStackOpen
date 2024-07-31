@@ -18,15 +18,13 @@ const asObject = (anecdote) => {
   }
 }
 
-const initialState = anecdotesAtStart.map(asObject)
+const sortVotes = (a, b) => b.votes - a.votes;
+
+let initialState = anecdotesAtStart.map(asObject)
+initialState =initialState.sort(sortVotes)
 
 const reducer = (state = initialState, action) => {
-  console.log(initialState)
-  console.log('state now: ', state)
-  console.log('action', action)
-  console.log('holaa')
-  // console.log(id)
-  // console.log(anecdote)
+
   switch(action.type) {
     case 'LIKE': 
     const id = action.data.id
@@ -34,12 +32,12 @@ const reducer = (state = initialState, action) => {
     const updatedAnecdote = {
       ...anecdoteLike, votes: anecdoteLike.votes + 1
     }
-    return state.map(an => an.id !== id ? an : updatedAnecdote)
+    return state.map(an => an.id !== id ? an : updatedAnecdote).sort(sortVotes);
 
     case 'NEW_ANECDOTE':
 
      const newAnecdote = asObject(action.payload);
-    return [...state, newAnecdote]
+    return [...state, newAnecdote].sort(sortVotes)
   }
  
 
