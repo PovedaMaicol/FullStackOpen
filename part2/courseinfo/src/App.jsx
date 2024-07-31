@@ -65,7 +65,7 @@ const addNote = (noteObject) => {
 
 
 // cambiar el estado de la nota IMPORTANT/NOT IMPORTANT
-const toggleImportanceOf = id => {
+const toggleImportanceOf = (id) => {
 
   if (!id) {
     console.error('ID is undefinded or null');
