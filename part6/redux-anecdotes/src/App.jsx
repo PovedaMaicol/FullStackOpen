@@ -11,12 +11,28 @@ const App = () => {
   const dispatch = useDispatch()
   // obtengo la función dispatch para enviar acciones a la store de Redux.
 
+
+  const generateId = () =>
+    Number((Math.random() * 1000000).toFixed(0))
+
+  
   const vote = (id) => {
 dispatch({
   type: 'LIKE',
   data: {id}
 })
     console.log('vote', id)
+  }
+
+  const addAnecdote = (event) => {
+    event.preventDefault()
+    const content = event.target.anecdote.value
+    event.target.anecdote.value = ''
+    dispatch({
+      type: 'NEW_ANECDOTE',
+      payload: content
+    })
+
   }
 
   return (
@@ -34,9 +50,9 @@ dispatch({
         </div>
       )}
       <h2>create new</h2>
-      <form>
-        <div><input /></div>
-        <button>create</button>
+      <form onSubmit={addAnecdote}>
+        <div><input name='anecdote'/></div>
+        <button type='submit'>create</button>
       </form>
     </div>
   )

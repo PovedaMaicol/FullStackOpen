@@ -35,6 +35,11 @@ const reducer = (state = initialState, action) => {
       ...anecdoteLike, votes: anecdoteLike.votes + 1
     }
     return state.map(an => an.id !== id ? an : updatedAnecdote)
+
+    case 'NEW_ANECDOTE':
+
+     const newAnecdote = asObject(action.payload);
+    return [...state, newAnecdote]
   }
  
 
