@@ -10,17 +10,22 @@ const Note = ({ note, handleClick }) => {
   )
 }
 
-const Notes = () => {
-  const dispatch = useDispatch()
-  const notes = useSelector(state => {
-    if ( state.filter === 'ALL' ) {
-      return state.notes
-    }
-    return state.filter  === 'IMPORTANT' 
-      ? state.notes.filter(note => note.important)
-      : state.notes.filter(note => !note.important)
-  })
 
+const Notes = () => {
+  const dispatch = useDispatch();
+  const notes = useSelector((state) => {
+    const { type, text } = state.filter;
+    return state.notes.filter((note) => {
+      const matchesType =
+        type === 'ALL' ||
+        (type === 'IMPORTANT' && note.important) ||
+        (type === 'NONIMPORTANT' && !note.important);
+      const matchesText = note.content
+        .toLowerCase()
+        .includes(text.toLowerCase());
+      return matchesType && matchesText;
+    });
+  });
 
   return(
     <ul>
