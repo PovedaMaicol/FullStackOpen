@@ -1,18 +1,16 @@
 import { useDispatch } from 'react-redux'
 import { createNote } from '../reducers/noteReducer'
+import noteService from '../services/notes'
 
-// El hook useDispatch proporciona acceso a cualquier componente de React a la función dispatch de redux-store definida en main.jsx. Esto permite que todos los componentes realicen cambios en el estado de Redux store.
-
-
-const NewNote = () => {
-
+const NewNote = (props) => {
   const dispatch = useDispatch()
 
-  const addNote = (event) => {
+  const addNote = async (event) => {
     event.preventDefault()
     const content = event.target.note.value
     event.target.note.value = ''
-    dispatch(createNote(content))
+    const newNote = await noteService.createNew(content)
+    dispatch(createNote(newNote))
   }
 
   return (
