@@ -1,5 +1,6 @@
 import AnecdoteForm from './components/AnecdoteForm'
 import AnecdoteList from './components/AnecdoteList'
+import Notification from './components/Notification'
 
 // ↑↑ se usa 'react-redux' para conectarse a la store de redux y manejar los votos de las anecdotas
 // useSelector --> accedo al estado almacenado en la store desde un componente React
@@ -10,7 +11,8 @@ const App = () => {
 
   return (
     <div>
-      <h2>Anecdotes</h2>
+      {/* <h2>Anecdotes</h2> */}
+      <Notification/>
       <AnecdoteList/>
       <AnecdoteForm/>
     </div>
