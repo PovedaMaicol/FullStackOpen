@@ -2,8 +2,11 @@ import ReactDOM from 'react-dom/client'
 import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 import App from './App'
-import reducer from './reducers/anecdoteReducer'
+import reducer, { appendAnecdote, setAnecdotes } from './reducers/anecdoteReducer'
+
+
 import anecdoteReducer from './reducers/anecdoteReducer'
+
 import notificationReducer from './reducers/notificationSlice'
 
 const store = configureStore({
@@ -13,7 +16,6 @@ reducer: {
 
 }
 })
-console.log(store.getState())
 
 
 
