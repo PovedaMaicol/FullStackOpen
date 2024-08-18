@@ -1,7 +1,7 @@
 import React from 'react'
 import {  useDispatch } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
-import anecdoteService from '../services/anecdotes'
+import { clearNotification, setNotification, setTimedNotification } from '../reducers/notificationSlice'
 const AnecdoteForm = () => {
 
     
@@ -13,12 +13,14 @@ const AnecdoteForm = () => {
         event.target.anecdote.value = '';
         if(content) {
           dispatch(createAnecdote(content))
+
+          dispatch(setTimedNotification(`new anecdote '${content}'`, 5));
+
+
+
         } else {
           console.log('No se puede crear una anécdota vacía');
         }
-        const newAnecdote = await anecdoteService.createNew(content)
-        dispatch(createAnecdote(newAnecdote))
-     
       }
 
   return (
