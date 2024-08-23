@@ -24,17 +24,6 @@ const AnecdoteForm = () => {
     }
   
 }
-const updateAnecdoteMutation = useMutation({
-  mutationFn: updateAnecdote,
-  onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ['anecdotes']})
-  }
-})
-
-
-  const updateVote = (anecdote) => {
-    updateAnecdote.mutate({...anecdote, vote: anecdote.vote + 1})
-  }
 
   return (
     <div>

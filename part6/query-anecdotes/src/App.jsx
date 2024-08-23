@@ -3,9 +3,24 @@ import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 import axios from 'axios'
 import { createAnecdote, getAnecdotes, updateAnecdote } from './server'
+import { useReducer } from 'react'
 
+const notificationReducer = (state, action) => {
+  switch (action.type) {
+    case "create":
+      return `New anecdote created: ${action.payload}`;
+    case "vote":
+      return `Voted for: ${action.payload}`;
+    case "clear":
+      return '';
+    default:
+      return state;
+  
+  }
+}
 const App = () => {
 
+  const [notification, notificationDispatch] = useReducer(notificationReducer, '')
  
     const queryClient = useQueryClient()
   // const handleVote = (anecdote) => {
@@ -22,7 +37,22 @@ const App = () => {
   
     const updateVote = (anecdote) => {
       console.log('anecdote es', anecdote)
-      updateAnecdoteMutation.mutate({...anecdote, votes: anecdote.votes + 1})
+      updateAnecdoteMutation.mutate({...anecdote, votes: anecdote.votes + 1},
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries(['anecdotes']);
+
+            notificationDispatch({
+              type: 'vote',
+              payload: anecdote.content,
+            });
+
+            setTimeout(() => {
+              notificationDispatch({type: 'clear'})
+            }, 5000)
+          }
+        }
+      )
     }
   
 
@@ -48,7 +78,7 @@ const App = () => {
     <div>
       <h3>Anecdote app</h3>
     
-      <Notification />
+      <Notification message={notification} />
       <AnecdoteForm />
     
       {anecdotes.map(anecdote =>
