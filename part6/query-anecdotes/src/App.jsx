@@ -79,7 +79,7 @@ const App = () => {
       <h3>Anecdote app</h3>
     
       <Notification message={notification} />
-      <AnecdoteForm />
+      <AnecdoteForm  notificationDispatch={notificationDispatch}/>
     
       {anecdotes.map(anecdote =>
         <div key={anecdote.id}>
