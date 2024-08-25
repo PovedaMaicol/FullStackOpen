@@ -30,7 +30,10 @@ const AnecdoteForm = ({notificationDispatch}) => {
     if(content.length > 4) {
       newAnecdoteMutation.mutate({content, votes: 0})
     } else {
-      console.log('la anecdota debe tener mas caracteres')
+      notificationDispatch({type: 'error'})
+      setTimeout(() => {
+        notificationDispatch({ type: 'clear' });
+      }, 5000);
     }
   
 }

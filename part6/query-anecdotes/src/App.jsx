@@ -11,6 +11,8 @@ const notificationReducer = (state, action) => {
       return `New anecdote created: ${action.payload}`;
     case "vote":
       return `Voted for: ${action.payload}`;
+    case "error":
+      return `too short anecdote, must have length 5 or more`;
     case "clear":
       return '';
     default:
