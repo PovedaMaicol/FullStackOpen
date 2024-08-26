@@ -1,20 +1,36 @@
 import React from 'react'
 import { useState } from 'react'
+import { useField } from '../hooks'
+
 
 
 const CreateNew = (props) => {
-const [content, setContent] = useState('')
-const [author, setAuthor] = useState('')
-const [info, setInfo] = useState('')
+// const [content, setContent] = useState('')
+// const [author, setAuthor] = useState('')
+// const [info, setInfo] = useState('')
+
+const content = useField('text')
+const author = useField('text')
+const info = useField('text')
+
 
 const handleSubmit = (e) => {
 e.preventDefault()
+console.log('content es' ,content)
 props.addNew({
-content,
-author,
-info,
+content: content.value,
+author: author.value,
+info: author.value,
 votes: 0
 })
+
+props.notificationDispatch({
+  type: 'create',
+  payload: content.value
+})
+setTimeout(() => {
+  props.notificationDispatch({ type: 'clear'})
+}, 5000)
 }
 
   return (
@@ -22,15 +38,20 @@ votes: 0
        <h2>create a new anecdote</h2>
        <form onSubmit={handleSubmit}>
        <div>content
-       <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+       <input name='content' {...content} />
        </div>
        <div>author
-       <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+       <input name='author' {...author} />
        </div>
        <div> url for more info
-       <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+       <input name='info' {...info} />
        </div>
-       <button>create</button>
+
+       <div>
+        <button>create</button>
+        <button>reset</button>
+        </div>
+       
        </form>
     </div>
   )

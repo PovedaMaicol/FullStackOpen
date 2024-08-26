@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useReducer, useState } from 'react'
 import About from './components/About'
 import Footer from './components/Footer'
 import AnecdoteList from './components/AnecdoteList'
@@ -7,6 +7,22 @@ import CreateNew from './components/CreateNew'
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Anecdote from './components/Anecdote'
+import Notification from './components/Notification'
+// import { useQueryClient } from 'react-query'
+
+
+const notificationReducer = (state, action) => {
+  switch (action.type) {
+    case "create":
+      return `New anecdote created: ${action.payload}`;
+    case "vote":
+      return `Voted for: ${action.payload}`;
+    case "clear": 
+      return '';
+      default:
+        return state;
+  }
+}
 
 
 const App = () => {
@@ -27,7 +43,9 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState('')
+  const [notification, notificationDispatch] = useReducer(notificationReducer, '')
+
+  // const queryClient = useQueryClient()
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
@@ -53,6 +71,7 @@ const App = () => {
    <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      <Notification message={notification}/>
 
       <Routes>
       <Route path="/" element={<AnecdoteList anecdotes={anecdotes} /> }/>
@@ -61,7 +80,7 @@ const App = () => {
 
       <Route path="/about" element={<About/>}/>
 
-      <Route path="/create" element={<CreateNew addNew={addNew}/>} />
+      <Route path="/create" element={<CreateNew addNew={addNew} notificationDispatch={notificationDispatch}/>} />
       </Routes>
    
       <Footer />
