@@ -1,3 +1,4 @@
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
@@ -5,6 +6,26 @@ import loginService from './services/login'
 import AddBlog from './components/AddBlog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import { type } from '@testing-library/user-event/dist/cjs/utility/type.js'
+import { useReducer } from 'react'
+
+
+
+const notificationReducer = (state, action) => {
+
+  switch(action.type){
+    case "login":
+      return `Login successful: ${action.payload}`
+    case "create":
+     return `New anecdote created: ${action.payload}`;
+    case "like":
+     return `Voted for: ${action.payload}`;
+    case "clear":
+     return '';
+    default:
+     return state;
+  }
+}
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -14,8 +35,12 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-  const [notificationMessage, setNotificationMessage] = useState(null)
+  // const [notificationMessage, setNotificationMessage] = useState(null) //
   const [formVisible, setFormVisible] = useState(false)
+
+
+  const [notification, notificationDispatch] = useReducer(notificationReducer, '')
+  const queryClient = useQueryClient()
 
 
   useEffect(() => {
@@ -48,10 +73,10 @@ const App = () => {
         username, password,
       })
 
-      setNotificationMessage(`approved login`)
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 3000)
+      // setNotificationMessage(`approved login`)
+      // setTimeout(() => {
+      //   setNotificationMessage(null)
+      // }, 3000)
 
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user)
     )
@@ -59,52 +84,71 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-    } catch (exception) {
-      setNotificationMessage('Wrong credentials')
+      notificationDispatch({ type: 'login', payload: user.username})
       setTimeout(() => {
-        setNotificationMessage(null)
-      }, 3000)
+        notificationDispatch({ type: 'clear'})
+      }, 5000);
+    } catch (exception) {
+      notificationDispatch({ type: 'create', payload: 'Wrong credentials' })
+      setTimeout(() => {
+        notificationDispatch({ type: 'clear'})
+      }, 5000);
     }
   }
 
 
+  const newBlogMutation = useMutation(blogService.create, {
+    onSuccess: (newBlog) => {
+      queryClient.invalidateQueries('blogs');
+
+      // mirar si puedo deshacer esta linea de set 
+      setBlogs(prevBlogs => [...prevBlogs, newBlog])
+      notificationDispatch({ type: 'create', payload: newBlog.title });
+      setTimeout(() => {
+        notificationDispatch({ type: 'clear'})
+      }, 5000);
+    }
+  })
 
 // añadir un blog
-  const addNewBlog =  (event) => {
+  const addNewBlog = (event) => {
     event.preventDefault()
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url
-    }
+    // const blogObject = {
+    //   title: title,
+    //   author: author,
+    //   url: url
+    // }
+    const blogObject = { title, author, url };
+    newBlogMutation.mutate(blogObject)
+   
 
 
-    // solicitud post
-    blogService
-    .create(blogObject)
-    .then(returnedBlog => {
-      setBlogs(blogs.concat(returnedBlog))
+  //   // solicitud post
+  //   blogService
+  //   .create(blogObject)
+  //   .then(returnedBlog => {
+  //     setBlogs(blogs.concat(returnedBlog))
 
 
-      setNotificationMessage(`A new blog '${title}' by ${author} added`)
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 3000)
+  //     setNotificationMessage(`A new blog '${title}' by ${author} added`)
+  //     setTimeout(() => {
+  //       setNotificationMessage(null)
+  //     }, 3000)
 
 
-      setAuthor('')
-      setTitle('')
-      setUrl('')
+  //     setAuthor('')
+  //     setTitle('')
+  //     setUrl('')
       
-    })
-    .catch( error => {
-      console.log(error)
-      setNotificationMessage('Fill all the boxes')
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 3000)
-    })
-  }
+  //   })
+  //   .catch( error => {
+  //     console.log(error)
+  //     setNotificationMessage('Fill all the boxes')
+  //     setTimeout(() => {
+  //       setNotificationMessage(null)
+  //     }, 3000)
+  //   })
+     }
 
     // update likes
     const handleLike = async (blog) => {
@@ -221,7 +265,7 @@ const ordenarLike = (a, b) => b.likes - a.likes ;
     <div>
       <h2>blogs</h2>
       <Notification
-      message={notificationMessage}/>
+      message={notification}/>
       
       {user === null ?
       loginForm() :
