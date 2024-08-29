@@ -1,54 +1,58 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { useState, useEffect } from 'react'
+import { useMutation,  useQueryClient } from 'react-query'
+import { useState, useEffect, useReducer } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import AddBlog from './components/AddBlog'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
-import { type } from '@testing-library/user-event/dist/cjs/utility/type.js'
-import { useReducer } from 'react'
+import { createBlog, initializeBlogs } from './reducers/blogReducer'
 
 
-
+// REDUCER  manejar notificaciones 
 const notificationReducer = (state, action) => {
 
   switch(action.type){
     case "login":
       return `Login successful: ${action.payload}`
+    case "nologin":
+      return 'Incorrect credentials'
     case "create":
      return `New anecdote created: ${action.payload}`;
     case "like":
-     return `Voted for: ${action.payload}`;
+     return `You liked: ${action.payload}`;
     case "clear":
      return '';
+    case "error":
+      return "An error has occurred"
     default:
      return state;
   }
 }
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+ 
+  const dispatch = useDispatch()
+  const blogs = useSelector(state => state.blogs)
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-  // const [notificationMessage, setNotificationMessage] = useState(null) //
   const [formVisible, setFormVisible] = useState(false)
-
-
   const [notification, notificationDispatch] = useReducer(notificationReducer, '')
   const queryClient = useQueryClient()
 
-
+// carga de blogs al iniciar la app
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
-  }, [])
 
+      dispatch(initializeBlogs())
+ 
+  }, [dispatch])
+
+
+// validar si hay un usuario logueado en localStorage
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -57,39 +61,33 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
-
-  
+// cierre de login
   const handleLogout = () => {
     window.localStorage.clear()
     setUser(null)
     setFormVisible(false)
   }
+
+// funcion para manejar login 
   const handleLogin = async (event) => {
     event.preventDefault()
-    // console.log('logging in with', username, password)
-
     try {
       const user = await loginService.login({
         username, password,
       })
-
-      // setNotificationMessage(`approved login`)
-      // setTimeout(() => {
-      //   setNotificationMessage(null)
-      // }, 3000)
-
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user)
+
     )
     blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
-      notificationDispatch({ type: 'login', payload: user.username})
+      notificationDispatch({ type: 'login', payload: user.name})
       setTimeout(() => {
         notificationDispatch({ type: 'clear'})
       }, 5000);
     } catch (exception) {
-      notificationDispatch({ type: 'create', payload: 'Wrong credentials' })
+      notificationDispatch({ type: 'nologin'})
       setTimeout(() => {
         notificationDispatch({ type: 'clear'})
       }, 5000);
@@ -97,12 +95,10 @@ const App = () => {
   }
 
 
-  const newBlogMutation = useMutation(blogService.create, {
+  const newBlogMutation = useMutation({
+    mutationFn: blogService.create,
     onSuccess: (newBlog) => {
-      queryClient.invalidateQueries('blogs');
-
-      // mirar si puedo deshacer esta linea de set 
-      setBlogs(prevBlogs => [...prevBlogs, newBlog])
+      queryClient.invalidateQueries({queryKey: ['blogs']});
       notificationDispatch({ type: 'create', payload: newBlog.title });
       setTimeout(() => {
         notificationDispatch({ type: 'clear'})
@@ -113,42 +109,9 @@ const App = () => {
 // añadir un blog
   const addNewBlog = (event) => {
     event.preventDefault()
-    // const blogObject = {
-    //   title: title,
-    //   author: author,
-    //   url: url
-    // }
     const blogObject = { title, author, url };
     newBlogMutation.mutate(blogObject)
-   
-
-
-  //   // solicitud post
-  //   blogService
-  //   .create(blogObject)
-  //   .then(returnedBlog => {
-  //     setBlogs(blogs.concat(returnedBlog))
-
-
-  //     setNotificationMessage(`A new blog '${title}' by ${author} added`)
-  //     setTimeout(() => {
-  //       setNotificationMessage(null)
-  //     }, 3000)
-
-
-  //     setAuthor('')
-  //     setTitle('')
-  //     setUrl('')
-      
-  //   })
-  //   .catch( error => {
-  //     console.log(error)
-  //     setNotificationMessage('Fill all the boxes')
-  //     setTimeout(() => {
-  //       setNotificationMessage(null)
-  //     }, 3000)
-  //   })
-     }
+    }
 
     // update likes
     const handleLike = async (blog) => {
@@ -156,14 +119,19 @@ const App = () => {
     
     try {
       const returnedBlog = await blogService.update(blog.id, updatedBlog)
-      setBlogs(blogs.map(b => (b.id === blog.id ? returnedBlog : b)))
-      setNotificationMessage(`You liked '${blog.title}'`);
-      setTimeout(() => setNotificationMessage(null), 3000);
+      dispatch(initializeBlogs())
+      // setBlogs(blogs.map(b => (b.id === blog.id ? returnedBlog : b)))
+      notificationDispatch({type: 'like', payload: blog.title})
+      setTimeout(() => {
+        notificationDispatch({ type: 'clear'})
+      }, 5000);
 
     } catch (error) {
       console.error('Error updating blog:', error)
-      setNotificationMessage('Error while liking the blog');
-      setTimeout(() => setNotificationMessage(null), 3000);
+      notificationDispatch({type: 'error'})
+      setTimeout(() => {
+        notificationDispatch({ type: 'clear'})
+      }, 5000);
     }
   }
   
