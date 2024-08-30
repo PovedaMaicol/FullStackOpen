@@ -1,6 +1,46 @@
 import React from 'react'
+import { useQueryClient, useMutation } from 'react-query';
+import blogService from '../services/blogs'
+import { useState } from 'react';
 
-const AddBlog = ({addNewBlog, title, author, url, setTitle, setAuthor, setUrl, setFormVisible}) => {
+
+
+const AddBlog = ({ setFormVisible, notificationDispatch}) => {
+
+  const queryClient = useQueryClient()
+
+
+
+  
+  const newBlogMutation = useMutation({ 
+    mutationFn: blogService.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs']})
+    }
+  })
+
+  const addNewBlog = async (event) => {
+    event.preventDefault()
+    const blogObject = { title, author, url };
+ newBlogMutation.mutate(blogObject)
+    setAuthor('')
+    setTitle('')
+    setUrl('')
+    notificationDispatch({ 
+            type: 'create', 
+            payload: blogObject.title 
+          });
+          setTimeout(() => {
+            notificationDispatch({ type: 'clear'})
+          }, 5000);
+        }
+      
+
+
+        const [title, setTitle] = useState('')
+        const [author, setAuthor] = useState('')
+        const [url, setUrl] = useState('')
+
   
   return (
     <form onSubmit={addNewBlog}>
