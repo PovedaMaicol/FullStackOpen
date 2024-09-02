@@ -5,6 +5,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import AddBlog from './components/AddBlog'
 import Notification from './components/Notification'
+import Users from './components/Users'
 
 
 // REDUCER  manejar notificaciones 
@@ -101,12 +102,18 @@ const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
 
 return (
   <div>
+
     <h2>blogs</h2>
     <Notification message={notification} />
+    
     {user ? (
       <div>
         <div style={{ display: formVisible ? 'none' : '' }}>
           <p>{user.name} logged-in<button onClick={handleLogout}>Logout</button></p>
+
+          <Users />
+
+
           <button onClick={() => setFormVisible(true)}>Add blog</button>
           <div>
             {sortedBlogs.map(blog => (
