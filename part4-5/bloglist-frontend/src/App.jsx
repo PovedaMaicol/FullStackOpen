@@ -2,10 +2,13 @@ import { useMutation,  useQuery,  useQueryClient } from 'react-query'
 import { useState, useEffect, useReducer } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
-import loginService from './services/login'
+// import loginService from './services/login'
 import AddBlog from './components/AddBlog'
 import Notification from './components/Notification'
 import Users from './components/Users'
+import Login from './components/Login'
+import { Route, Routes } from 'react-router-dom'
+import Home from './components/Home'
 
 
 // REDUCER  manejar notificaciones 
@@ -31,8 +34,6 @@ const notificationReducer = (state, action) => {
 
 const App = () => {
   const [user, setUser] = useState(null)
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
   const [notification, notificationDispatch] = useReducer(notificationReducer, '')
   const [formVisible, setFormVisible] = useState(false)
 
@@ -50,38 +51,6 @@ const App = () => {
     }, []);
   
 
-  // LOGIN 
-  const loginMutation = useMutation({
-    mutationFn: (credentials) => loginService.login(credentials),
-  onSuccess: (user) => {
-    window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user));
-    blogService.setToken(user.token);
-    setUser(user)
-    setUsername('')
-    setPassword('')
-    notificationDispatch({ type: 'login', payload: user.name})
-    setTimeout(() => {
-      notificationDispatch({ type: 'clear'})
-    }, 5000);
-  },
-onError: () => {
-  notificationDispatch({ type: 'nologin' });
-  setTimeout(() => {
-    notificationDispatch({ type: 'clear' });
-  }, 5000);
-  } 
-  })
-
-
-  
-  // MANEJAR LOGIN  
-  const handleLogin = (event) => {
-    event.preventDefault()
-    loginMutation.mutate({ username, password })
-    
-    }
-
-    
   // CIERRE LOGIN 
   const handleLogout = () => {
     window.localStorage.clear();
@@ -98,62 +67,39 @@ if (isLoading) {
   return <div>Loading data...</div>;
 }
 
-const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
+// const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
 
 return (
+
   <div>
+  <h2>blogs</h2>
+  <Notification message={notification} />
 
-    <h2>blogs</h2>
-    <Notification message={notification} />
-    
-    {user ? (
-      <div>
-        <div style={{ display: formVisible ? 'none' : '' }}>
-          <p>{user.name} logged-in<button onClick={handleLogout}>Logout</button></p>
+  <Routes>
+    <Route path='/' element={
+      user ? (
+        <Home 
+        user={user} 
+        handleLogout={handleLogout} 
+        setFormVisible={setFormVisible} 
+        formVisible={formVisible} 
+        notificationDispatch={notificationDispatch} 
+        blogs={blogs}
+        />
+      ) : (
+        <Login 
+        setUser={setUser} 
+        notificationDispatch={notificationDispatch}
+        />
+      )
+    } />
+    <Route path='/form' element={<AddBlog notificationDispatch={notificationDispatch}/>} />
+    <Route path='/users' element={<Users />} />
+</Routes>
+ 
 
-          <Users />
-
-
-          <button onClick={() => setFormVisible(true)}>Add blog</button>
-          <div>
-            {sortedBlogs.map(blog => (
-              <Blog key={blog.id} blog={blog} notificationDispatch={notificationDispatch} user={user} />
-            ))}
-          </div>
-        </div>
-        {formVisible && (
-          <AddBlog
-            notificationDispatch={notificationDispatch}
-            setFormVisible={setFormVisible}
-          />
-        )}
-      </div>
-    ) : (
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type="text"
-            data-testid='username'
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            data-testid='password'
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    )}
   </div>
+
 );
 };
 
