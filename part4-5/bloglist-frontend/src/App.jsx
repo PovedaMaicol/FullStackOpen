@@ -1,14 +1,15 @@
 import { useMutation,  useQuery,  useQueryClient } from 'react-query'
 import { useState, useEffect, useReducer } from 'react'
-import Blog from './components/Blog'
 import blogService from './services/blogs'
-// import loginService from './services/login'
 import AddBlog from './components/AddBlog'
 import Notification from './components/Notification'
 import Users from './components/Users'
 import Login from './components/Login'
 import { Route, Routes } from 'react-router-dom'
 import Home from './components/Home'
+import User from './components/User'
+import userService from './services/users'
+import BlogCard from './components/BlogCard'
 
 
 // REDUCER  manejar notificaciones 
@@ -59,13 +60,27 @@ const App = () => {
     }
     
 
-// carga de blogs al iniciar la app
+  // Carga de blogs
+  const { data: blogs, isLoading: blogsLoading, error: blogsError } = useQuery({
+    queryKey: ['blogs'],
+    queryFn: blogService.getAll
+  });
 
-const { data: blogs, isLoading } = useQuery('blogs', blogService.getAll);
+  // Carga de usuarios
+  const { data: users, isLoading: usersLoading, error: usersError } = useQuery({
+    queryKey: ['users'],
+    queryFn: userService.getAll
+  });
 
-if (isLoading) {
-  return <div>Loading data...</div>;
-}
+  if (blogsLoading || usersLoading) {
+    return <div>Loading data...</div>;
+  }
+
+  if (blogsError || usersError) {
+    return <div>An error occurred while fetching data.</div>;
+  }
+
+
 
 // const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
 
@@ -94,7 +109,9 @@ return (
       )
     } />
     <Route path='/form' element={<AddBlog notificationDispatch={notificationDispatch}/>} />
-    <Route path='/users' element={<Users />} />
+    <Route path='/users' element={<Users users={users} />} />
+    <Route path='/users/:id' element={<User users={users}/>} />
+    <Route path='/blogs/:id' element={<BlogCard blogs={blogs} />}/>
 </Routes>
  
 

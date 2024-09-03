@@ -11,4 +11,10 @@ const setToken = newToken => {
     return request.then(response => response.data)
   }
 
-export default {getAll, setToken}
+  const getOne = (id) => {
+    const request = axios.get(`${baseUrl}/${id}`)
+    console.log('ID ES', id)
+    return request.then(response => response.data)
+  }
+
+export default {getAll, getOne, setToken}

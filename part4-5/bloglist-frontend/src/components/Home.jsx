@@ -1,6 +1,7 @@
 import React from 'react'
 import Blog from './Blog'
 import AddBlog from './AddBlog';
+import { Link } from 'react-router-dom';
 
 const Home = ({user, handleLogout, setFormVisible, formVisible, notificationDispatch, blogs}) => {
 
@@ -16,7 +17,9 @@ const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
       <button onClick={() => setFormVisible(true)}>Add blog</button>
       <div>
         {sortedBlogs.map(blog => (
-          <Blog key={blog.id} blog={blog} notificationDispatch={notificationDispatch} user={user} />
+          <Link key={blog.id} to={`/blogs/${blog.id}`}>
+            <Blog blog={blog} notificationDispatch={notificationDispatch} user={user} />
+          </Link>
         ))}
       </div>
     </div>

@@ -1,34 +1,23 @@
 import axios from 'axios'
 import React from 'react'
-import { useQuery } from 'react-query'
-import userService  from '../services/users'
 
-const Users = () => {
+import { Link } from 'react-router-dom'
 
-     const { data: users, isLoading, error } = useQuery({
-        queryKey: ['users'],
-        queryFn: () => userService.getAll()
-     })
 
-     if (isLoading) {
-        return <div>Loading users...</div>
-     }
+const Users = ({users}) => {
 
-     if (error) {
-        return <div>An error occurred while fetching users.</div>
-     }
 
   return (
     <div>
         <h2>Users</h2>
         <ul>
             
-            {/* <li style={{ listStyleType: 'none' }}>Blogs created</li> */}
-            {users.map((user) => (
+            {users.map(user => 
                 <li key={user.id}>
-                    {user.name} - Blogs created:  {user.blogs.length}
+                    <Link to={`/users/${user.id}`}>{user.name} - Blogs created:  {user.blogs.length}</Link>
+                    
                 </li>
-            ))}
+            )}
         </ul>
     </div>
   )
