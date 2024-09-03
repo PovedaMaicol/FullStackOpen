@@ -17,9 +17,9 @@ const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
       <button onClick={() => setFormVisible(true)}>Add blog</button>
       <div>
         {sortedBlogs.map(blog => (
-          <Link key={blog.id} to={`/blogs/${blog.id}`}>
-            <Blog blog={blog} notificationDispatch={notificationDispatch} user={user} />
-          </Link>
+          <li key={blog.id}>
+<Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          </li>
         ))}
       </div>
     </div>

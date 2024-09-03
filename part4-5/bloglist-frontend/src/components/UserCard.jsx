@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 
 
-const User = ({ users }) => {
+const UserCard = ({ users }) => {
 
   const { id } = useParams();
   const user = users.find(us => us.id === id)
@@ -24,4 +24,4 @@ const User = ({ users }) => {
   )
 }
 
-export default User
+export default UserCard

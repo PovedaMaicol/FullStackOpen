@@ -1,10 +1,16 @@
-import { useState, useEffect } from 'react'
+
 
 import { useQueryClient, useMutation } from 'react-query'
 import blogService from '../services/blogs'
+import { useParams } from 'react-router-dom'
 
 
-const Blog = ({ blog, user, notificationDispatch }) => {
+const Blog = ({ blogs, notificationDispatch }) => {
+  console.log(blogs)
+const id = useParams().id
+const blog = blogs.find(b => b.id === id)
+console.log(blog)
+console.log(id)
 
 const queryClient = useQueryClient()
 
@@ -58,28 +64,15 @@ const handleDelete = () => {
 
 }
 
-  const [isOpen, setIsOpen] = useState(false)
 
-let view = isOpen ? 'hide' : 'view'
   return (
     <div className='blog'>
-    {blog.title} - {blog.author} 
-    <button onClick={() => setIsOpen(!isOpen)}>{view}</button>
-   
-    {
-      isOpen&& (
-      <>
-      <br/>
-           {blog.url}<br/>
-           likes: {blog.likes}<button onClick={() => handleLike(blog)}>like</button><br/>
-           {blog.user && blog.user.username}<br/>
-        
-           {blog.user.username === user.username && (
-        <button onClick={() => handleDelete(blog.id)}>Delete</button>
-      )}
-           </>
-      )
-    }
+    <h2>{blog.title} - {blog.author}</h2> 
+    <a>{blog.url}</a>
+    <p>likes: {blog.likes}<button onClick={() => handleLike(blog)}>like</button><br/>
+    Added by: {blog.user.name}</p> 
+
+
   
   </div>  
 
