@@ -10,6 +10,8 @@ import Home from './components/Home';
 import UserCard from './components/UserCard';
 import userService from './services/users';
 import Blog from './components/Blog';
+import NavBar from './components/NavBar';
+import { useNavigate } from 'react-router-dom';
 
 // REDUCER para manejar notificaciones
 const notificationReducer = (state, action) => {
@@ -35,7 +37,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [notification, notificationDispatch] = useReducer(notificationReducer, '');
   const [formVisible, setFormVisible] = useState(false);
-
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   
@@ -55,7 +57,8 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.clear();
     setUser(null);
-    setFormVisible(false);
+    navigate('/')
+
   };
 
   // Carga de blogs
@@ -81,7 +84,9 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
+      {user && <NavBar user={user} handleLogout={handleLogout}/>}
+   
+      <h2>Blog App</h2>
       <Notification message={notification} />
       <Routes>
         <Route 

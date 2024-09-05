@@ -12,7 +12,7 @@ const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
   return (
     <div>
     <div style={{ display: formVisible ? 'none' : '' }}>
-      <p>{user.name} logged-in<button onClick={handleLogout}>Logout</button></p>
+      {/* <p>{user.name} logged-in<button onClick={handleLogout}>Logout</button></p> */}
 
       <button onClick={() => setFormVisible(true)}>Add blog</button>
       <div>

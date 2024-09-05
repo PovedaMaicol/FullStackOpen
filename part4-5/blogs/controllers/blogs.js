@@ -122,5 +122,16 @@ blogsRouter.put('/:id', async (request, response) => {
       response.status(500).json({ error: 'An error occurred while updating the blog.' });
     }
   });
+
+  blogsRouter.post('/:id/comments', async (request, response) => {
+    const { comment } = request.body
+    const blog = await Blog.findById(request.params.id)
+
+    blog.comments = blog.comments.concat(comment);
+    const updatedBlog = await blog.save()
+
+    response.status(201).json(updatedBlog)
+  }
+)
   
   module.exports = blogsRouter;

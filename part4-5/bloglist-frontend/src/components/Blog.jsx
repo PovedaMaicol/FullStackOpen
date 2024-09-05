@@ -1,17 +1,15 @@
 
-
+import { useState } from 'react'
 import { useQueryClient, useMutation } from 'react-query'
 import blogService from '../services/blogs'
 import { useParams } from 'react-router-dom'
 
 
 const Blog = ({ blogs, notificationDispatch }) => {
-  console.log(blogs)
 const id = useParams().id
 const blog = blogs.find(b => b.id === id)
-console.log(blog)
-console.log(id)
 
+const [newComment, setNewComment] = useState('')
 const queryClient = useQueryClient()
 
 //UPDATE BLOG
@@ -28,6 +26,27 @@ const updateBlogMutation = useMutation({
     }, 5000);
   }
 })
+
+// COMENTAR BLOG 
+const addCommentMutation = useMutation({
+  mutationFn: ({id, comment}) => blogService.addComment(id, comment),
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['blogs']})
+  },
+  onError: (error) => {
+    console.error('Error adding comment', error)
+    notificationDispatch({ type: 'error' })
+    setTimeout(() => {
+      notificationDispatch({ type: 'clear' })
+    }, 5000)
+  }
+})
+
+const addComment = (event) => {
+  event.preventDefault()
+  addCommentMutation.mutate({ id: blog.id, comment: newComment})
+  setNewComment('') 
+}
 
 const handleLike = () => {
   const updatedBlog = ({...blog, likes: blog.likes + 1,user: blog.user.id || blog.user})
@@ -71,6 +90,23 @@ const handleDelete = () => {
     <a>{blog.url}</a>
     <p>likes: {blog.likes}<button onClick={() => handleLike(blog)}>like</button><br/>
     Added by: {blog.user.name}</p> 
+    <h2>comments</h2>
+
+    {
+      
+      blog.comments.map((comment, index) => (
+        <li key={index}>{comment}</li>
+      ))  
+    
+    }
+
+    <form onSubmit={addComment}>
+      <input 
+      name='comment'
+      value={newComment}
+      onChange={(event) => setNewComment(event.target.value)}/>
+      <button type='submit'>comment</button>
+    </form>
 
 
   
