@@ -111,7 +111,8 @@ blogsRouter.put('/:id', async (request, response) => {
       author: body.author,
       url: body.url,
       likes: body.likes,
-      user: body.user
+      user: body.user,
+      comments: body.comments
     };
   
     try {
@@ -123,15 +124,31 @@ blogsRouter.put('/:id', async (request, response) => {
     }
   });
 
+  //comentarios
+
   blogsRouter.post('/:id/comments', async (request, response) => {
-    const { comment } = request.body
-    const blog = await Blog.findById(request.params.id)
-
-    blog.comments = blog.comments.concat(comment);
-    const updatedBlog = await blog.save()
-
-    response.status(201).json(updatedBlog)
-  }
-)
+    const { comment } = request.body;
+    const blogId = request.params.id;
+  
+    if (!comment) {
+      return response.status(400).json({ error: 'Comment is required' });
+    }
+  
+    try {
+      const blog = await Blog.findById(blogId);
+  
+      if (!blog) {
+        return response.status(404).json({ error: 'Blog not found' });
+      }
+  
+      blog.comments = blog.comments.concat(comment);
+      const updatedBlog = await blog.save();
+      response.status(200).json(updatedBlog);
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      response.status(500).json({ error: 'An error occurred while adding the comment' });
+    }
+  });
+  
   
   module.exports = blogsRouter;

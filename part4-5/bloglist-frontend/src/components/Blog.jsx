@@ -8,9 +8,12 @@ import { useParams } from 'react-router-dom'
 const Blog = ({ blogs, notificationDispatch }) => {
 const id = useParams().id
 const blog = blogs.find(b => b.id === id)
-
 const [newComment, setNewComment] = useState('')
 const queryClient = useQueryClient()
+
+if (!blog) {
+  return <div>Loading blog...</div>
+}
 
 //UPDATE BLOG
 const updateBlogMutation = useMutation({
@@ -42,11 +45,6 @@ const addCommentMutation = useMutation({
   }
 })
 
-const addComment = (event) => {
-  event.preventDefault()
-  addCommentMutation.mutate({ id: blog.id, comment: newComment})
-  setNewComment('') 
-}
 
 const handleLike = () => {
   const updatedBlog = ({...blog, likes: blog.likes + 1,user: blog.user.id || blog.user})
@@ -58,6 +56,15 @@ setTimeout(() => {
 }, 5000);
 
 } 
+
+
+const addComment = (event) => {
+  event.preventDefault()
+  addCommentMutation.mutate({ id: blog.id, comment: newComment})
+  setNewComment('') 
+}
+
+
 
 // DELETE BLOG
 
@@ -93,12 +100,13 @@ const handleDelete = () => {
     <h2>comments</h2>
 
     {
-      
-      blog.comments.map((comment, index) => (
-        <li key={index}>{comment}</li>
-      ))  
-    
-    }
+      blog.comments.length === 0 ? (
+        <p>No comments yet</p>
+      ) : (
+        blog.comments.map((comment, index) => (
+          <li key={index}>{comment}</li>
+        ))  
+      )}
 
     <form onSubmit={addComment}>
       <input 

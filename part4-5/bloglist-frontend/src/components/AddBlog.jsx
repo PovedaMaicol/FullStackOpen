@@ -10,36 +10,47 @@ const AddBlog = ({ setFormVisible, notificationDispatch}) => {
   const queryClient = useQueryClient()
 
 
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
 
   
   const newBlogMutation = useMutation({ 
     mutationFn: blogService.create,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['blogs']})
-    }
+    onSuccess: (newBlog) => {
+      queryClient.invalidateQueries({ queryKey: ['blogs']});
+      // reset fields form
+      setAuthor('')
+      setTitle('')
+      setUrl('')
+      // close form
+      setFormVisible(false)
+      // notification
+      notificationDispatch({ 
+        type: 'create', 
+        payload: newBlog.title 
+      });
+      setTimeout(() => {
+        notificationDispatch({ type: 'clear'})
+      }, 5000);
+    },
+    onError: (error) => {
+      console.error('Error creating blog:', error);
+      notificationDispatch({ type: 'error' });
+      setTimeout(() => {
+        notificationDispatch({ type: 'clear' });
+      }, 5000);
+    },
   })
 
   const addNewBlog = async (event) => {
     event.preventDefault()
     const blogObject = { title, author, url };
  newBlogMutation.mutate(blogObject)
-    setAuthor('')
-    setTitle('')
-    setUrl('')
-    notificationDispatch({ 
-            type: 'create', 
-            payload: blogObject.title 
-          });
-          setTimeout(() => {
-            notificationDispatch({ type: 'clear'})
-          }, 5000);
         }
       
 
-
-        const [title, setTitle] = useState('')
-        const [author, setAuthor] = useState('')
-        const [url, setUrl] = useState('')
 
   
   return (
@@ -78,7 +89,7 @@ const AddBlog = ({ setFormVisible, notificationDispatch}) => {
         onChange={({ target }) => setUrl(target.value)}
       />
     </div>
-    <button type="submit" onClick={() => setFormVisible(false)}>Add</button>
+    <button type="submit">Add</button>
     <button onClick={(e) => { e.preventDefault(); setFormVisible(false); }}>Cancel</button>
 
   </form>  
