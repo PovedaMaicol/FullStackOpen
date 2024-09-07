@@ -1,0 +1,13 @@
+.notification {
+    background-color: rgba(148 239 148 / 64%);
+    position:fixed;
+    width: auto;
+    height: auto;
+    top: 20px;
+    left: 50%; 
+    transform: translateX(-50%); 
+    z-index: 100;
+   border-radius: 10px;
+   padding: 0 10px 0 10px;
+   text-align: center;
+}

@@ -83,10 +83,10 @@ const App = () => {
 
 
   return (
-    <div>
+    <div className='container'>
       {user && <NavBar user={user} handleLogout={handleLogout}/>}
    
-      <h2>Blog App</h2>
+      {/* <h2>Blog App</h2> */}
       <Notification message={notification} />
       <Routes>
         <Route 

@@ -2,6 +2,9 @@ import React, {useState} from 'react'
 import { useMutation  } from 'react-query'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import './styles/login.css'
+import { Form, Button} from 'react-bootstrap'
+import Notification from './Notification'
 
 const Login = ({notificationDispatch, setUser}) => {
 
@@ -49,30 +52,45 @@ onError: () => {
 
 
   return (
-    <div>
-         <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
+    <div className='padre'>
+     
+    <div className='contenedor'>
+
+      <div className='cabezote'>
+      <i className="fa-regular fa-pen-to-square"></i>
+      <h2>Blog App</h2>
+      <br/>
+      <p>SIGN IN <br/>TO CONTINUE</p>
+      </div>
+     
+
+
+         <Form className='form' onSubmit={handleLogin}>
+        <Form.Group>
+          <Form.Control
             type="text"
             data-testid='username'
             value={username}
             name="Username"
+            placeholder='username'
             onChange={({ target }) => setUsername(target.value)}
           />
-        </div>
-        <div>
-          password
-          <input
+        </Form.Group>
+        <br/>
+        <Form.Group>
+          <Form.Control
             type="password"
             data-testid='password'
             value={password}
             name="Password"
+            placeholder='password'
             onChange={({ target }) => setPassword(target.value)}
           />
-        </div>
-        <button type="submit">login</button>
-      </form>
+          <br/>
+        </Form.Group>
+        <Button className='btn' variant="primary" type="submit">login</Button>
+      </Form>
+    </div>
     </div>
   )
 }
