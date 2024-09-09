@@ -2,6 +2,7 @@ import React from 'react'
 import { useQueryClient, useMutation } from 'react-query';
 import blogService from '../services/blogs'
 import { useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
 
 
 
@@ -54,11 +55,11 @@ const AddBlog = ({ setFormVisible, notificationDispatch}) => {
 
   
   return (
-    <form onSubmit={addNewBlog}>
-      <h2>Create new Blog</h2>
-    <div>
-      title:
-        <input
+    <Form onSubmit={addNewBlog}>
+<br/>
+    <Form.Group>
+      Create new Blog
+        <Form.Control
         data-testid='title'
         type="text"
         value={title}
@@ -66,10 +67,10 @@ const AddBlog = ({ setFormVisible, notificationDispatch}) => {
         placeholder='title'
         onChange={({ target }) => setTitle(target.value)}
       />
-    </div>
-    <div>
-      author:
-        <input
+    </Form.Group>
+    <Form.Group>
+<br/>
+        <Form.Control
         data-testid='author'
         type="text"
         value={author}
@@ -77,10 +78,10 @@ const AddBlog = ({ setFormVisible, notificationDispatch}) => {
         placeholder='author'
         onChange={({ target }) => setAuthor(target.value)}
       />
-    </div>
-    <div>
-      url:
-        <input
+    </Form.Group>
+    <Form.Group>
+<br/>
+        <Form.Control
         data-testid='url'
         type="text"
         value={url}
@@ -88,11 +89,15 @@ const AddBlog = ({ setFormVisible, notificationDispatch}) => {
         placeholder='url'
         onChange={({ target }) => setUrl(target.value)}
       />
-    </div>
-    <button type="submit">Add</button>
-    <button onClick={(e) => { e.preventDefault(); setFormVisible(false); }}>Cancel</button>
+    </Form.Group>
+    <br/>
 
-  </form>  
+    <Form.Group style={{display: 'flex', justifyContent: 'space-around'}}>
+    <Button type="submit">Add</Button>
+    <Button onClick={(e) => { e.preventDefault(); setFormVisible(false); }}>Cancel</Button>
+    </Form.Group>
+    
+  </Form>  
   )
 }
 

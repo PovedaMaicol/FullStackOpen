@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useQueryClient, useMutation } from 'react-query'
 import blogService from '../services/blogs'
 import { useParams } from 'react-router-dom'
-
+import { Table, Form, Button } from 'react-bootstrap'
 
 const Blog = ({ blogs, notificationDispatch }) => {
 const id = useParams().id
@@ -92,29 +92,63 @@ const handleDelete = () => {
 
 
   return (
-    <div className='blog'>
-    <h2>{blog.title} - {blog.author}</h2> 
-    <a>{blog.url}</a>
-    <p>likes: {blog.likes}<button onClick={() => handleLike(blog)}>like</button><br/>
-    Added by: {blog.user.name}</p> 
-    <h2>comments</h2>
+    <div className='container'>
+      <br/>
+    <h2 style={{fontStyle:'italic'}}>{blog.title} <span style={{fontWeight: '300', fontSize: 'revert'}}>by {blog.author}</span>
+    </h2>
+
+    <a style={{textDecoration:'underline', fontStyle: 'italic', color: '#0b5ed7'}}>{blog.url}</a>
+
+    <p style={{fontWeight: '300'}}>
+      <span style={{fontWeight: '400'}}>{blog.likes}</span> likes
+      <button style={{border: 'none', background: 'none'}} onClick={() => handleLike(blog)}><i className="fa-regular fa-heart"></i>
+      </button>
+      <br/>
+      Added by: <span style={{fontWeight:'500'}}>{blog.user.name}</span></p> 
+    <p>comments:</p>
 
     {
       blog.comments.length === 0 ? (
         <p>No comments yet</p>
       ) : (
-        blog.comments.map((comment, index) => (
-          <li key={index}>{comment}</li>
-        ))  
+        <Table striped>
+          <tbody>
+           {
+            blog.comments.map((comment, index) => (
+              <tr key={index}>
+                <td style={{color: '#0b5ed7'}}>{comment}</td>
+              </tr>
+            ))
+           } 
+          </tbody>
+        </Table>
+        // blog.comments.map((comment, index) => (
+        //   <li key={index}>{comment}</li>
+        // ))  
       )}
 
-    <form onSubmit={addComment}>
+      <Form onSubmit={addComment}>
+        <Form.Group>
+          <Form.Control 
+          type='text'
+          data-testid='comment'
+          value={newComment}
+          onChange={(event) => setNewComment(event.target.value)}
+          placeholder='add a comment'
+          />
+   <Button variant="primary" type="submit">comment</Button>
+        </Form.Group>
+     
+
+      </Form>
+
+    {/* <form onSubmit={addComment}>
       <input 
       name='comment'
       value={newComment}
       onChange={(event) => setNewComment(event.target.value)}/>
       <button type='submit'>comment</button>
-    </form>
+    </form> */}
 
 
   

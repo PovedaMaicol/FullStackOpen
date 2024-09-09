@@ -83,7 +83,7 @@ const App = () => {
 
 
   return (
-    <div className='container'>
+    <div>
       {user && <NavBar user={user} handleLogout={handleLogout}/>}
    
       {/* <h2>Blog App</h2> */}

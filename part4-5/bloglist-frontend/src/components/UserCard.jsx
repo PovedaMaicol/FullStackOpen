@@ -1,6 +1,6 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
-
+import { Link, useParams } from 'react-router-dom'
+import { Table } from 'react-bootstrap';
 
 const UserCard = ({ users }) => {
 
@@ -12,14 +12,24 @@ const UserCard = ({ users }) => {
 
 
   return (
-    <div>
-      <h2>{user.name}</h2>
-      <h4>added blogs</h4>
-
-      {user.blogs.map( blog => (
-      <li key={blog.id}>{blog.title}</li>
+    <div className='container'>
+      <br/>
+      <h1>{user.name}</h1>
+      <p>added blogs:</p>
+<Table striped>
+  <tbody>
+  {user.blogs.map( blog => (
+      <tr key={blog.id}>
+        <td>
+          <Link style={{textDecoration: 'none', 
+    fontWeight: '500'}} to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          </td>
+          </tr>
       )
       )}
+  </tbody>
+
+</Table>
     </div>
   )
 }

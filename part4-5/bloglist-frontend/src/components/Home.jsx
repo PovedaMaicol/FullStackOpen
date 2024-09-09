@@ -2,25 +2,53 @@ import React from 'react'
 import Blog from './Blog'
 import AddBlog from './AddBlog';
 import { Link } from 'react-router-dom';
+import { Button, Table } from 'react-bootstrap';
 
 const Home = ({user, handleLogout, setFormVisible, formVisible, notificationDispatch, blogs}) => {
 
-    
+
 const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
 
 
   return (
-    <div>
-    <div style={{ display: formVisible ? 'none' : '' }}>
-      {/* <p>{user.name} logged-in<button onClick={handleLogout}>Logout</button></p> */}
-
-      <button onClick={() => setFormVisible(true)}>Add blog</button>
+    <div className='container'>
+      
+      <br/>
+    <div style={{ display: 'flex', justifyContent: 'space-between',     alignItems: 'center'}}>
       <div>
-        {sortedBlogs.map(blog => (
-          <li key={blog.id}>
-<Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-          </li>
+      <h1 style={{margin: '0'}}>Blog App</h1>
+      <p style={{margin: '0'}}>{user.name} logged in</p>
+      </div>
+    
+    <Button style={{height: '40px'}} onClick={() => setFormVisible(true)}>Add</Button>
+    </div>
+      
+
+
+    <div style={{ display: formVisible ? 'none' : '' }}>
+      
+      <div>
+      <br/>
+        <Table striped>
+          <tbody>
+          {sortedBlogs.map(blog => (
+          <tr key={blog.id}>
+            <td>
+            <Link style={{ textDecoration: 'none', 
+    fontWeight: '500'}} to={`/blogs/${blog.id}`}>{blog.title}
+            </Link>
+            </td>
+            <td style={{ fontStyle: 'italic',
+    fontSize: 'medium', fontWeight: '300'}}>
+              {blog.author}
+            </td>
+          </tr>
         ))}
+          </tbody>
+
+
+        </Table>
+
       </div>
     </div>
     {formVisible && (

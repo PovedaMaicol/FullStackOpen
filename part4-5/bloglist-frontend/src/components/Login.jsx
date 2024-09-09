@@ -10,7 +10,13 @@ const Login = ({notificationDispatch, setUser}) => {
 
 const [username, setUsername] = useState('') 
 const [password, setPassword] = useState('') 
-
+const btn = {
+  margin: '0 auto',
+  display: 'flex',
+  textAlign: 'center', // Propiedad corregida
+  width: '150px',
+  justifyContent: 'center'
+}
 
 
 
@@ -52,15 +58,15 @@ onError: () => {
 
 
   return (
-    <div className='padre'>
+    <div className='padre container'>
      
     <div className='contenedor'>
 
       <div className='cabezote'>
       <i className="fa-regular fa-pen-to-square"></i>
-      <h2>Blog App</h2>
+      <h1>Blog App</h1>
       <br/>
-      <p>SIGN IN <br/>TO CONTINUE</p>
+      <p>SIGN IN TO CONTINUE</p>
       </div>
      
 
@@ -88,7 +94,7 @@ onError: () => {
           />
           <br/>
         </Form.Group>
-        <Button className='btn' variant="primary" type="submit">login</Button>
+        <Button style={btn} variant="primary" type="submit">login</Button>
       </Form>
     </div>
     </div>
