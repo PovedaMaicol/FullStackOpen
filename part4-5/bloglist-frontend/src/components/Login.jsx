@@ -5,6 +5,7 @@ import blogService from '../services/blogs'
 import './styles/login.css'
 import { Form, Button} from 'react-bootstrap'
 import Notification from './Notification'
+import { Link } from 'react-router-dom'
 
 const Login = ({notificationDispatch, setUser}) => {
 
@@ -66,7 +67,8 @@ onError: () => {
       <i className="fa-regular fa-pen-to-square"></i>
       <h1>Blog App</h1>
       <br/>
-      <p>SIGN IN TO CONTINUE</p>
+      <p>SIGN IN TO CONTINUE<br/>
+      OR <span style={{color: '#0b5ed7', fontWeight: '600'}}><Link to={`/register`}>REGISTER HERE</Link></span></p>
       </div>
      
 
@@ -94,6 +96,7 @@ onError: () => {
           />
           <br/>
         </Form.Group>
+        <br/>
         <Button style={btn} variant="primary" type="submit">login</Button>
       </Form>
     </div>

@@ -7,7 +7,18 @@ const Notification = ({message}) => {
         return null
     }
   return (
-    <div className='container'>
+    <div style={{
+      paddingTop: '10px', 
+      position: 'fixed', 
+      // top: '50%', 
+      // left: '50%', 
+      // right: '50%',
+      // transform: 'translate(-50%, -50%)', 
+      display: 'flex', 
+      justifyContent: 'center', 
+    
+      width: '100%' // Se ajusta al tamaño de la pantalla
+    }}>
       {(message &&
   <Alert variant='success'>
   {message}

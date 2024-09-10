@@ -9,6 +9,7 @@ const Blog = ({ blogs, notificationDispatch }) => {
 const id = useParams().id
 const blog = blogs.find(b => b.id === id)
 const [newComment, setNewComment] = useState('')
+const [isLike, setIsLike] = useState(false)
 const queryClient = useQueryClient()
 
 if (!blog) {
@@ -47,13 +48,27 @@ const addCommentMutation = useMutation({
 
 
 const handleLike = () => {
-  const updatedBlog = ({...blog, likes: blog.likes + 1,user: blog.user.id || blog.user})
+  const updatedBlog = ({
+    ...blog, 
+    likes: isLike ? blog.likes -1 : blog.likes + 1,
+    user: blog.user.id || blog.user
+  })
 
 updateBlogMutation.mutate({id: blog.id, updatedBlog})
-notificationDispatch({ type: 'like', payload: blog.title });
-setTimeout(() => {
-  notificationDispatch({ type: 'clear' });
-}, 5000);
+if (!isLike) {
+  notificationDispatch({ 
+    type: 'like', 
+    payload: blog.title 
+  });
+  
+  setTimeout(() => {
+    notificationDispatch({ type: 'clear' });
+  }, 5000);
+}
+
+
+// Alternar el estado de isLike
+setIsLike(!isLike)
 
 } 
 
@@ -101,12 +116,32 @@ const handleDelete = () => {
 
     <p style={{fontWeight: '300'}}>
       <span style={{fontWeight: '400'}}>{blog.likes}</span> likes
-      <button style={{border: 'none', background: 'none'}} onClick={() => handleLike(blog)}><i className="fa-regular fa-heart"></i>
+      
+      <button style={{border: 'none', background: 'none'}} onClick={() => handleLike(blog)}>
+
+      <i className={isLike ? "fa-solid fa-heart" : "fa-regular fa-heart"}></i>
       </button>
       <br/>
       Added by: <span style={{fontWeight:'500'}}>{blog.user.name}</span></p> 
-    <p>comments:</p>
 
+
+    <Form onSubmit={addComment}>
+        <Form.Group style={{display: 'flex', width: '100%', justifyContent: 'space-between'}}
+       >
+          <Form.Control 
+          type='text'
+          data-testid='comment'
+          value={newComment}
+          onChange={(event) => setNewComment(event.target.value)}
+          placeholder='add a comment'
+          style={{ width: '72%' }}
+          />
+   <Button variant="primary" type="submit" style={{width: '25%'}}>comment</Button>
+        </Form.Group>
+     
+
+      </Form>
+<br/>
     {
       blog.comments.length === 0 ? (
         <p>No comments yet</p>
@@ -127,29 +162,9 @@ const handleDelete = () => {
         // ))  
       )}
 
-      <Form onSubmit={addComment}>
-        <Form.Group>
-          <Form.Control 
-          type='text'
-          data-testid='comment'
-          value={newComment}
-          onChange={(event) => setNewComment(event.target.value)}
-          placeholder='add a comment'
-          />
-   <Button variant="primary" type="submit">comment</Button>
-        </Form.Group>
-     
+      
 
-      </Form>
-
-    {/* <form onSubmit={addComment}>
-      <input 
-      name='comment'
-      value={newComment}
-      onChange={(event) => setNewComment(event.target.value)}/>
-      <button type='submit'>comment</button>
-    </form> */}
-
+ 
 
   
   </div>  

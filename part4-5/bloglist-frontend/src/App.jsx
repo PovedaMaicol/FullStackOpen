@@ -12,6 +12,7 @@ import userService from './services/users';
 import Blog from './components/Blog';
 import NavBar from './components/NavBar';
 import { useNavigate } from 'react-router-dom';
+import Register from './components/Register';
 
 // REDUCER para manejar notificaciones
 const notificationReducer = (state, action) => {
@@ -28,6 +29,8 @@ const notificationReducer = (state, action) => {
       return '';
     case "error":
       return "An error has occurred";
+    case "newuser":
+      return "User created successfully";
     default:
       return state;
   }
@@ -86,9 +89,15 @@ const App = () => {
     <div>
       {user && <NavBar user={user} handleLogout={handleLogout}/>}
    
-      {/* <h2>Blog App</h2> */}
+     
       <Notification message={notification} />
       <Routes>
+
+      <Route
+        path='/register'
+        element={<Register notificationDispatch={notificationDispatch}/>}
+        />
+
         <Route 
           path='/' 
           element={

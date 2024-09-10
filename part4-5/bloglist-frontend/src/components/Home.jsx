@@ -19,8 +19,12 @@ const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
       <h1 style={{margin: '0'}}>Blog App</h1>
       <p style={{margin: '0'}}>{user.name} logged in</p>
       </div>
-    
-    <Button style={{height: '40px'}} onClick={() => setFormVisible(true)}>Add</Button>
+    {
+      !formVisible && (
+        <Button className='btadd' style={{height: '40px'}} onClick={() => setFormVisible(true)}>Add</Button>
+      )
+    }
+  
     </div>
       
 
