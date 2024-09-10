@@ -4,12 +4,14 @@ import { useQueryClient, useMutation } from 'react-query'
 import blogService from '../services/blogs'
 import { useParams } from 'react-router-dom'
 import { Table, Form, Button } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 
-const Blog = ({ blogs, notificationDispatch }) => {
+const Blog = ({ blogs, notificationDispatch, user }) => {
 const id = useParams().id
 const blog = blogs.find(b => b.id === id)
 const [newComment, setNewComment] = useState('')
 const [isLike, setIsLike] = useState(false)
+const navigate = useNavigate();
 const queryClient = useQueryClient()
 
 if (!blog) {
@@ -100,6 +102,7 @@ const deleteBlogMutation = useMutation({
 const handleDelete = () => {
   if (window.confirm("Are you sure you want to delete this blog?")){
     console.log(`Deleting blog with id ${blog.id}`);
+    navigate('/')
     deleteBlogMutation.mutate(blog.id);
   }
 
@@ -119,10 +122,20 @@ const handleDelete = () => {
       
       <button style={{border: 'none', background: 'none'}} onClick={() => handleLike(blog)}>
 
-      <i className={isLike ? "fa-solid fa-heart" : "fa-regular fa-heart"}></i>
+      <i className={isLike ? "fa-solid fa-heart" : "fa-regular fa-heart"} style={{color: 'red'}}></i>
       </button>
       <br/>
-      Added by: <span style={{fontWeight:'500'}}>{blog.user.name}</span></p> 
+      Added by: <span style={{fontWeight:'500'}}>{blog.user.name}</span>
+      {
+      blog.user.username === user.username && (
+        // <Button style={{backgroundColor: 'red', border: 'none'}} >Delete</Button>
+        <i className="fa-regular fa-trash-can" style={{marginLeft: '15px', color: 'red'}} onClick={() => handleDelete(blog.id)}></i>
+        
+      )
+      }
+      </p> 
+
+     
 
 
     <Form onSubmit={addComment}>
@@ -157,9 +170,7 @@ const handleDelete = () => {
            } 
           </tbody>
         </Table>
-        // blog.comments.map((comment, index) => (
-        //   <li key={index}>{comment}</li>
-        // ))  
+  
       )}
 
       

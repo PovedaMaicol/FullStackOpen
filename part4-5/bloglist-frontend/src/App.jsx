@@ -132,7 +132,7 @@ const App = () => {
         />
         <Route 
           path='/blogs/:id' 
-          element={<Blog blogs={blogs} notificationDispatch={notificationDispatch} />} 
+          element={<Blog user={user} blogs={blogs} notificationDispatch={notificationDispatch} />} 
         />
       </Routes>
     </div>
