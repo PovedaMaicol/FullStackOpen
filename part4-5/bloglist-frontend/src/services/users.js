@@ -1,5 +1,6 @@
 import axios from "axios";
-const baseUrl = '/api/users'
+const base = import.meta.env.VITE_BACKEND_URL
+const url = '/api/users'
 
 let token = null
 
@@ -8,16 +9,16 @@ const setToken = newToken => {
   }
 
   const create = async (newUser) => {
-    const response = await axios.post(baseUrl, newUser)
+    const response = await axios.post(`${base}${url}`, newUser)
     return response.data
   }
   const getAll = () => {
-    const request = axios.get(baseUrl)
+    const request = axios.get(`${base}${url}`)
     return request.then(response => response.data)
   }
 
   const getOne = (id) => {
-    const request = axios.get(`${baseUrl}/${id}`)
+    const request = axios.get(`${base}${url}/${id}`)
     console.log('ID ES', id)
     return request.then(response => response.data)
   }

@@ -1,6 +1,7 @@
 import axios from 'axios'
-const baseUrl = '/api/blogs'
-
+// const baseUrl = '/api/blogs'
+const base = import.meta.env.VITE_BACKEND_URL
+const url = '/api/blogs'
 let token = null
 
 
@@ -8,7 +9,7 @@ const setToken = newToken => {
   token = `Bearer ${newToken}`
 }
 const getAll = () => {
-  const request = axios.get(baseUrl)
+  const request = axios.get(`${base}${url}`)
   return request.then(response => response.data)
 }
 
@@ -17,12 +18,12 @@ const create = async newObject => {
     headers: { Authorization: token },
   }
 
-  const response = await axios.post(baseUrl, newObject, config)
+  const response = await axios.post(`${base}${url}`, newObject, config)
   return response.data
 }
 
 const update = async (id, updateBlog) => {
-  const dire = `${baseUrl}/${id}`;
+  const dire = `${base}${url}/${id}`;
   console.log(dire);
   console.log('updateBlog:', updateBlog);
 
@@ -47,7 +48,7 @@ const destroy = async (id) => {
     headers: { Authorization: token },
   }
 
-  const response = await axios.delete(`${baseUrl}/${id}`, config)
+  const response = await axios.delete(`${base}${url}/${id}`, config)
   return response.data
   }
 
@@ -56,7 +57,7 @@ const config = {
   headers: { Authorization: token },
 };
 
-  const response = await axios.post(`${baseUrl}/${id}/comments`, { comment }, config)
+  const response = await axios.post(`${base}${url}/${id}/comments`, { comment }, config)
  
   return response.data;
 }
