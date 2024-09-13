@@ -1,0 +1,16 @@
+{
+  "name": "courseinfo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "author": "Maicol Salazar",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "apollo-server": "^3.13.0",
+    "graphql": "^16.9.0",
+    "nodemon": "^3.1.4"
+  }
+}

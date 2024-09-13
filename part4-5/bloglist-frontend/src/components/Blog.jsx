@@ -115,7 +115,7 @@ const handleDelete = () => {
     <h2 style={{fontStyle:'italic'}}>{blog.title} <span style={{fontWeight: '300', fontSize: 'revert'}}>by {blog.author}</span>
     </h2>
 
-    <a style={{textDecoration:'underline', fontStyle: 'italic', color: '#0b5ed7'}}>{blog.url}</a>
+    <a href={blog.url}  target="_blank" rel="noopener noreferrer" style={{textDecoration:'underline', fontStyle: 'italic', color: '#0b5ed7'}}>{blog.url}</a>
 
     <p style={{fontWeight: '300'}}>
       <span style={{fontWeight: '400'}}>{blog.likes}</span> likes
