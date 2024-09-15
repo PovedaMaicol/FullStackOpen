@@ -1,0 +1,16 @@
+{
+  "name": "bookcount",
+  "version": "1.0.0",
+  "description": "biblioteca",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Maicol Salazar",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.11.0",
+    "apollo": "^2.34.0",
+    "graphql": "^16.6.0"
+  }
+}
