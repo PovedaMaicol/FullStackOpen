@@ -6,6 +6,9 @@ const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 const Book = require('./models/book')
 const Author = require('./models/author')
+const User = require('./models/user')
+const { GraphQLError } = require('graphql')
+const jwt = require('jsonwebtoken')
 
 require('dotenv').config()
 
@@ -101,6 +104,16 @@ mongoose.connect(MONGODB_URI)
 
 
 const typeDefs = gql`
+type User {
+username: String!
+favoriteGenre: String!
+id: ID!
+}
+
+type Token {
+value: String!
+}
+
 type Author {
 name: String!
 id: ID!
@@ -117,6 +130,18 @@ genres: [String]!
 }
 
 type Mutation {
+
+createUser(
+username: String!
+favoriteGenre: String!
+) : User
+
+
+login(
+username: String!
+password: String!
+): Token
+
 addBook(
 title: String!
 published: Int!
@@ -136,6 +161,7 @@ bookCount: Int!
 authorCount: Int!
 allBooks(author: String, genre: String) : [Book!]!
 allAuthors: [Author!]!
+me: User
 
 }
 `
@@ -184,15 +210,47 @@ const resolvers = {
   },
 
   Mutation: {
-    addBook: async (root, args) => {
-      let author = await Author.findOne({ name: args.author });
+    createUser: async (root, args) => {
+      const user = new User({ username: args.username})
 
-      if(!author) {
-        author = new Author({ name: args.author, id: uuid() });
-        await author.save()
+      return user.save()
+      .catch(error => {
+        throw new GraphQLError('Creating the user failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error
+          }
+        })
+      })
+    },
+    addBook: async (root, args) => {
+      try {
+        let author = await Author.findOne({ name: args.author });
+
+        if(!author) {
+          author = new Author({ name: args.author, id: uuid() });
+          await author.save()
+        }
+        const book = new Book({ ...args });
+        return book.save();
+      } catch (error) {
+        if (error.name === 'ValidationError') {
+          throw new GraphQLError('Error validation ' + error.message, {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args,
+            },
+          });
+        }
+        throw new GraphQLError('Error en la creación del libro', {
+          extensions: {
+            code: 'INTERNAL_SERVER_ERROR',
+          },
+        });
+
       }
-      const book = new Book({ ...args });
-      return book.save();
+   
 
     },
 

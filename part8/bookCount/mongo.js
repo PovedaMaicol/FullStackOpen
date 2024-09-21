@@ -5,10 +5,7 @@
 //   process.exit(1)
 // }
 
-// const password = process.argv[2]
 
-// const url =
-//   `mongodb+srv://backendp:12345ba@cluster0.qgjpa3f.mongodb.net/bookApp?retryWrites=true&w=majority`
 
 // mongoose.set('strictQuery', false)
 mongoose.connect(url)
