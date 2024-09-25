@@ -10,7 +10,7 @@ const NewBook = (props) => {
   const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
-  const [error, setError] = useState(null)
+  
 
   
  
@@ -18,7 +18,7 @@ const NewBook = (props) => {
     refetchQueries: [ { query: ALL_BOOKS}],
     onError: (error) => {
       const messages = error.graphQLErrors.map(e => e.message).join('\n')
-      setError(messages)
+      props.setError(messages)
     }
   })
 
@@ -31,7 +31,7 @@ const NewBook = (props) => {
   
   const publishedInt = parseInt(published)
 
-  await addBook({ variables: {title, published: publishedInt, author, genres}})
+  await addBook({ variables: {title, published: publishedInt, author, genres: genres.length > 0 ? genres : "undefined"}})
 
   console.log('add book...')
 
