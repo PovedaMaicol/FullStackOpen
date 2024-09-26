@@ -34,6 +34,20 @@ const Books = (props) => {
           ))}
         </tbody>
       </table>
+      { 
+      books.map((book) => (
+        <div key={book.id}>
+          {
+            book.genres.map((genre, index) => (
+              <button key={index}>{genre}</button>
+            ))
+          }
+
+
+        </div>
+      ))
+      }
+
     </div>
   )
 }

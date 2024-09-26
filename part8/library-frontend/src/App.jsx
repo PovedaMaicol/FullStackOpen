@@ -5,7 +5,7 @@ import NewBook from "./components/NewBook";
 import Notify from "./components/Notify";
 import LoginForm from "./components/LoginForm";
 import { useApolloClient, useQuery } from "@apollo/client";
-import { ALL_AUTHORS } from "./queries";
+import { ALL_AUTHORS, ALL_BOOKS } from "./queries";
 
 
 
@@ -17,10 +17,12 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [token, setToken] = useState(null)
   const [isVisible, setIsVisible] = useState(false)
+
   const result = useQuery(ALL_AUTHORS)
+  const resultBook = useQuery(ALL_BOOKS)
   const client = useApolloClient()
 
-  if (result.loading)  {
+  if (result.loading || resultBook.loading)  {
     return <div>loading...</div>
   }
   const logout = () => {
@@ -37,12 +39,6 @@ const App = () => {
       setErrorMessage(null)
     }, 10000)
   }
-
-  // const hanleLoginClick = () => {
-  //   // setIsVisible(true)
-  //   setPage("login")
-  //   // setIsVisible(false)
-  // }
 
 
  
@@ -62,11 +58,7 @@ const App = () => {
       { !token && (
   <button onClick={() => setPage("login")}>login</button>
       )
-
       }
-      
-
-    
 
       {
         isVisible && (
@@ -102,8 +94,9 @@ const App = () => {
       />
      
     
-      
-      
+    <div>
+    </div>  
+    
     </div>
   );
 };
