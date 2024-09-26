@@ -28,6 +28,7 @@ const App = () => {
     localStorage.clear()
     client.resetStore()
     setPage("authors")
+    setIsVisible(false)
   }
 
   const notify = (message) => {
@@ -38,49 +39,70 @@ const App = () => {
   }
 
   // const hanleLoginClick = () => {
-  //   setIsVisible(true)
+  //   // setIsVisible(true)
   //   setPage("login")
+  //   // setIsVisible(false)
   // }
 
-  // const handleSuccessfulLogin = (newToken) => {
-  //   setToken(newToken);
-  //   setIsVisible(false);
-  //   setPage("authors")
-  // }
+
  
   
 
   return (
     <div>
       <div>
-      <button onClick={() => {setPage("authors"); setIsVisible(false)}}>authors</button>
-      <button onClick={() => {setPage("books"); setIsVisible(false)}}>books</button>
-      
-      {
-      token && 
-      <button onClick={() => setPage("add")}>add book</button>
+      <button onClick={() => setPage("authors") }>authors</button>
+      <button onClick={() => setPage("books") }>books</button>
+
+      { isVisible && (
+        <button onClick={() => setPage("add")}>add book</button>
+      )
+      }
+
+      { !token && (
+  <button onClick={() => setPage("login")}>login</button>
+      )
+
       }
       
-      {token ? (
+
+    
+
+      {
+        isVisible && (
       <button onClick={logout}>logout</button>
-      ) : (
-      <button onClick={() => {setPage("login"); setIsVisible(true)}}>login</button>
-      )}
+        )
+      }
+      
+      
       </div>
 
       <Notify errorMessage={errorMessage} />
      
-      <Authors show={page === "authors"}  setError={notify}/>
+      <Authors 
+      show={page === "authors"}  
+      setError={notify}
+      />
 
-      <Books show={page === "books"} />
+      <Books 
+      show={page === "books"} 
+      />
 
-      <NewBook show={page === "add"} setError={notify} />
-      {
-        isVisible && 
-      <LoginForm setToken={setToken} setError={notify} setPage={setPage} setIsVisible={setIsVisible}/>
+      <NewBook 
+      show={page === "add"} 
+      setError={notify} 
+      />
+     
+      <LoginForm 
+      show={page === "login"} 
+      setToken={setToken} 
+      setError={notify}  
+      setPage={setPage} 
+      setIsVisible={setIsVisible}
+      />
      
     
-      }
+      
       
     </div>
   );

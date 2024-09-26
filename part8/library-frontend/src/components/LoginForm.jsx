@@ -2,14 +2,20 @@ import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client'
 import { LOGIN } from '../queries'
 
-const LoginForm = ({ setError, setToken, setPage, setIsVisible }) => {
+const LoginForm = ({ setError, setToken, show, setPage, setIsVisible}) => {
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
 
 
   const [ login, result ] = useMutation(LOGIN, {
     onError: (error) => {
       setError(error.graphQLErrors[0].message)
+    },
+
+    onCompleted: () => {
+      setError("")
     }
   })
 
@@ -19,14 +25,22 @@ const LoginForm = ({ setError, setToken, setPage, setIsVisible }) => {
       const token = result.data.login.value
       setToken(token)
       localStorage.setItem('bookApp-user-token', token)
+      setPage("authors")
+      setIsVisible(true)
+      setUsername('')
+      setPassword('')
     }
-  }, [result.data]) // eslint-disable-line
+  }, [result.data, setPage, setToken, setIsVisible]) // eslint-disable-line
 
   const submit = async (event) => {
     event.preventDefault()
-setPage("authors")
-setIsVisible(false)
-    login({ variables: { username, password } })
+    await login({ variables: { username, password } })
+   
+
+  }
+
+  if (!show) {
+    return null
   }
 
   return (
