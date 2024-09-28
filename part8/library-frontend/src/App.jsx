@@ -6,6 +6,7 @@ import Notify from "./components/Notify";
 import LoginForm from "./components/LoginForm";
 import { useApolloClient, useQuery } from "@apollo/client";
 import { ALL_AUTHORS, ALL_BOOKS } from "./queries";
+import Recommend from "./components/Recommend";
 
 
 
@@ -63,9 +64,11 @@ const App = () => {
       {
         isVisible && (
       <button onClick={logout}>logout</button>
-        )
+      )
       }
       
+
+      <button onClick={() => setPage("recommend")}>recommend</button>
       
       </div>
 
@@ -91,8 +94,11 @@ const App = () => {
       setError={notify}  
       setPage={setPage} 
       setIsVisible={setIsVisible}
+
       />
      
+
+     <Recommend show={page === "recommend"}/>
     
     <div>
     </div>  

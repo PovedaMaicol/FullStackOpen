@@ -35,7 +35,7 @@ const LoginForm = ({ setError, setToken, show, setPage, setIsVisible}) => {
   const submit = async (event) => {
     event.preventDefault()
     await login({ variables: { username, password } })
-   
+
 
   }
 

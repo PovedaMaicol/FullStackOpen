@@ -84,11 +84,14 @@ allBooks(author: String, genre: String) : [Book!]!
 allAuthors: [Author!]!
 me: User
 
+
 }
 `
 
 const resolvers = {
   Query: {
+
+ 
     authorCount: async () => Author.collection.countDocuments(),
 
     bookCount: async () => Book.collection.countDocuments(),
@@ -286,7 +289,7 @@ startStandaloneServer(server, {
         auth.substring(7), process.env.JWT_SECRET
       )
       const currentUser = await User
-      .findById(decodedToken.id).populate('favoriteGenre')
+      .findById(decodedToken.id)
       return { currentUser }
     }
   }
