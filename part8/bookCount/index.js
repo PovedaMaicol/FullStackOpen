@@ -97,7 +97,7 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
 
     allBooks: async (root, args) => {
-  
+
       let query = {};
 
       if(args.author) {

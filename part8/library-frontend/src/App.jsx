@@ -66,9 +66,14 @@ const App = () => {
       <button onClick={logout}>logout</button>
       )
       }
-      
 
-      <button onClick={() => setPage("recommend")}>recommend</button>
+      {
+        isVisible && (
+          <button onClick={() => setPage("recommend")}>recommend</button>
+        )
+      }
+
+    
       
       </div>
 

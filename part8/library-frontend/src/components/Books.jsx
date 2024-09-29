@@ -3,33 +3,45 @@ import { ALL_BOOKS } from "../queries"
 import { useEffect, useState } from "react"
 
 const Books = (props) => {
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState('all')
   const [allGenres, setAllGenres] = useState([])
 
-  const result = useQuery(ALL_BOOKS)
+  
+
+  const {loading, error, data } = useQuery(ALL_BOOKS, {
+    variables: { genre: category === 'all' ? null : category }
+  })
+
+
 
   useEffect(() => {
-    if(result.data) {
+    if(data) {
 
-
-      const genres = result.data.allBooks.flatMap(b => b.genres)
+      const genres = data.allBooks.flatMap(b => b.genres)
       const uniqueGenres = Array.from(new Set(genres))
-      setAllGenres(uniqueGenres)
+      setAllGenres(['all', ...uniqueGenres])
     }
-  }, [result.data])
+  }, [data])
 
 
   if (!props.show) {
     return null
   }
 
-  if (result.loading)  {
+  if (loading)  {
     return <div>loading...</div>
   }
 
+  if (error) {
+    return <div>Error... {result.error.message}</div>
+  }
+console.log('el resultado es', data)
 
 
-  const books = category ? result.data.allBooks.filter(b => b.genres.includes(category)) : result.data.allBooks
+  const books = category  === 'all' 
+  ? data.allBooks 
+  :
+  data.allBooks.filter(b => b.genres.includes(category)) 
 
 
   
@@ -51,21 +63,27 @@ console.log('genres es', allGenres)
             <th>author</th>
             <th>published</th>
           </tr>
-          {books.map((a) => (
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author}</td>
-              <td>{a.published}</td>
+          {books.map((b) => (
+            <tr key={b.id}>
+              <td>{b.title}</td>
+              <td>{b.author}</td>
+              <td>{b.published}</td>
             </tr>
           ))}
         </tbody>
       </table>
       { 
       allGenres.map((genre, index) => (
-        <button key={index} onClick={() => setCategory(genre)}>{genre}</button>
+        <button 
+        key={index} 
+        onClick={() => setCategory(genre)}
+        >
+          {genre}
+        </button>
       
       ))
       }
+   
 
     </div>
   )
