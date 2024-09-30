@@ -1,19 +1,19 @@
-import { useQuery } from "@apollo/client"
-import { ALL_BOOKS } from "../queries"
+import { useLazyQuery, useQuery } from "@apollo/client"
+import { ALL_BOOKS, FIND_BOOKS_RECOMMEND } from "../queries"
 import { useEffect, useState } from "react"
 
 const Books = (props) => {
   const [category, setCategory] = useState('all')
   const [allGenres, setAllGenres] = useState([])
 
-  
+  //libros filtrados
+  const [getFilterBook, { data: filterData, loading: filterLoading, error: filerError}] = useLazyQuery(FIND_BOOKS_RECOMMEND)
 
-  const {loading, error, data } = useQuery(ALL_BOOKS, {
-    variables: { genre: category === 'all' ? null : category }
-  })
+  // todos los libros
+  const {loading, error, data } = useQuery(ALL_BOOKS)
 
 
-
+//obtener todos los generos
   useEffect(() => {
     if(data) {
 
@@ -22,6 +22,14 @@ const Books = (props) => {
       setAllGenres(['all', ...uniqueGenres])
     }
   }, [data])
+
+  // obtener libros filtrados x categoria
+
+  useEffect(() => {
+    if(category !== 'all') {
+     getFilterBook({ variables: {favoriteGenre: category}})
+    }
+  }, [category, getFilterBook])
 
 
   if (!props.show) {
@@ -33,23 +41,23 @@ const Books = (props) => {
   }
 
   if (error) {
-    return <div>Error... {result.error.message}</div>
+    return <div>Error... {error.message}</div>
   }
-console.log('el resultado es', data)
 
 
   const books = category  === 'all' 
   ? data.allBooks 
   :
-  data.allBooks.filter(b => b.genres.includes(category)) 
+  filterData ? filterData.allBooks : []
 
 
   
-console.log('genres es', allGenres)
-
-
-
-
+if( category !== 'all') {
+  if(filterLoading) return <div>Loading...</div>
+  if(filerError) return <div>Error... {filerError.message}</div>
+}
+console.log('El resultado es', books)
+console.log('Los géneros son', allGenres)
 
 
   return (

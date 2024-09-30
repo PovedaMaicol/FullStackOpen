@@ -9,16 +9,6 @@ favoriteGenre
 }
 }`
 
-// export const RECOMMENDATIONS = gql`
-// query {
-// recommendations {
-// title
-// author
-// published
-// genres
-// }
-// }
-// `
 
 export const ALL_AUTHORS = gql`
 query {
@@ -42,6 +32,17 @@ genres
 }
 }
 `
+ 
+export const FIND_BOOKS_RECOMMEND = gql`
+query findBooksRecommend($favoriteGenre: String!) {
+allBooks(genre: $favoriteGenre) {
+title
+published
+author
+id
+genres
+}
+}`
 
 export const ADD_BOOK = gql`
 mutation createBook($title: String!, $published: Int!, $author: String!, $genres: [String!]!) {

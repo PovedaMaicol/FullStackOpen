@@ -149,8 +149,9 @@ const resolvers = {
         })
     },
 
-    me: (root, args, context) => {
+    me: (root, args, context)  => {
       return context.currentUser
+
     }
   },
 

@@ -19,6 +19,7 @@ const App = () => {
   const [token, setToken] = useState(null)
   const [isVisible, setIsVisible] = useState(false)
 
+
   const result = useQuery(ALL_AUTHORS)
   const resultBook = useQuery(ALL_BOOKS)
   const client = useApolloClient()
@@ -29,9 +30,11 @@ const App = () => {
   const logout = () => {
     setToken(null)
     localStorage.clear()
+    localStorage.removeItem('bookApp-user-token')
     client.resetStore()
     setPage("authors")
     setIsVisible(false)
+    console.log(localStorage)
   }
 
   const notify = (message) => {

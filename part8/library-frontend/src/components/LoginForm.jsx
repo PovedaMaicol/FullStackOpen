@@ -16,6 +16,7 @@ const LoginForm = ({ setError, setToken, show, setPage, setIsVisible}) => {
 
     onCompleted: () => {
       setError("")
+      
     }
   })
 
@@ -27,8 +28,8 @@ const LoginForm = ({ setError, setToken, show, setPage, setIsVisible}) => {
       localStorage.setItem('bookApp-user-token', token)
       setPage("authors")
       setIsVisible(true)
-      setUsername('')
-      setPassword('')
+      console.log(localStorage)
+  
     }
   }, [result.data, setPage, setToken, setIsVisible]) // eslint-disable-line
 
