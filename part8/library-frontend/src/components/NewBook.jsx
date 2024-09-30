@@ -19,6 +19,9 @@ const NewBook = (props) => {
     onError: (error) => {
       const messages = error.graphQLErrors.map(e => e.message).join('\n')
       props.setError(messages)
+    },
+    update: (store, response) => {
+      updateCacheWith(response.data.addBook)
     }
   })
 
@@ -83,7 +86,7 @@ const NewBook = (props) => {
           </button>
         </div>
         <div>genres: {genres.join(' ')}</div>
-        <button type="submit">create book</button>
+        <button type="submit" onClick={setPage}>create book</button>
       </form>
     </div>
   )
