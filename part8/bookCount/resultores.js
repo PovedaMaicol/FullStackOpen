@@ -48,21 +48,22 @@ const resolvers = {
           };
         });
       },
-  
+      // Obtén todos los autores
       allAuthors: async () => {
         const authors = await Author.find({});
-        const books = await Book.find({});
-  
-          return authors.map(author => {
-            if (!author || !author._id)  {
-              return { ...author, bookCount: 0 };
-            }
-            
-  
-            const bookCount = books.filter(book => book.author && book.author.equals(author._id)).length;
+
+        // Usa agregación para contar los libros por autor
+        const booksPerAuthor = await Book.aggregate([
+          { $group: {_id: "$author", bookCount: { $sum: 1}}}
+        ]);
+        // Mapea los autores con el conteo de libros
+        return authors.map(author => {
+          const authorBookInfo = booksPerAuthor.find(b => b._id.toString() === author._id.toString())
+
+      
               return {
                   ...author._doc, 
-                  bookCount,
+                  bookCount: authorBookInfo ? authorBookInfo.bookCount : 0,
                   id: author._id.toString()
                  
               }

@@ -43,6 +43,8 @@ const NewBook = (props) => {
   setAuthor('')
   setGenres([])
   setGenre('')
+props.setPage('books')
+  props.setError(addBook.title)
   }
 
   const addGenre = () => {
@@ -86,7 +88,7 @@ const NewBook = (props) => {
           </button>
         </div>
         <div>genres: {genres.join(' ')}</div>
-        <button type="submit" onClick={setPage}>create book</button>
+        <button type="submit">create book</button>
       </form>
     </div>
   )

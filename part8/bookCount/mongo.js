@@ -1,13 +1,3 @@
-// const mongoose = require('mongoose')
-
-// if (process.argv.length<3) {
-//   console.log('give password as argument')
-//   process.exit(1)
-// }
-
-
-
-// mongoose.set('strictQuery', false)
 mongoose.connect(url)
 
 const bookSchema = new mongoose.Schema({

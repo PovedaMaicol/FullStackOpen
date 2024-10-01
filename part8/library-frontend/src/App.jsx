@@ -45,6 +45,7 @@ useSubscription(BOOK_ADDED, {
     console.log(data)
     const addedBook = data.data.bookAdded
     console.log('libro añadido', addedBook)
+    window.alert(`${addedBook.title} added`) 
     notify(`${addedBook.title} added`)
     updateCacheWith(addedBook)
   }
@@ -65,6 +66,7 @@ useSubscription(BOOK_ADDED, {
 
   const notify = (message) => {
     setErrorMessage(message)
+    console.log(`Notification is: ${message}`)
     setTimeout(() => {
       setErrorMessage(null)
     }, 10000)
@@ -119,6 +121,7 @@ useSubscription(BOOK_ADDED, {
       <NewBook 
       show={page === "add"} 
       setError={notify} 
+      setPage={setPage}
       />
      
       <LoginForm 
