@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { useMutation } from '@apollo/client'
-import { LOGIN } from '../queries'
+import { useMutation, useQuery } from '@apollo/client'
+import { LOGIN, ME } from '../queries'
 
-const LoginForm = ({ setError, setToken, show, setPage, setIsVisible}) => {
+const LoginForm = ({ setError, setToken, show, setPage, setIsVisible, setUser, user}) => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
 
 
 
@@ -15,10 +16,12 @@ const LoginForm = ({ setError, setToken, show, setPage, setIsVisible}) => {
     },
 
     onCompleted: () => {
-      setError("")
-      
+      setError("")      
     }
   })
+
+
+  const token =  localStorage.getItem('bookApp-user-token') || '';
 
 
   useEffect(() => {
@@ -28,16 +31,22 @@ const LoginForm = ({ setError, setToken, show, setPage, setIsVisible}) => {
       localStorage.setItem('bookApp-user-token', token)
       setPage("authors")
       setIsVisible(true)
-      console.log(localStorage)
+      console.log("Token almacenado en localStorage:", localStorage.getItem('bookApp-user-token'));
+    
   
     }
   }, [result.data, setPage, setToken, setIsVisible]) // eslint-disable-line
 
+
+
+
   const submit = async (event) => {
     event.preventDefault()
-    await login({ variables: { username, password } })
+    try {
+      await login({ variables: { username, password } })
+    } catch (error) {
 
-
+    }
   }
 
   if (!show) {

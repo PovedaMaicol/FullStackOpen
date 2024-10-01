@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import Notify from "./components/Notify";
 import LoginForm from "./components/LoginForm";
 import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
-import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED } from "./queries";
+import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED, ME } from "./queries";
 import Recommend from "./components/Recommend";
 
 
@@ -18,11 +18,26 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [token, setToken] = useState(null)
   const [isVisible, setIsVisible] = useState(false)
-
+  const [user, setUser] = useState(null)
 
   const result = useQuery(ALL_AUTHORS)
   const resultBook = useQuery(ALL_BOOKS)
   const client = useApolloClient()
+
+
+
+  const {data: meData, loading: meLoading, error: meError} = useQuery(ME, {
+    skip: !token
+  })
+
+  useEffect(() => {
+    if (meData && meData.me) {
+      setUser(meData.me);
+      console.log("Datos de usuario:", meData.me);
+    }
+  }, [meData, token]);
+
+
 
 
   const includedIn = (set, object) => 
@@ -61,6 +76,7 @@ useSubscription(BOOK_ADDED, {
     client.resetStore()
     setPage("authors")
     setIsVisible(false)
+    setUser(null)
     console.log(localStorage)
   }
 
@@ -134,7 +150,7 @@ useSubscription(BOOK_ADDED, {
       />
      
 
-     <Recommend show={page === "recommend"}/>
+     <Recommend show={page === "recommend"} user={user} setUser={setUser}/>
     
     <div>
     </div>  

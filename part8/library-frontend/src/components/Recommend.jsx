@@ -9,39 +9,38 @@ const Recommend = (props) => {
 
 
 
-  const {data: meData, loading: meLoading, error: meError} = useQuery(ME)
 
   useEffect(() => {
-    if(meData && meData.me && meData.me.favoriteGenre) {
-      getRecommend({ variables: {favoriteGenre: meData.me.favoriteGenre} })
+    if(props.user) {
+      getRecommend({ variables: {favoriteGenre: props.user.favoriteGenre} })
     }
-  }, [meData, getRecommend])
+  }, [props.user, getRecommend])
 
   useEffect(() => {
     if(recommendData) {
       setRecommend(recommendData.allBooks)
     }
   }, [recommendData])
-console.log(meData)
+// console.log(meData)
 console.log(recommend)
 
   if (!props.show) {
     return null
   }
 
-  if (meLoading || recommendLoading) {
+  if (recommendLoading) {
     return <div>loading...</div>
   } 
 
-  if(meError || recommendError) {
+  if(recommendError) {
     return <div>Error </div>
   }
 
-  if(!meData?.me) {
+  if(!props.user) {
     return <div>No register name</div>
   }
-
-  const user = meData.me;
+  console.log('lo que llega es',props.user)
+  const user = props.user;
 
   return (
     <div>
