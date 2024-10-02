@@ -8,6 +8,7 @@ import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
 import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED, ME } from "./queries";
 import Recommend from "./components/Recommend";
 import RegisterForm from "./components/RegisterForm";
+import './app.css'
 
 
 
@@ -93,8 +94,16 @@ useSubscription(BOOK_ADDED, {
  
 
   return (
-    <div>
-      <div>
+    <div className="container">
+      <div style={{ 
+        display: 'flex',  
+        width: '100%',
+        backgroundColor: 'blue',
+        height: '20px',
+        margin: '0',
+        padding: '0'
+        
+        }}>
       <button onClick={() => setPage("authors") }>authors</button>
       <button onClick={() => setPage("books") }>books</button>
 
