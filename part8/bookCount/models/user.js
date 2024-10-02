@@ -9,7 +9,11 @@ const userSchema = new mongoose.Schema({
     },
     favoriteGenre: {
     type: String,
-    
+    required: true
+    },
+    passwordHash: {
+        type: String,
+        required: true
     }
 })
 

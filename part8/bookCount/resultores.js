@@ -2,11 +2,16 @@ const { GraphQLError, subscribe } = require('graphql')
 const { PubSub } = require('graphql-subscriptions')
 const pubsub = new PubSub()
 
+
+const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const User = require('./models/user')
-const book = require('./models/book')
+const { UserInputError, AuthenticationError } = require('apollo-server')
+
+const JWT_SECRET = process.env.JWT_SECRET
+console.log('JWT_SECRET en resolvers.js:', JWT_SECRET)
 
 const resolvers = {
     Query: {
@@ -78,29 +83,46 @@ const resolvers = {
   
     Mutation: {
       createUser: async (root, args) => {
-        const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre})
-  
-        return user.save()
-        .catch(error => {
-          throw new GraphQLError('Creating the user failed', {
-            extensions: {
-              code: 'BAD_USER_INPUT',
-              invalidArgs: args.name,
-              error
-            }
+        const { username, favoriteGenre, password } = args
+
+        if(password.length < 3) {
+          throw new UserInputError('Password must be at least 5 characters long')
+        }
+
+        const saltRounds = 10
+        const passwordHash = await bcrypt.hash(password, saltRounds)
+
+        const user = new User({ 
+          username,
+          favoriteGenre,
+          passwordHash
           })
-        })
+
+          try {
+            await user.save()
+          } catch {
+            throw new UserInputError(error.message, {
+              invalidArgs: args,
+            })
+          }
+  
+        return user
+      
       },
   
       login: async (root, args) => {
-        const user = await User.findOne({ username: args.username})
+        const { username, password } = args
+
+        const user = await User.findOne({ username })
   
-        if ( !user || args.password !== 'secret' ) {
-          throw new GraphQLError('Wrong credentials', {
-            extensions: {
-              code: 'BAD_USER_INPUT'
-            }
-          })
+        if ( !user ) {
+          throw new UserInputError('Incorrect username or password')
+        }
+
+        const passwordCorrect = await bcrypt.compare(password, user.passwordHash)
+
+        if(!passwordCorrect) {
+          throw new UserInputError('Incorrect username or password')
         }
   
         const userForToken = {
@@ -108,7 +130,7 @@ const resolvers = {
           id: user._id,
         }
   
-        return { value: jwt.sign(userForToken, process.env.JWT_SECRET)}
+        return { value: jwt.sign(userForToken, JWT_SECRET)}
       },
     
       addBook: async (root, args, context) => {

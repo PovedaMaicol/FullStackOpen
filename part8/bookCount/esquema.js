@@ -29,6 +29,7 @@ type Mutation {
 createUser(
 username: String!
 favoriteGenre: String!
+password: String!
 ) : User
 
 

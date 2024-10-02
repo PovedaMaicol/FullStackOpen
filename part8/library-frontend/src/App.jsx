@@ -7,6 +7,7 @@ import LoginForm from "./components/LoginForm";
 import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
 import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED, ME } from "./queries";
 import Recommend from "./components/Recommend";
+import RegisterForm from "./components/RegisterForm";
 
 
 
@@ -97,6 +98,7 @@ useSubscription(BOOK_ADDED, {
       <button onClick={() => setPage("authors") }>authors</button>
       <button onClick={() => setPage("books") }>books</button>
 
+
       { isVisible && (
         <button onClick={() => setPage("add")}>add book</button>
       )
@@ -125,6 +127,11 @@ useSubscription(BOOK_ADDED, {
 
       <Notify errorMessage={errorMessage} />
      
+
+     <RegisterForm 
+     show={page === "register"}
+     />
+
       <Authors 
       show={page === "authors"}  
       setError={notify}

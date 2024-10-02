@@ -70,7 +70,9 @@ const LoginForm = ({ setError, setToken, show, setPage, setIsVisible, setUser, u
           />
         </div>
         <button type='submit'>login</button>
+        <a onClick={() => setPage("register")}>Register here</a>
       </form>
+      
     </div>
   )
 }

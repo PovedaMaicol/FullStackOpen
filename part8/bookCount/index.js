@@ -1,3 +1,4 @@
+require ('dotenv').config()
 const { WebSocketServer } = require('ws')
 const {useServer} = require('graphql-ws/lib/use/ws')
 
@@ -24,9 +25,11 @@ const User = require('./models/user')
 const typeDefs = require('./esquema')
 const resolvers = require('./resultores')
 
-require ('dotenv').config()
+
 
 const MONGODB_URI = process.env.MONGODB_URI
+const JWT_SECRET = process.env.JWT_SECRET
+console.log('JWT_SECRET en index.js:', JWT_SECRET)
 
 mongoose.connect(MONGODB_URI)
   .then(() => {
@@ -74,7 +77,7 @@ const start =  async () => {
         const auth = req ? req.headers.authorization : null
         if (auth && auth.startsWith('Bearer ')) {
           const decodedToken = jwt.verify(
-            auth.substring(7), process.env.JWT_SECRET
+            auth.substring(7), JWT_SECRET
           )
           const currentUser = await User
           .findById(decodedToken.id)
