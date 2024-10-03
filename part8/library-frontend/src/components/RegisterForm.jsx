@@ -43,16 +43,18 @@ const [favoriteGenre, setfavoriteGenre] = useState('')
 
     const form = {
         backgroundColor:'#ffecaa', 
-        borderRadius: '20px 20px 0 0', 
-        height: '85%', 
-        padding: '0 20px 0 20px'
+       display: 'flex',
+       flexDirection: 'column',
+       justifyContent: 'center',
+        height: '100vh', 
+        padding: '20px'
     }
 
     const [ addUser ] = useMutation(ADD_USER, {
         refetchQueries: [ { query: ALL_BOOKS}],
         onError: (error) => {
             const messages = error.graphQLErrors.map(e => e.message).join('\n')
-            props.setError(messages)
+            props.setMessage(messages)
         }
     })
 
@@ -62,36 +64,51 @@ const [favoriteGenre, setfavoriteGenre] = useState('')
 
       const submit = async (e) => {
         e.preventDefault()
-        await addUser({ variables: {username, password, favoriteGenre}})
-        
-        console.log('add user...')
-        
-        setUsername('')
-        setPassword('')
-        setfavoriteGenre('')
-        props.setErrorMessage(addUser.username)
-        // props.setPage("books")
-
-      }
+    
+        try {
+            const result = await addUser({ 
+                variables: { username, password, favoriteGenre }
+            })
+            
+            if (result) { 
+                console.log('add user...')
+                props.setMessage(`User ${username} created successfully`)
+                setUsername('')
+                setPassword('')
+                setfavoriteGenre('')
+                setTimeout(() => {
+                    props.setMessage(null)
+                }, 5000)
+                props.setIsRegister(false)
+                props.setPage("books")
+            }
+        } catch (error) {
+            props.setMessage(`Error: ${error.message}`)
+            setTimeout(() => {
+                props.setMessage(null)
+            }, 5000)
+        }
+    }
 
      
 
   return (
-    <div style={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        justifyContent: 'flex-end', 
-         height: 'calc(100vh - 20px)'
-        }}>
+    
 
     <Form style={form} onSubmit={submit}>
+     
 
-    <Form.Group>
-        <h2>
+    <Form.Group style={{ display: 'flex', justifyContent: 'space-between'}}>
+        <h1 style={{ padding: '0'}}>
         <span style={{fontWeight: 'normal'}}>Hello...</span> 
         <br/>
-        Register
-        </h2>
+        Register here
+        </h1>
+
+        <i className='bx bx-x-circle' 
+        style={{fontSize: '25px', color: 'red'}}
+        onClick={() => {props.setIsRegister(false), props.setPage('books')}}
+        ></i>
     </Form.Group>
     <br/>
 
@@ -156,7 +173,7 @@ const [favoriteGenre, setfavoriteGenre] = useState('')
        
 
     </Form>
-</div>
+
   )
 }
 

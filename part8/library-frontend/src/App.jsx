@@ -8,7 +8,8 @@ import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
 import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED, ME } from "./queries";
 import Recommend from "./components/Recommend";
 import RegisterForm from "./components/RegisterForm";
-import './app.css'
+// import './app.css'
+import { Button } from "react-bootstrap";
 
 
 
@@ -21,6 +22,7 @@ const App = () => {
   const [token, setToken] = useState(null)
   const [isVisible, setIsVisible] = useState(false)
   const [user, setUser] = useState(null)
+  const [isRegister, setIsRegister] = useState(false)
 
   const result = useQuery(ALL_AUTHORS)
   const resultBook = useQuery(ALL_BOOKS)
@@ -95,53 +97,52 @@ useSubscription(BOOK_ADDED, {
  
 
   return (
-    <div className="container">
-      <div style={{ 
-        display: 'flex',  
-        width: '100%',
-        backgroundColor: 'blue',
-        height: '20px',
-        margin: '0',
-        padding: '0'
-        
-        }}>
-      <button onClick={() => setPage("authors") }>authors</button>
-      <button onClick={() => setPage("books") }>books</button>
+    <div className="container" style={{padding: '0px'}}>
 
 
-      { isVisible && (
-        <button onClick={() => setPage("add")}>add book</button>
-      )
-      }
+      { !isRegister && (
+ <div className="buttons">
+ <Button onClick={() => setPage("authors") }>authors</Button>
+ <Button onClick={() => setPage("books") }>books</Button>
 
-      { !token && (
-  <button onClick={() => setPage("login")}>login</button>
-      )
-      }
 
-      {
-        isVisible && (
-      <button onClick={logout}>logout</button>
-      )
-      }
+ { isVisible && (
+   <Button onClick={() => setPage("add")}>add book</Button>
+ )
+ }
 
-      {
-        isVisible && (
-          <button onClick={() => setPage("recommend")}>recommend</button>
-        )
-      }
+ { !token && (
+<Button onClick={() => setPage("login")}>login</Button>
+ )
+ }
 
-    
-      
-      </div>
+ {
+   isVisible && (
+ <Button onClick={logout}>logout</Button>
+ )
+ }
+
+ {
+   isVisible && (
+     <Button onClick={() => setPage("recommend")}>recommend</Button>
+   )
+ }
+
+
+ 
+ </div>
+      )}
+     
 
       <Notify message={message} />
      
 
      <RegisterForm 
      show={page === "register"}
-    //  setErrorMessage={setErrorMessage}
+     setMessage={notify}
      setPage={setPage}
+     setIsRegister={setIsRegister}
+     
      />
 
       <Authors 
@@ -166,6 +167,7 @@ useSubscription(BOOK_ADDED, {
       setPage={setPage} 
       setIsVisible={setIsVisible}
       setMessage={notify}
+      setIsRegister={setIsRegister}
 
       />
      

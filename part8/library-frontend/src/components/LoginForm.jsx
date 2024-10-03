@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
 import { LOGIN, ME } from '../queries'
+import { Form, Button } from 'react-bootstrap'
 
-const LoginForm = ({ setMessage, setToken, show, setPage, setIsVisible, setUser, user}) => {
+const LoginForm = ({ setMessage, setToken, show, setPage, setIsVisible, setIsRegister}) => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-
+const form = {
+  display: 'flex', 
+        flexDirection: 'column', 
+        justifyContent: 'flex-end', 
+         height: 'calc(100vh - 20px)',
+         backgroundColor: '#ffecaa',
+         borderRadius: '0px 20px 0 0', 
+}
 
 
   const [ login, result ] = useMutation(LOGIN, {
@@ -60,24 +68,28 @@ const LoginForm = ({ setMessage, setToken, show, setPage, setIsVisible, setUser,
   }
 
   return (
-    <div>
-      <form onSubmit={submit}>
-        <div>
+    <div style={form}>
+      <Form onSubmit={submit}>
+        <Form.Group>
           username <input
             value={username}
             onChange={({ target }) => setUsername(target.value)}
           />
-        </div>
-        <div>
+        </Form.Group>
+        <Form.Group>
           password <input
             type='password'
             value={password}
             onChange={({ target }) => setPassword(target.value)}
           />
-        </div>
-        <button type='submit'>login</button>
-        <a onClick={() => setPage("register")}>Register here</a>
-      </form>
+        </Form.Group>
+
+        <Form.Group>
+        <Button type='submit'>login</Button>
+        <a onClick={() => {setPage("register"), setIsRegister(true)}}>Register here</a>
+        </Form.Group>
+       
+      </Form>
       
     </div>
   )
