@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
 import { LOGIN, ME } from '../queries'
 
-const LoginForm = ({ setError, setToken, show, setPage, setIsVisible, setUser, user}) => {
+const LoginForm = ({ setMessage, setToken, show, setPage, setIsVisible, setUser, user}) => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -12,11 +12,11 @@ const LoginForm = ({ setError, setToken, show, setPage, setIsVisible, setUser, u
 
   const [ login, result ] = useMutation(LOGIN, {
     onError: (error) => {
-      setError(error.graphQLErrors[0].message)
+      setMessage(error.graphQLErrors[0].message)
     },
 
     onCompleted: () => {
-      setError("")      
+        
     }
   })
 
@@ -29,6 +29,12 @@ const LoginForm = ({ setError, setToken, show, setPage, setIsVisible, setUser, u
       const token = result.data.login.value
       setToken(token)
       localStorage.setItem('bookApp-user-token', token)
+      setMessage(`${username} loggin`)
+      setUsername('')
+      setPassword('')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000);   
       setPage("authors")
       setIsVisible(true)
       console.log("Token almacenado en localStorage:", localStorage.getItem('bookApp-user-token'));

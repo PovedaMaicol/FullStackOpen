@@ -26,7 +26,7 @@ genres: [String]!
 
 type Mutation {
 
-createUser(
+addUser(
 username: String!
 favoriteGenre: String!
 password: String!

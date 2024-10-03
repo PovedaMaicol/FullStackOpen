@@ -70,7 +70,18 @@ genres
 }
 }
 `
-
+export const ADD_USER = gql`
+mutation createUser($username:  String!, $favoriteGenre: String!, $password: String!) {
+addUser(
+username: $username,
+favoriteGenre: $favoriteGenre,
+password: $password
+) {
+username
+favoriteGenre
+}
+}
+`
 export const BOOK_ADDED = gql`
 subscription {
 bookAdded {

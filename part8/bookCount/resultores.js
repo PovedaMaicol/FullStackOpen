@@ -82,16 +82,25 @@ const resolvers = {
     },
   
     Mutation: {
-      createUser: async (root, args) => {
+      addUser: async (root, args) => {
         const { username, favoriteGenre, password } = args
 
         if(password.length < 3) {
           throw new UserInputError('Password must be at least 5 characters long')
         }
 
+        const existingUser = await User.findOne({username})
+        if (existingUser) {
+          throw new UserInputError('Username already exists', {
+            invalidArgs: args,
+
+          })
+          
+        }
+
         const saltRounds = 10
         const passwordHash = await bcrypt.hash(password, saltRounds)
-
+        console.log('User arguments: ', args);
         const user = new User({ 
           username,
           favoriteGenre,

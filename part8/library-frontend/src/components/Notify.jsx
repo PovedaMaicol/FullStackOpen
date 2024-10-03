@@ -1,12 +1,18 @@
 import React from 'react'
+import { Alert } from 'react-bootstrap'
 
-const Notify = ({errorMessage}) => {
-    if ( !errorMessage ) {
+const Notify = ({message}) => {
+    if ( message === null) {
         return null
       }
   return (
     <div style={{color: 'red'}}>
-      {errorMessage}
+      {
+        message && 
+        <Alert variant='success'>
+          {message}
+        </Alert>
+      }
     </div>
   )
 }

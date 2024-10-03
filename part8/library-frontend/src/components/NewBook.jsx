@@ -18,7 +18,7 @@ const NewBook = (props) => {
     refetchQueries: [ { query: ALL_BOOKS}],
     onError: (error) => {
       const messages = error.graphQLErrors.map(e => e.message).join('\n')
-      props.setError(messages)
+      props.setMessage(messages)
     },
     update: (store, response) => {
       updateCacheWith(response.data.addBook)
@@ -38,13 +38,17 @@ const NewBook = (props) => {
 
   console.log('add book...')
 
+  props.setMessage(`${title} added`) 
+   setTimeout(() => {
+    props.setMessage(null)
+  }, 5000);  
   setTitle('')
   setPublished('')
   setAuthor('')
   setGenres([])
   setGenre('')
-props.setPage('books')
-  props.setError(addBook.title)
+  props.setPage('books')
+  
   }
 
   const addGenre = () => {

@@ -17,7 +17,7 @@ import './app.css'
 const App = () => {
 
   const [page, setPage] = useState("authors");
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState(null)
   const [token, setToken] = useState(null)
   const [isVisible, setIsVisible] = useState(false)
   const [user, setUser] = useState(null)
@@ -62,8 +62,9 @@ useSubscription(BOOK_ADDED, {
     console.log(data)
     const addedBook = data.data.bookAdded
     console.log('libro añadido', addedBook)
-    window.alert(`${addedBook.title} added`) 
-    notify(`${addedBook.title} added`)
+    // window.alert(`${addedBook.title} added`) 
+    setMessage(notify)
+  
     updateCacheWith(addedBook)
   }
 })
@@ -83,10 +84,10 @@ useSubscription(BOOK_ADDED, {
   }
 
   const notify = (message) => {
-    setErrorMessage(message)
+    setMessage(message)
     console.log(`Notification is: ${message}`)
     setTimeout(() => {
-      setErrorMessage(null)
+      setMessage(null)
     }, 10000)
   }
 
@@ -134,11 +135,13 @@ useSubscription(BOOK_ADDED, {
       
       </div>
 
-      <Notify errorMessage={errorMessage} />
+      <Notify message={message} />
      
 
      <RegisterForm 
      show={page === "register"}
+    //  setErrorMessage={setErrorMessage}
+     setPage={setPage}
      />
 
       <Authors 
@@ -152,16 +155,17 @@ useSubscription(BOOK_ADDED, {
 
       <NewBook 
       show={page === "add"} 
-      setError={notify} 
+      setMessage={notify} 
       setPage={setPage}
       />
      
       <LoginForm 
       show={page === "login"} 
       setToken={setToken} 
-      setError={notify}  
+      set={notify}  
       setPage={setPage} 
       setIsVisible={setIsVisible}
+      setMessage={notify}
 
       />
      
