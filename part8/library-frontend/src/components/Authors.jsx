@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client"
 import { ALL_AUTHORS, EDIT_AUTHOR } from "../queries"
 import EditBorn from "./EditBorn"
+import { Table } from "react-bootstrap"
 
 
 
@@ -18,17 +19,17 @@ const Authors = (props) => {
   
 
   const authors= result.data ? result.data.allAuthors : []
-  // if (authors.length === 0) {
-  //   return (<div>No users</div>);
-  // }
+
 
   return (
     <div>
-      <h2>authors</h2>
-      <table>
-        <tbody>
+
+
+ 
+      <Table striped style={{'--bs-table-striped-bg': 'rgba(255, 236, 170)', border: 'transparent'}}>
+        <tbody >
           <tr>
-            <th></th>
+            <th>Name</th>
             <th>born</th>
             <th>books</th>
           </tr>
@@ -41,7 +42,7 @@ const Authors = (props) => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
 
       <EditBorn authors={authors} setError={props.setError}/>
 

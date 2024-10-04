@@ -8,8 +8,10 @@ import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
 import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED, ME } from "./queries";
 import Recommend from "./components/Recommend";
 import RegisterForm from "./components/RegisterForm";
-// import './app.css'
-import { Button } from "react-bootstrap";
+import { Button, Navbar, Nav} from "react-bootstrap";
+import { Link } from 'react-router-dom'
+
+
 
 
 
@@ -24,9 +26,25 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [isRegister, setIsRegister] = useState(false)
 
+
+  const button = {
+    borderRadius: '5px 5px 0 0',
+    border: 'transparent',
+    '--bs-btn-bg': '#ffecaa',
+    '--bs-btn-hover-bg': '#f9d96c',
+    '--bs-btn-active-bg': '#f9d96c',
+    '--bs-btn-disabled-bg': '#dccb90',
+  
+  }
+  const padding = {
+    padding: '15px'
+  }
+
   const result = useQuery(ALL_AUTHORS)
   const resultBook = useQuery(ALL_BOOKS)
   const client = useApolloClient()
+
+
 
 
 
@@ -97,41 +115,110 @@ useSubscription(BOOK_ADDED, {
  
 
   return (
-    <div className="container" style={{padding: '0px'}}>
+    <div className="container">
+
+      { 
+        !isRegister && (
+          
+<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+  <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+  <Navbar.Collapse id="responsive-navbar-nav">
+    <Nav className="mr-auto">
+      <Nav.Link href="#" as="span">
+        <a style={button} onClick={() => setPage("authors") }> Authors </a>
+      </Nav.Link>
 
 
+      <Nav.Link href="#" as="span">
+      <a style={button} onClick={() => setPage("books") }>Books</a>
+      </Nav.Link>
+
+       
+       {
+        isVisible && (
+          <Nav.Link href="#" as="span">
+          <a style={button} onClick={() => setPage("add")}>Add book</a>
+        </Nav.Link>
+        )
+       } 
+
+       {
+        !token && (
+          <Nav.Link href="#" as="span">
+          <a style={button} onClick={() => {setPage("login"), setIsRegister(true)}} >Login</a>
+        </Nav.Link>
+        )
+       }
+
+       {
+        isVisible && (
+          <Nav.Link href="#" as="span">
+          <a style={button} onClick={logout}>Logout</a>
+        </Nav.Link>
+  
+
+        )
+       }
+
+       {
+        isVisible && (
+          
+      <Nav.Link href="#" as="span">
+      <a style={button} onClick={logout}>Recommend</a>
+      </Nav.Link>
+      )
+       }
+  
+
+       
+     
+
+
+      {/* <Nav.Link href="#" as="span">
+        {user
+          ? <em>{user} logged in</em>
+          : <Link>login</Link>
+        }
+    </Nav.Link> */}
+    </Nav>
+  </Navbar.Collapse>
+</Navbar>
+        )
+      }
+
+{/* 
       { !isRegister && (
  <div className="buttons">
- <Button onClick={() => setPage("authors") }>authors</Button>
- <Button onClick={() => setPage("books") }>books</Button>
+ <Button style={button} onClick={() => setPage("authors") }>authors</Button>
+ <Button style={button} onClick={() => setPage("books") }>books</Button>
 
 
  { isVisible && (
-   <Button onClick={() => setPage("add")}>add book</Button>
+   <Button style={button} onClick={() => setPage("add")}>add book</Button>
  )
  }
 
  { !token && (
-<Button onClick={() => setPage("login")}>login</Button>
+<Button style={button} onClick={() => {setPage("login"), setIsRegister(true)}}>login</Button>
  )
  }
 
  {
    isVisible && (
- <Button onClick={logout}>logout</Button>
+ <Button style={button} onClick={logout}>logout</Button>
  )
  }
 
  {
    isVisible && (
-     <Button onClick={() => setPage("recommend")}>recommend</Button>
+     <Button style={button} onClick={() => setPage("recommend")}>recommend</Button>
    )
  }
 
 
  
  </div>
-      )}
+      )} */}
      
 
       <Notify message={message} />

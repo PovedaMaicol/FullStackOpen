@@ -11,10 +11,47 @@ const LoginForm = ({ setMessage, setToken, show, setPage, setIsVisible, setIsReg
 const form = {
   display: 'flex', 
         flexDirection: 'column', 
-        justifyContent: 'flex-end', 
-         height: 'calc(100vh - 20px)',
+        justifyContent: 'center', 
+         height: '100vh',
          backgroundColor: '#ffecaa',
          borderRadius: '0px 20px 0 0', 
+         alignItems: 'center',
+         padding: '20px'
+}
+
+const groups = {
+  display: 'flex', 
+  flexDirection: 'column', 
+  margin: '0', 
+  padding: '0',
+  width: '80%'
+}
+
+const inputs = {
+  width: '100%',  
+  height: '40px',
+  borderRadius: '5px',
+  paddingLeft: '10px',
+  backgroundColor: 'transparent',
+  border: '2px solid gray'
+
+}
+
+const groupButton = {
+  display: 'flex', 
+  flexDirection: 'column', 
+  textAlign: 'center', 
+  justifyContent: 'space-between',
+  width: '80%'
+}
+
+
+const buttons = {
+  width: '100%', 
+  backgroundColor: '#050522',
+  color: '#e1c461',
+  height: '40px',
+  borderRadius: '5px'
 }
 
 
@@ -45,6 +82,7 @@ const form = {
       }, 5000);   
       setPage("authors")
       setIsVisible(true)
+      setIsRegister(false)
       console.log("Token almacenado en localStorage:", localStorage.getItem('bookApp-user-token'));
     
   
@@ -56,9 +94,12 @@ const form = {
 
   const submit = async (event) => {
     event.preventDefault()
+   
     try {
       await login({ variables: { username, password } })
+  
     } catch (error) {
+  
 
     }
   }
@@ -68,30 +109,82 @@ const form = {
   }
 
   return (
-    <div style={form}>
-      <Form onSubmit={submit}>
-        <Form.Group>
-          username <input
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </Form.Group>
-        <Form.Group>
-          password <input
-            type='password'
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </Form.Group>
+        <Form onSubmit={submit} style={form}>
 
-        <Form.Group>
-        <Button type='submit'>login</Button>
-        <a onClick={() => {setPage("register"), setIsRegister(true)}}>Register here</a>
+       
+        <Form.Group style={{ display: 'flex', justifyContent: 'space-between', textAlign: 'center'}}>
+        <h1 style={{ padding: '0'}}>
+        <span style={{fontWeight: 'normal'}}>Welcome to</span> 
+        <br/>
+        AppBook
+        </h1>
+
+      
+        </Form.Group>
+        <br/>
+
+
+
+          
+        <Form.Group style={groups}>
+        <Form.Label>Username</Form.Label>
+        <Form.Control
+          placeholder='Pepito12'
+          style={inputs}
+          value={username}
+          onChange={({ target }) => setUsername(target.value)}
+        />
+        </Form.Group>
+        <br/>
+
+
+        <Form.Group style={groups}>
+        <Form.Label>Password</Form.Label>
+        <Form.Control
+          placeholder='####'
+          style={inputs}
+          type='password'
+          value={password}
+          onChange={({ target }) => setPassword(target.value)}
+          />
+        </Form.Group>
+        <br/>
+
+        <Form.Group style={groupButton}>
+          <br/>
+        <Button type='submit' style={buttons}>
+          login
+        </Button>
+        <br/>
+
+        <div style={{ 
+          width: '100%', 
+     
+          display: 'flex',
+          justifyContent: 'center'}}>
+
+
+        <a 
+        onClick={() => {
+        setPage("register"),
+        setIsRegister(true)}}
+        style={{fontWeight: 'bold'}}>
+        Register
+        </a>
+
+        <a style={{ padding: '0 10px 0 10px'}}>|</a>
+
+        <a
+        onClick={() => {setIsRegister(false), setPage('books')}}>
+        Cancel
+        </a>
+        </div>
+        
         </Form.Group>
        
       </Form>
       
-    </div>
+
   )
 }
 
