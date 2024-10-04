@@ -10,6 +10,7 @@ import Recommend from "./components/Recommend";
 import RegisterForm from "./components/RegisterForm";
 import { Button, Navbar, Nav} from "react-bootstrap";
 import { Link } from 'react-router-dom'
+import Navigation from "./components/Navigation";
 
 
 
@@ -117,7 +118,22 @@ useSubscription(BOOK_ADDED, {
   return (
     <div className="container">
 
-      { 
+      {
+        !isRegister && (
+<Navigation 
+setIsRegister={setIsRegister}
+isRegister={isRegister}
+setPage={setPage}
+isVisible={isVisible}
+token={token}
+logout={logout}
+
+/>
+        )
+      }
+
+
+      {/* { 
         !isRegister && (
           
 <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -168,7 +184,7 @@ useSubscription(BOOK_ADDED, {
       </Nav.Link>
       )
        }
-  
+   */}
 
        
      
@@ -180,11 +196,11 @@ useSubscription(BOOK_ADDED, {
           : <Link>login</Link>
         }
     </Nav.Link> */}
-    </Nav>
+    {/* </Nav>
   </Navbar.Collapse>
 </Navbar>
         )
-      }
+      } */}
 
 {/* 
       { !isRegister && (
