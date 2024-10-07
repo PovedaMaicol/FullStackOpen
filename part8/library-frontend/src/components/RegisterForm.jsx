@@ -70,7 +70,8 @@ const [favoriteGenre, setfavoriteGenre] = useState('')
                 variables: { username, password, favoriteGenre }
             })
             
-            if (result) { 
+            if (result.data) { 
+                console.log('result es', result)
                 console.log('add user...')
                 props.setMessage(`User ${username} created successfully`)
                 setUsername('')
@@ -79,8 +80,8 @@ const [favoriteGenre, setfavoriteGenre] = useState('')
                 setTimeout(() => {
                     props.setMessage(null)
                 }, 5000)
-                props.setIsRegister(false)
-                props.setPage("books")
+                props.setIsRegister(true)
+                props.setPage("login")
             }
         } catch (error) {
             props.setMessage(`Error: ${error.message}`)

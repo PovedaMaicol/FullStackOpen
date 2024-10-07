@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ME, FIND_BOOKS_RECOMMEND } from '../queries'
 import { useLazyQuery, useQuery } from '@apollo/client'
+import { Table } from 'react-bootstrap'
 
 const Recommend = (props) => {
 
@@ -43,20 +44,34 @@ console.log(recommend)
   const user = props.user;
 
   return (
-    <div>
-    <h1>Recommendations</h1>
-    <p>books in your favorite genre:</p>  
-{user.favoriteGenre}
-    {
-     recommend?.map( b => (
-      <li key={b.id}>
-        {b.title} - {b.author} - {b.published} - {b.genres}
+    <div className='container' style={{paddingTop: '65px'}}>
+      <h1 style={{ padding: '0'}}>
+        <span style={{fontWeight: 'normal'}}>Hello {user.username}</span> 
+        <br/>
+        We recommend:
 
-        
-        </li>
+        </h1>
+        <br/>
+    {/* <p>{user.username} books in your favorite genre:</p>   */}
+{/* {user.favoriteGenre} */}
+<Table striped style={{'--bs-table-striped-bg': 'rgba(255, 236, 170)', border: 'transparent'}}>
+  <tbody>
+    <tr>
+      <th>Book</th>
+      <th>Author</th>
+      <th>Genre</th>
+    </tr>
+    {recommend?.map( b => (
+      <tr key={b.id}>
+        <td>{b.title}</td>
+        <td>{b.author}</td>
+        <td>{b.genres}</td> 
+        </tr>
      ))
-
     }
+  </tbody>
+</Table>
+  
     </div>
   )
 }

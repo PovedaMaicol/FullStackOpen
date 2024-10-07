@@ -22,10 +22,10 @@ const Authors = (props) => {
 
 
   return (
-    <div className="container">
+    <div className="container" style={{ paddingTop: '65px'}}>
 
 
- 
+ <h1>Authors</h1>
       <Table striped style={{'--bs-table-striped-bg': 'rgba(255, 236, 170)', border: 'transparent'}}>
         <tbody >
           <tr>
@@ -36,15 +36,15 @@ const Authors = (props) => {
           {authors.map((a) => (
           
             <tr key={a.name}>
-              <td>{a.name}</td>
-              <td>{a.born}</td>
-              <td>{a.bookCount}</td>
+              <td  style={{fontStyle: 'italic'}}>{a.name}</td>
+              <td style={{fontStyle: 'italic'}}>{a.born}</td>
+              <td style={{fontStyle: 'italic'}}>{a.bookCount}</td>
             </tr>
           ))}
         </tbody>
       </Table>
 
-      <EditBorn authors={authors} setError={props.setError}/>
+      <EditBorn authors={authors} setError={props.setError} user={props.user}/>
 
     </div>
   )

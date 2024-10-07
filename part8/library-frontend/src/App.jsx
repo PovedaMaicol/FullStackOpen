@@ -151,6 +151,7 @@ logout={logout}
       <Authors 
       show={page === "authors"}  
       setError={notify}
+      user={user}
       />
 
       <Books 

@@ -6,7 +6,7 @@ const Navigation = ({setIsRegister, setPage, isVisible, token, logout}) => {
   return (
   
           
-<Navbar collapseOnSelect expand="lg" bg='dark' variant="dark" style={{paddingLeft: '15px'}}>
+<Navbar collapseOnSelect expand="lg" bg='dark' variant="dark" style={{paddingLeft: '15px', position: 'absolute', width: '100%', zIndex: '3'}}>
   <Navbar.Toggle aria-controls="responsive-navbar-nav" style={{border: '1px solid white'}}/>
   <Navbar.Collapse id="responsive-navbar-nav">
     <Nav className="mr-auto">
@@ -50,7 +50,7 @@ const Navigation = ({setIsRegister, setPage, isVisible, token, logout}) => {
         isVisible && (
           
       <Nav.Link href="#" as="span">
-      <a onClick={logout}>Recommend</a>
+      <a onClick={() => setPage("recommend")}>Recommend</a>
       </Nav.Link>
       )
        }
