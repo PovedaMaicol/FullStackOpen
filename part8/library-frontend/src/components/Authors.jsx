@@ -22,7 +22,7 @@ const Authors = (props) => {
 
 
   return (
-    <div>
+    <div className="container">
 
 
  

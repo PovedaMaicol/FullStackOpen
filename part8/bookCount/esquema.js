@@ -58,6 +58,7 @@ authorCount: Int!
 allBooks(author: String, genre: String) : [Book!]!
 allAuthors: [Author!]!
 me: User
+allGenres: [String!]!
 
 }
 

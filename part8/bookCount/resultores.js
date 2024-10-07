@@ -20,7 +20,13 @@ const resolvers = {
       authorCount: async () => Author.collection.countDocuments(),
   
       bookCount: async () => Book.collection.countDocuments(),
-  
+      
+      allGenres: async () => {
+        const books = await Book.find({});
+        const allGenres = books.flatMap(book => book.genres);
+        return [...new Set(allGenres)];
+      },
+      
       allBooks: async (root, args) => {
   
         let query = {};

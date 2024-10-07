@@ -14,7 +14,7 @@ const form = {
         justifyContent: 'center', 
          height: '100vh',
          backgroundColor: '#ffecaa',
-         borderRadius: '0px 20px 0 0', 
+   
          alignItems: 'center',
          padding: '20px'
 }

@@ -116,9 +116,8 @@ useSubscription(BOOK_ADDED, {
  
 
   return (
-    <div className="container">
-
-      {
+    <div>
+          {
         !isRegister && (
 <Navigation 
 setIsRegister={setIsRegister}
@@ -129,116 +128,17 @@ token={token}
 logout={logout}
 
 />
+
         )
+        
       }
 
-
-      {/* { 
-        !isRegister && (
-          
-<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-  <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-  <Navbar.Collapse id="responsive-navbar-nav">
-    <Nav className="mr-auto">
-      <Nav.Link href="#" as="span">
-        <a style={button} onClick={() => setPage("authors") }> Authors </a>
-      </Nav.Link>
-
-
-      <Nav.Link href="#" as="span">
-      <a style={button} onClick={() => setPage("books") }>Books</a>
-      </Nav.Link>
-
-       
-       {
-        isVisible && (
-          <Nav.Link href="#" as="span">
-          <a style={button} onClick={() => setPage("add")}>Add book</a>
-        </Nav.Link>
-        )
-       } 
-
-       {
-        !token && (
-          <Nav.Link href="#" as="span">
-          <a style={button} onClick={() => {setPage("login"), setIsRegister(true)}} >Login</a>
-        </Nav.Link>
-        )
-       }
-
-       {
-        isVisible && (
-          <Nav.Link href="#" as="span">
-          <a style={button} onClick={logout}>Logout</a>
-        </Nav.Link>
-  
-
-        )
-       }
-
-       {
-        isVisible && (
-          
-      <Nav.Link href="#" as="span">
-      <a style={button} onClick={logout}>Recommend</a>
-      </Nav.Link>
-      )
-       }
-   */}
-
-       
-     
-
-
-      {/* <Nav.Link href="#" as="span">
-        {user
-          ? <em>{user} logged in</em>
-          : <Link>login</Link>
-        }
-    </Nav.Link> */}
-    {/* </Nav>
-  </Navbar.Collapse>
-</Navbar>
-        )
-      } */}
-
-{/* 
-      { !isRegister && (
- <div className="buttons">
- <Button style={button} onClick={() => setPage("authors") }>authors</Button>
- <Button style={button} onClick={() => setPage("books") }>books</Button>
-
-
- { isVisible && (
-   <Button style={button} onClick={() => setPage("add")}>add book</Button>
- )
- }
-
- { !token && (
-<Button style={button} onClick={() => {setPage("login"), setIsRegister(true)}}>login</Button>
- )
- }
-
- {
-   isVisible && (
- <Button style={button} onClick={logout}>logout</Button>
- )
- }
-
- {
-   isVisible && (
-     <Button style={button} onClick={() => setPage("recommend")}>recommend</Button>
-   )
- }
-
-
  
- </div>
-      )} */}
-     
+    
+    <Notify message={message} />
 
-      <Notify message={message} />
-     
+
+
 
      <RegisterForm 
      show={page === "register"}
@@ -279,7 +179,7 @@ logout={logout}
     
     <div>
     </div>  
-    
+
     </div>
   );
 };

@@ -6,8 +6,8 @@ const Navigation = ({setIsRegister, setPage, isVisible, token, logout}) => {
   return (
   
           
-<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-  <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+<Navbar collapseOnSelect expand="lg" bg='dark' variant="dark" style={{paddingLeft: '15px'}}>
+  <Navbar.Toggle aria-controls="responsive-navbar-nav" style={{border: '1px solid white'}}/>
   <Navbar.Collapse id="responsive-navbar-nav">
     <Nav className="mr-auto">
       <Nav.Link href="#" as="span">
