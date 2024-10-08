@@ -3,6 +3,10 @@ import { Button, Navbar, Nav} from "react-bootstrap";
 import { Link } from 'react-router-dom'
 
 const Navigation = ({setIsRegister, setPage, isVisible, token, logout}) => {
+
+  const ancor = {
+    cursor: 'pointer'
+  }
   return (
   
           
@@ -11,19 +15,19 @@ const Navigation = ({setIsRegister, setPage, isVisible, token, logout}) => {
   <Navbar.Collapse id="responsive-navbar-nav">
     <Nav className="mr-auto">
       <Nav.Link href="#" as="span">
-        <a  onClick={() => setPage("authors") }> Authors </a>
+        <a  style={ancor} onClick={() => setPage("authors") }> Authors </a>
       </Nav.Link>
 
 
       <Nav.Link href="#" as="span">
-      <a onClick={() => setPage("books") }>Books</a>
+      <a style={ancor} onClick={() => setPage("books") }>Books</a>
       </Nav.Link>
 
        
        {
         isVisible && (
           <Nav.Link href="#" as="span">
-          <a onClick={() => setPage("add")}>Add book</a>
+          <a style={ancor} onClick={() => setPage("add")}>Add book</a>
         </Nav.Link>
         )
        } 
@@ -31,41 +35,35 @@ const Navigation = ({setIsRegister, setPage, isVisible, token, logout}) => {
        {
         !token && (
           <Nav.Link href="#" as="span">
-          <a onClick={() => {setPage("login"), setIsRegister(true)}} >Login</a>
+          <a style={ancor} onClick={() => {setPage("login"), setIsRegister(true)}} >Login</a>
         </Nav.Link>
         )
+       }
+
+{
+        isVisible && (
+          
+      <Nav.Link href="#" as="span">
+      <a style={ancor} onClick={() => setPage("recommend")}>Recommend</a>
+      </Nav.Link>
+      )
        }
 
        {
         isVisible && (
           <Nav.Link href="#" as="span">
-          <a onClick={logout}>Logout</a>
+          <a style={ancor} onClick={logout}>Logout</a>
         </Nav.Link>
   
 
         )
        }
 
-       {
-        isVisible && (
-          
-      <Nav.Link href="#" as="span">
-      <a onClick={() => setPage("recommend")}>Recommend</a>
-      </Nav.Link>
-      )
-       }
+       
   
 
        
-     
 
-
-      {/* <Nav.Link href="#" as="span">
-        {user
-          ? <em>{user} logged in</em>
-          : <Link>login</Link>
-        }
-    </Nav.Link> */}
     </Nav>
   </Navbar.Collapse>
 </Navbar>

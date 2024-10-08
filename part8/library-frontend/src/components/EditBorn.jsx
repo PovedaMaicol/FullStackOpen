@@ -82,10 +82,16 @@ const buttons = {
     return;
     }
 
+
     if(user) {
       editAuthor({ variables: {name: selectAuthor.value, setBornTo: parseInt(born)}})
       setSelectAuthor(null)
       setBorn('')
+    }
+
+    if (!user) {
+      setError('Not authorized');
+      return
     }
     
     

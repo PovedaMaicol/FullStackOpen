@@ -141,7 +141,7 @@ const buttons = {
         <Form.Group style={groups}>
         <Form.Label>Password</Form.Label>
         <Form.Control
-          placeholder='####'
+          placeholder='********'
           style={inputs}
           type='password'
           value={password}
