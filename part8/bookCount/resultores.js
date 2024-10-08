@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const User = require('./models/user')
-const { UserInputError, AuthenticationError } = require('apollo-server')
+const { UserInputError, AuthenticationError } = require('@apollo/server')
 
 const JWT_SECRET = process.env.JWT_SECRET
 console.log('JWT_SECRET en resolvers.js:', JWT_SECRET)
