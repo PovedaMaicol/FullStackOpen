@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { useState } from 'react'
-import { ADD_BOOK, ALL_BOOKS } from '../queries'
+import { ADD_BOOK, ALL_BOOKS, FIND_BOOKS_RECOMMEND} from '../queries'
 import { Button, Form } from 'react-bootstrap'
 
 
@@ -83,7 +83,8 @@ const form = {
   
  
   const [ addBook ] = useMutation(ADD_BOOK, {
-    refetchQueries: [ { query: ALL_BOOKS}],
+    refetchQueries: [ { query: ALL_BOOKS }
+    ],
     onError: (error) => {
       const messages = error.graphQLErrors.map(e => e.message).join('\n')
       props.setMessage(messages)

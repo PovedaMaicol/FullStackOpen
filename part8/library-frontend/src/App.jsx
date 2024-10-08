@@ -46,6 +46,11 @@ const App = () => {
   const client = useApolloClient()
 
 
+  
+
+  // console.log('result book es', resultBook.data.allBooks.length)
+
+
 
 
 
@@ -83,12 +88,22 @@ useSubscription(BOOK_ADDED, {
     console.log(data)
     const addedBook = data.data.bookAdded
     console.log('libro añadido', addedBook)
-    // window.alert(`${addedBook.title} added`) 
-    setMessage(notify)
+    window.alert(`${addedBook.title} added`) 
+    setMessage(`${addedBook.title} added`)
+    setTimeout(() => {
+      setMessage(null)
+    }, 10000)
   
     updateCacheWith(addedBook)
   }
 })
+
+useEffect(() => {
+  if (resultBook.data && resultBook.data.allBooks) {
+    console.log('result book es', resultBook.data.allBooks.length);
+  }
+}, [resultBook.data]);
+
 
   if (result.loading || resultBook.loading)  {
     return <div>loading...</div>
@@ -176,7 +191,7 @@ logout={logout}
       />
      
 
-     <Recommend show={page === "recommend"} user={user} setUser={setUser}/>
+     <Recommend show={page === "recommend"} user={user} setUser={setUser} books={resultBook.data ? resultBook.data.allBooks : []}/>
     
     <div>
     </div>  
