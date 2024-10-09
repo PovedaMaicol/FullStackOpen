@@ -71,8 +71,6 @@ const [favoriteGenre, setfavoriteGenre] = useState('')
             })
             
             if (result.data) { 
-                console.log('result es', result)
-                console.log('add user...')
                 props.setMessage(`User ${username} created successfully`)
                 setUsername('')
                 setPassword('')
@@ -150,7 +148,7 @@ const [favoriteGenre, setfavoriteGenre] = useState('')
             type='text'
             data-testid='genre'
             name='genre'
-            placeholder='Terror'
+            placeholder='Only one genre'
             value={favoriteGenre}
             onChange={({ target }) => setfavoriteGenre(target.value)}
             />

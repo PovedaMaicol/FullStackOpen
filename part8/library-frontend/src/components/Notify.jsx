@@ -23,6 +23,7 @@ const Notify = ({message}) => {
           width: 'auto', // Ajusta el tamaño según el contenido
           maxWidth: '300px', // Limita el ancho máximo
           borderRadius: '8px', // Bordes redondeados
+          lineHeight: '1'
           }} variant='success'>
           {message}
         </Alert>

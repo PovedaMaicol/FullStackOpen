@@ -23,7 +23,7 @@ const resolvers = {
       
       allGenres: async () => {
         const books = await Book.find({});
-        const allGenres = books.flatMap(book => book.genres);
+        const allGenres = books.flatMap(book => book.genres.map(genre => genre.toLowerCase()));
         return [...new Set(allGenres)];
       },
       

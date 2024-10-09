@@ -40,16 +40,20 @@ const Recommend = (props) => {
   }
 
   const user = props.user
-
+console.log('recommend es', recommend)
 
 
   return (
     <div className='container' style={{ paddingTop: '65px' }}>
       <h1 style={{ padding: '0' }}>
-        <span style={{ fontWeight: 'normal' }}>Hello {user.username}</span>
-        <br />
-        We recommend:
-      </h1>
+  <span style={{ fontWeight: 'normal' }}>Hello {user.username}</span>
+  <br />
+  { 
+  recommend.length > 0 ? 
+    "We recommend" : 
+    "Not have recommend"
+}
+</h1>
       <br />
       <Table striped style={{ '--bs-table-striped-bg': 'rgba(255, 236, 170)', border: 'transparent' }}>
         <tbody>

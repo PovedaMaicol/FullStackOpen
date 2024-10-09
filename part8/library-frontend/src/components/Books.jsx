@@ -1,129 +1,111 @@
-import { useLazyQuery, useQuery } from "@apollo/client"
-import { ALL_BOOKS, ALL_GENRES, FIND_BOOKS_RECOMMEND } from "../queries"
-import { useEffect, useState } from "react"
-import { Table } from "react-bootstrap"
-import Select from "react-select"
+import { useLazyQuery, useQuery } from "@apollo/client";
+import { ALL_BOOKS, ALL_GENRES } from "../queries";
+import { useEffect, useState } from "react";
+import { Table } from "react-bootstrap";
+import Select from "react-select";
 
 const Books = (props) => {
-  const [category, setCategory] = useState('All')
-  // const [allGenres, setAllGenres] = useState([])
-  const [selectGenre, setSelectGenre] = useState(null)
+  const [category, setCategory] = useState('All');
 
 
+  // Query para obtener todos los libros o filtrados por género
+  const [getBooks, { data, loading, error }] = useLazyQuery(ALL_BOOKS);
 
-  //libros filtrados
-  const [getFilterBook, { data: filterData, loading: filterLoading, error: filerError}] = useLazyQuery(FIND_BOOKS_RECOMMEND)
+  // Query para obtener todos los géneros
+  const { data: genresData, loading: genresLoading, error: genresError } = useQuery(ALL_GENRES);
 
-  // todos los libros
-  const {loading, error, data } = useQuery(ALL_BOOKS)
-
-  
-  // todos los generos
-  const todosGeneros = useQuery(ALL_GENRES)
-  if(todosGeneros) {
-    console.log('los generos son ', todosGeneros)
-  }
-
-  const options = todosGeneros.data ? todosGeneros.data.allGenres.map((g) => ({
-  value: g,
-  label: g
-})) : [];
-console.log('options son' ,options)
+  // Opciones de géneros para el componente `Select`, incluyendo "All"
+  const options = genresData
+    ? [
+        { value: 'All', label: 'All' },
+        ...genresData.allGenres.map((g) => ({
+          value: g,
+          label: g,
+        })),
+      ]
+    : [{ value: 'All', label: 'All' }];
 
 
- 
-  
-  
-  const submit = async (e) => {
-    e.preventDefault()
-
-    }
-  
-
-
+  // Ejecutar consulta según la categoría seleccionada
   useEffect(() => {
-    if(category !== 'All') {
-     getFilterBook({ variables: {favoriteGenre: category}})
+    
+    if (category === 'All') {
+      getBooks(); // Obtener todos los libros
+    } else {
+      getBooks({ variables: { genre: category } }); // Obtener libros filtrados por género
     }
-  }, [category, getFilterBook])
-
+  }, [category, getBooks]);
 
   if (!props.show) {
-    return null
+    return null;
   }
 
-  if (loading)  {
-    return <div>loading...</div>
+  if (loading || genresLoading) {
+    return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error... {error.message}</div>
+  if (error || genresError) {
+    return <div>Error... {error ? error.message : genresError.message}</div>;
   }
 
-
-  const books = category  === 'All' 
-  ? data.allBooks 
-  :
-  filterData ? filterData.allBooks : []
+  // Libros obtenidos de la consulta, ya sea todos o filtrados por género
+  const books = data?.allBooks || [];
 
 
-  
-if( category !== 'All') {
-  if(filterLoading) return <div>Loading...</div>
-  if(filerError) return <div>Error... {filerError.message}</div>
-}
-console.log('El resultado es', books)
+  const submit = async (event) => {
+    event.preventDefault();
 
+    if (!category) {
+      props.setMessage("Please select a category");
+      setTimeout(() => {
+        props.setMessage(null)
+      }, 5000);  
+      return;
+    }
 
+    // se(null);
+    // Aquí puedes agregar lógica adicional si es necesario
+  };
 
   return (
-    <div className="container" style={{ paddingTop: '65px'}}>
-    
-          <form onSubmit={submit} style={{display: 'flex', justifyContent:'space-between', alignItems: 'center'}}>
-            <h1 style={{margin: '0', padding: '0', lineHeight: '1'}}>
-              {
-                category ? `${category} Books` : Books
-              }
-              </h1>
-
-
-            <div style={{width:'60%', height: '20px'}}>
-            <Select 
-             value={category}
+    <div className="container" style={{ paddingTop: '65px' }}>
+      <form onSubmit={submit} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1 style={{ margin: '0', padding: '0', lineHeight: '1' }}>
+          {category === 'All' ? 'All Books' : `${category} Books`}
+        </h1>
+        <div style={{ width: '60%', height: '40px' }}>
+          <Select
+            value={options.find(option => option.value === category)}
             onChange={(selectedOption) => setCategory(selectedOption.value)}
             options={options}
-            placeholder='Select a genre...'
-    
-  
+            placeholder="Select a genre..."
           />
-            </div>
-       
-          </form>
-          <br/>
+        </div>
+      </form>
+      <br />
 
-     
-   
 
-      <Table striped style={{'--bs-table-striped-bg': 'rgba(255, 236, 170)', border: 'transparent'}}>
-        <tbody>
+
+      <Table striped style={{ '--bs-table-striped-bg': 'rgba(255, 236, 170)', border: 'transparent' }}>
+        <thead>
           <tr>
             <th>Name</th>
             <th>Author</th>
             <th>Published</th>
           </tr>
+        </thead>
+        <tbody>
           {books.map((b) => (
             <tr key={b.id}>
-              <td style={{fontStyle: 'italic', margin: '0', lineHeight: '1'}}>{b.title}</td>
-              <td style={{fontStyle: 'italic'}}>{b.author}</td>
-              <td style={{fontStyle: 'italic'}}>{b.published}</td>
+              <td style={{ fontStyle: 'italic', margin: '0', lineHeight: '1' }}>{b.title}</td>
+              <td style={{ fontStyle: 'italic' }}>{b.author}</td>
+              <td style={{ fontStyle: 'italic' }}>{b.published}</td>
             </tr>
           ))}
         </tbody>
       </Table>
-
-
     </div>
-  )
-}
+  );
+};
 
-export default Books
+export default Books;

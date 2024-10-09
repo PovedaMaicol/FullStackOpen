@@ -45,7 +45,6 @@ const groupButton = {
   width: '80%'
 }
 
-
 const buttons = {
   width: '100%', 
   backgroundColor: '#050522',
@@ -57,7 +56,8 @@ const buttons = {
 
   const [ login, result ] = useMutation(LOGIN, {
     onError: (error) => {
-      setMessage(error.graphQLErrors[0].message)
+      setMessage('Invalid credentials');
+      // setMessage(error.graphQLErrors[0].message);
     },
 
     onCompleted: () => {
@@ -74,7 +74,7 @@ const buttons = {
       const token = result.data.login.value
       setToken(token)
       localStorage.setItem('bookApp-user-token', token)
-      setMessage(`${username} loggin`)
+      setMessage(`Welcome`)
       setUsername('')
       setPassword('')
       setTimeout(() => {
@@ -83,7 +83,7 @@ const buttons = {
       setPage("authors")
       setIsVisible(true)
       setIsRegister(false)
-      console.log("Token almacenado en localStorage:", localStorage.getItem('bookApp-user-token'));
+ 
     
   
     }
@@ -94,12 +94,17 @@ const buttons = {
 
   const submit = async (event) => {
     event.preventDefault()
+    
+    if (!username || !password) {
+      setMessage('Please fill in all fields');
+      return;
+    }
    
     try {
       await login({ variables: { username, password } })
   
     } catch (error) {
-  
+  setMessage('ivalid credentiasl', error)
 
     }
   }

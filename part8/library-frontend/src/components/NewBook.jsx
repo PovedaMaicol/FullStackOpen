@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { useState } from 'react'
-import { ADD_BOOK, ALL_BOOKS, FIND_BOOKS_RECOMMEND} from '../queries'
+import { ADD_BOOK, ALL_BOOKS, ALL_GENRES, FIND_BOOKS_RECOMMEND} from '../queries'
 import { Button, Form } from 'react-bootstrap'
 
 
@@ -83,7 +83,8 @@ const form = {
   
  
   const [ addBook ] = useMutation(ADD_BOOK, {
-    refetchQueries: [ { query: ALL_BOOKS }
+    refetchQueries: [ { query: ALL_BOOKS },
+      {query: ALL_GENRES}
     ],
     onError: (error) => {
       const messages = error.graphQLErrors.map(e => e.message).join('\n')
@@ -121,9 +122,12 @@ const form = {
   }
 
   const addGenre = () => {
-  setGenres(genres.concat(genre))
-  setGenre('')
-  }
+    if (genre && !genres.includes(genre)) { // Solo agregar si el género no está ya en la lista
+      setGenres(genres.concat(genre));
+      setGenre('');
+    }
+  };
+
 
   return (
     <div>

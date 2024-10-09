@@ -38,16 +38,16 @@ allGenres
 `
 
 export const ALL_BOOKS = gql`
-query {
-allBooks {
-title
-published
-author
-id
-genres
-}
-}
-`
+  query AllBooks($genre: String) {
+    allBooks(genre: $genre) {
+      title
+      published
+      author
+      id
+      genres
+    }
+  }
+`;
  
 export const FIND_BOOKS_RECOMMEND = gql`
 query findBooksRecommend($favoriteGenre: String!) {
