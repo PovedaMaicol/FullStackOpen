@@ -26,12 +26,12 @@ const authLink = setContext((_, { headers }) => {
   }
 })
 
-const httpLink = new HttpLink({ uri: 'http://localhost:4000'})
+const httpLink = new HttpLink({ uri: 'https://backendappbook.onrender.com/'})
 
 
 const wsLink = new GraphQLWsLink(
 createClient({
-  url: 'ws://localhost:4000'
+  url: 'https://backendappbook.onrender.com/'
 })
 )
 

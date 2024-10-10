@@ -26,6 +26,7 @@ const App = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [user, setUser] = useState(null)
   const [isRegister, setIsRegister] = useState(false)
+  const [newBookAdded, setNewBookAdded] = useState(false); // Nuevo estado
 
 
   const button = {
@@ -82,19 +83,21 @@ const App = () => {
     }
 
   
-useSubscription(BOOK_ADDED, {
-  onData: ({ data }) => {
-    const addedBook = data.data.bookAdded
-    console.log('libro añadido', addedBook)
-    // window.alert(`${addedBook.title} added`) 
-    setMessage(`${addedBook.title} added`)
-    setTimeout(() => {
-      setMessage(null)
-    }, 10000)
+    useSubscription(BOOK_ADDED, {
+      onData: ({ data }) => {
+        const addedBook = data.data.bookAdded;
+        console.log('libro añadido', addedBook);
+        setMessage(`${addedBook.title} added`);
+        setNewBookAdded(true); // Indicar que se ha agregado un nuevo libro
   
-    updateCacheWith(addedBook)
-  }
-})
+        setTimeout(() => {
+          setMessage(null);
+          setNewBookAdded(false); // Resetear el estado después de mostrar el mensaje
+        }, 10000);
+  
+        updateCacheWith(addedBook);
+      },
+    });
 
 
 
@@ -185,7 +188,11 @@ logout={logout}
       />
      
 
-     <Recommend show={page === "recommend"} user={user} setUser={setUser} books={resultBook.data ? resultBook.data.allBooks : []}/>
+     <Recommend 
+     show={page === "recommend"} 
+     user={user} setUser={setUser} 
+     books={resultBook.data ? resultBook.data.allBooks : []}
+     newBookAdded={newBookAdded}/>
     
     <div>
     </div>  

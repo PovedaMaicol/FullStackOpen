@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { FIND_BOOKS_RECOMMEND, ALL_BOOKS, ADD_BOOK } from '../queries'
-import { useLazyQuery } from '@apollo/client'
+import {  ALL_BOOKS  } from '../queries'
+import { useLazyQuery, useQuery } from '@apollo/client'
 import { Table } from 'react-bootstrap'
 
 const Recommend = (props) => {
-  const [getRecommend, { data: recommendData, loading: recommendLoading, error: recommendError }] = useLazyQuery(ALL_BOOKS)
+  const { data: recommendData, loading: recommendLoading, error: recommendError, refetch } = useQuery(ALL_BOOKS)
 
   
   const [recommend, setRecommend] = useState(null)
@@ -12,16 +12,18 @@ const Recommend = (props) => {
 
   useEffect(() => {
     if (props.user && props.user.favoriteGenre) {
-      getRecommend({ variables: { genre: props.user.favoriteGenre } })
-    } 
-  }, [props.user, getRecommend ])  
-
-
-  useEffect(() => {
-    if (recommendData) {
-      setRecommend(recommendData.allBooks)
+      // Aquí filtramos los libros por el género favorito del usuario
+      const filteredBooks = recommendData?.allBooks.filter(book => book.genres.includes(props.user.favoriteGenre)) || []
+      setRecommend(filteredBooks)
     }
-  }, [recommendData])  // Re-renderizar solo cuando `recommendData` cambie
+  }, [props.user, recommendData]) // Dependencias actualizadas
+
+  // Llama a refetch para actualizar las recomendaciones cuando se agrega un libro
+  useEffect(() => {
+    if (props.newBookAdded) { // Prop que indica que se agregó un nuevo libro
+      refetch()
+    }
+  }, [props.newBookAdded, refetch])
 
   if (!props.show) {
     return null
@@ -50,8 +52,8 @@ console.log('recommend es', recommend)
   <br />
   { 
   recommend.length > 0 ? 
-    "We recommend" : 
-    "Not have recommend"
+    `in ${user.favoriteGenre} we recommend` : 
+    `Not have any ${user.favoriteGenre} recommendations`
 }
 </h1>
       <br />
