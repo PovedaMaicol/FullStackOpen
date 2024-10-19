@@ -1,5 +1,6 @@
-type Operation = 'multiply' | 'add' | 'divide';
+export type Operation = 'multiply' | 'add' | 'divide';
 type result = string | number;
+
 
 export const calculator = (a: number, b: number, op: Operation) : result => {
     switch(op) {
