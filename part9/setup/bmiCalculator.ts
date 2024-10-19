@@ -41,7 +41,7 @@ type ResultadoIMC =
  * @returns Un objeto con los detalles del IMC.
  */
 
-const imc = ( altura: number, peso: number ) : BmiResult => {
+export const imc = ( altura: number, peso: number ) : BmiResult => {
 
   if (altura <= 0 || peso <= 0) {
     return {
@@ -85,37 +85,37 @@ const imc = ( altura: number, peso: number ) : BmiResult => {
 };
 
 // funcion para manejar la entrada y salida
-const main = () => {
-  const args = process.argv.slice(2);
+// const main = () => {
+//   const args = process.argv.slice(2);
 
-  if (args.length < 2) {
-    console.error('Error: Se requieren dos argumentos: altura (en metros) y peso (en kg).');
-    console.error('Uso: npm run calcularBmi -- <altura> <peso>');
-    process.exit(1);
-  }
+//   if (args.length < 2) {
+//     console.error('Error: Se requieren dos argumentos: altura (en metros) y peso (en kg).');
+//     console.error('Uso: npm run calcularBmi -- <altura> <peso>');
+//     process.exit(1);
+//   }
 
-  const [alturaArg, pesoArg] = args;
+//   const [alturaArg, pesoArg] = args;
 
-  const altura = Number(alturaArg);
-  const peso = Number(pesoArg);
+//   const altura = Number(alturaArg);
+//   const peso = Number(pesoArg);
 
-  if(isNaN(altura) || isNaN(peso)) {
-    console.error('Error: Tanto la altura como el peso deben ser números.');
-    process.exit(1);
-  }
+//   if(isNaN(altura) || isNaN(peso)) {
+//     console.error('Error: Tanto la altura como el peso deben ser números.');
+//     process.exit(1);
+//   }
 
-  const resultado: BmiResult = imc(altura, peso);
+//   const resultado: BmiResult = imc(altura, peso);
 
-  if (resultado.bmiCategory === 'Valores incorrectos') {
-    console.error('Error: La altura y el peso deben ser mayores que cero.');
-    process.exit(1);
-  }
+//   if (resultado.bmiCategory === 'Valores incorrectos') {
+//     console.error('Error: La altura y el peso deben ser mayores que cero.');
+//     process.exit(1);
+//   }
 
-  console.log(`Altura: ${resultado.height} m`);
-  console.log(`Peso: ${resultado.weight} kg`);
-  console.log(`IMC: ${resultado.bmiValue}`);
-  console.log(`Categoría: ${resultado.bmiCategory}`);
-};
+//   console.log(`Altura: ${resultado.height} m`);
+//   console.log(`Peso: ${resultado.weight} kg`);
+//   console.log(`IMC: ${resultado.bmiValue}`);
+//   console.log(`Categoría: ${resultado.bmiCategory}`);
+// };
 
-// ejecutar la funcion principal
-main();
+// // ejecutar la funcion principal
+// main();
