@@ -9,7 +9,7 @@ target: number;
 average: number;
 }
 
-const calculateExercises = (dailyHours: number[], target: number) : ExerciseResult => {
+export const calculateExercises = (dailyHours: number[], target: number) : ExerciseResult => {
     
 const periodLength = dailyHours.length;
 const trainingDays = dailyHours.filter(day => day > 0).length;
@@ -45,26 +45,26 @@ return {
 };
 
 
-const main = () => {
-    const args = process.argv.slice(2);
+// const main = () => {
+//     const args = process.argv.slice(2);
 
-    if (args.length < 2) {
-        console.error('Error: Se requieren los argumentos de horas diarias y un objetivo de horas.');
-        console.error('Uso: npm run calcularExercises -- <objetivo> <horas...>');
-        process.exit(1);
-    }
+//     if (args.length < 2) {
+//         console.error('Error: Se requieren los argumentos de horas diarias y un objetivo de horas.');
+//         console.error('Uso: npm run calcularExercises -- <objetivo> <horas...>');
+//         process.exit(1);
+//     }
 
-    const target = Number(args[0]);
-    const dailyHours = args.slice(1).map((hour) => Number(hour));
+//     const target = Number(args[0]);
+//     const dailyHours = args.slice(1).map((hour) => Number(hour));
 
-    // Verificar si los argumentos son números válidos
-    if (isNaN(target) || dailyHours.some((hour) => isNaN(hour))) {
-    console.error('Error: Todos los argumentos deben ser números válidos.');
-    process.exit(1);
-    }
+//     // Verificar si los argumentos son números válidos
+//     if (isNaN(target) || dailyHours.some((hour) => isNaN(hour))) {
+//     console.error('Error: Todos los argumentos deben ser números válidos.');
+//     process.exit(1);
+//     }
 
-    const result = calculateExercises(dailyHours, target);
-    console.log(result);
-}
+//     const result = calculateExercises(dailyHours, target);
+//     console.log(result);
+// }
 
-main()
+// main()
