@@ -1,24 +1,28 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Vuelo } from './types'
 import { createVuelo, getAllVuelos } from './services/vuelosService';
+import Notification from './components/Notification';
 
 
 function App() {
   const [vuelos, setVuelos] = useState<Vuelo[]>([]);
   const [newVuelo, setNewVuelo] = useState({});
 
-  const [newDate, setDate] = useState('');
-  const [newWeather, setWeather] = useState('')
-  const [newVisibility, setVisibility] = useState('')
-  const [newComment, setComment] = useState('')
+  const [newDate, setDate] = useState<string>('');
+  const [newWeather, setWeather] = useState<string>('')
+  const [newVisibility, setVisibility] = useState<string>('')
+  const [newComment, setComment] = useState<string>('')
+  const [notify, setNotify] = useState(null)
 
   useEffect(() => {
     getAllVuelos().then(data => {
-      setVuelos(data)
-    })
-  }, [])
+      if (data) {
+        setVuelos(data)
+      }
+    });
+  }, []);
 
-  const vueloCreation = (event: React.SyntheticEvent) => {
+  const vueloCreation = async (event: React.SyntheticEvent) => {
     event.preventDefault();
 
     const vueloToAdd = {
@@ -29,7 +33,9 @@ function App() {
     };
     createVuelo(vueloToAdd)
     .then(data => {
-      setVuelos(vuelos.concat(data))
+      if (data) {
+        setVuelos(vuelos.concat(data))
+      }
     })
   
 
@@ -42,26 +48,32 @@ function App() {
   return (
     <>
     <h1>Add new entry</h1>
+    <Notification message={notify}/>
     <form onSubmit={vueloCreation}>
       <input
+      type='date'
       value={newDate}
-      onChange={(event) => setDate(event.target.value)}
+      placeholder='date'
+      onChange={(event: React.ChangeEvent<HTMLInputElement>) => setDate(event.target.value)}
       />
       <br/>
 
       <input
       value={newWeather}
+      placeholder='weather'
       onChange={(event) => setWeather(event.target.value)}
       />
       <br/>
 
       <input 
       value={newVisibility}
+      placeholder='visibility'
       onChange={(event) => setVisibility(event.target.value)}/>
       <br/>
 
       <input
       value={newComment}
+      placeholder='comment'
       onChange={(event) => setComment(event.target.value)}
       />
       <br/>

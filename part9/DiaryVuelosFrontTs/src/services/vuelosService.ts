@@ -3,14 +3,34 @@ import { Vuelo, NewVuelo } from "../types";
 
 const baseUrl = 'http://localhost:3000/api/diaries'
 
-export const getAllVuelos = () => {
-    return axios
-    .get<Vuelo[]>(baseUrl)
-    .then(response => response.data)
+export const getAllVuelos = async () => {
+    try {
+        const response = await axios.get<Vuelo[]>(baseUrl);
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log(error.status)
+            console.error(error.response);
+        } else {
+            console.error(error)
+        }
+        return undefined;
+    }
 }
 
-export const createVuelo = (object: NewVuelo) => {
-    return axios
-    .post<Vuelo>(baseUrl, object)
-    .then(response => response.data)
+export const createVuelo = async (object: NewVuelo) => {
+    try {
+        const response = await axios.post<Vuelo>(baseUrl, object);
+        return response.data
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.log(error.status)
+            console.error(error.response?.data);
+            set
+        } else {
+            console.error(error)
+        }
+        return undefined;
+
+    }
 }
