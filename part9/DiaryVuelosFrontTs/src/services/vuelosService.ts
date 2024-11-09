@@ -9,18 +9,19 @@ export const getAllVuelos = async () => {
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.log(error.status)
-            console.error(error.response);
+            console.error(`Error al obtener vuelos: ${error.message}`);
+            console.error('Respuesta del error:', error.response?.data);
         } else {
-            console.error(error)
+            console.error('Error inesperado', error)
         }
-        return undefined;
+        return [];
     }
 }
 
 export const createVuelo = async (object: NewVuelo): Promise<Vuelo | { error: string }> => {
     try {
         const response = await axios.post<Vuelo>(baseUrl, object);
+        console.log('respuesta es', response)
         return response.data
     } catch (error) {
         if (axios.isAxiosError(error)) {

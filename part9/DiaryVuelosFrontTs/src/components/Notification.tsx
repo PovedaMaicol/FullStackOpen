@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface NotificationProps {
-  message: string | null;
+  message?: string | null;
   type: string | null;
 }
 
