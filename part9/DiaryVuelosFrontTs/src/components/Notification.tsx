@@ -1,11 +1,29 @@
-import React from 'react'
+import React from 'react';
 
-const Notification = ({message}) => {
+interface NotificationProps {
+  message: string | null;
+  type: string | null;
+}
+
+const Notification: React.FC<NotificationProps> = ({ message, type }) => {
     if(message === null) {
         return null
     }
+    const notificationStyle = {
+      color: type === 'error' ? 'red' : 'green',
+      background: 'lightgrey',
+      fontSize: '20px',
+      border: `2px solid ${type === 'error' ? 'red' : 'green'}`,
+      borderRadius: '5px',
+      padding: '10px',
+      marginBottom: '10px'
+    };
+
+
   return (
-    <div>{message}</div>
+    <div style={notificationStyle}>
+      {message}
+    </div>
   )
 }
 

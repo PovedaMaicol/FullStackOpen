@@ -18,19 +18,18 @@ export const getAllVuelos = async () => {
     }
 }
 
-export const createVuelo = async (object: NewVuelo) => {
+export const createVuelo = async (object: NewVuelo): Promise<Vuelo | { error: string }> => {
     try {
         const response = await axios.post<Vuelo>(baseUrl, object);
         return response.data
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.log(error.status)
-            console.error(error.response?.data);
-            set
+            console.error(`Error: ${error.message}`);
+            console.error(error.response?.data)
+            return {error: error.response?.data || 'error in request'};
         } else {
-            console.error(error)
+            console.error(`Error inesperado: ${error}`)
+            return { error: "Unexpected error" };
         }
-        return undefined;
-
     }
 }

@@ -12,7 +12,7 @@ function App() {
   const [newWeather, setWeather] = useState<string>('')
   const [newVisibility, setVisibility] = useState<string>('')
   const [newComment, setComment] = useState<string>('')
-  const [notify, setNotify] = useState(null)
+  const [notify, setNotify] = useState<{ message: string, type: string } | null>(null)
 
   useEffect(() => {
     getAllVuelos().then(data => {
@@ -31,24 +31,33 @@ function App() {
       visibility: newVisibility,
       comment: newComment
     };
-    createVuelo(vueloToAdd)
-    .then(data => {
-      if (data) {
-        setVuelos(vuelos.concat(data))
+
+    try {
+      const data = await createVuelo(vueloToAdd);
+      if ('error' in data) {
+        setNotify({ message: data.error, type: 'error' });
+      } else {
+        setVuelos(vuelos.concat(data));
+        setNotify({ message: 'Vuelo creado con éxito', type: 'success' });
       }
-    })
-  
+    } catch (error) {
+      setNotify({ message: 'Ocurrió un error inesperado.', type: 'error' });
+    }
 
     setDate('');
     setWeather('');
     setVisibility('');
     setComment('');
+
+    setTimeout(() => {
+      setNotify(null);
+    }, 5000);
   };
 
   return (
     <>
     <h1>Add new entry</h1>
-    <Notification message={notify}/>
+    <Notification message={notify?.message}/>
     <form onSubmit={vueloCreation}>
       <input
       type='date'
