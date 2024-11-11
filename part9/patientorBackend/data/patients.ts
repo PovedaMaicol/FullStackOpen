@@ -8,7 +8,7 @@ const data = [
         "dateOfBirth": "1986-07-09",
         "ssn": "090786-122X",
         "gender": "male",
-        "occupation": "New york city cop"
+        "occupation": "New york city cop",
     },
     {
         "id": "d2773598-f723-11e9-8f0b-362b9e155667",
@@ -46,7 +46,7 @@ const data = [
 
 
 const patientEntries: PatientEntry [] = data.map(obj => {
-    const object = toNewPatientEntry(obj) as PatientEntry;
+    const object = toNewPatientEntry({...obj, entries: []}) as PatientEntry;
     object.id = obj.id;
     return object;
 })

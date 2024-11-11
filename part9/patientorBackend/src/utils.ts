@@ -1,4 +1,4 @@
-import { NewPatientEntry, Gender } from "./types";
+import { NewPatientEntry, Gender, Entry } from "./types";
 
 //IMPORTANTE
 // esta funcion es una guardia de tipo, deveuelve un booleano 
@@ -66,6 +66,16 @@ const parseOccupation = (occupation: unknown): string => {
     return occupation;
 }
 
+const isEntries = (entries: unknown): entries is Entry[] => {
+    return Array.isArray(entries) && entries.every(entry => typeof entry === 'object')
+};
+
+const parseEntries = (entries: unknown): Entry[] => {
+    if(!entries || !isEntries(entries)) {
+        throw new Error('Incorrect or missing entries')
+    }
+    return entries;
+}
 
 const toNewPatientEntry = (object: unknown): NewPatientEntry => {
 
@@ -73,13 +83,14 @@ const toNewPatientEntry = (object: unknown): NewPatientEntry => {
         throw new Error('Incorrect or missing data');
     }
 
-    if('occupation' in object && 'gender' in object && 'ssn' in object && 'dateOfBirth' in object && 'name' in object){
+    if('occupation' in object && 'gender' in object && 'ssn' in object && 'dateOfBirth' in object && 'name' in object && 'entries' in object){
         const newEntry: NewPatientEntry = {
             name: parseName(object.name),
             dateOfBirth: parseDate(object.dateOfBirth),
             ssn: parseSsn(object.ssn),
             gender: parseGender(object.gender),
-            occupation: parseOccupation(object.occupation)
+            occupation: parseOccupation(object.occupation),
+            entries: parseEntries(object.entries)
         };
 
         return newEntry;
