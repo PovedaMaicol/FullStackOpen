@@ -34,4 +34,22 @@ routerPatient.get('/:id', (_req, res) => {
   
 })
 
+// POST /api/patients/:id/entries.
+routerPatient.post('/:id/entries', (_req, res) => {
+  const patient = patientsServices.findById(String(_req.params.id))
+
+  if (!patient) {
+    return res.status(404).send('Patient not found');
+  }
+
+
+  try {
+    const newEntry = toNewEntry(_req.body);
+    const addedEntry = patientsServices.addEntry(patient.id, newEntry)
+    res.json(addedEntry);
+  }catch (error) {
+    res.status(400).send(error instanceof Error ? error.message : 'Error adding entry');
+  }
+})
+
 export default routerPatient;
