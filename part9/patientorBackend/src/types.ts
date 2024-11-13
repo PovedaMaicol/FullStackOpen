@@ -1,8 +1,55 @@
+interface BaseEntry {
+    id: string;
+    description: string;
+    date: string;
+    specialist: string;
+    diagnosisCodes?: Array<DiagnoseEntry['code']>;
+  }
 
-//
-export interface Entry {
-
+export enum HealthCheckRating {
+    "Healthy" = 0,
+    "LowRisk" = 1,
+    "HighRisk" = 2,
+    "CriticalRisk" = 3
 }
+export type Entry =
+
+  | HospitalEntry
+  | OccupationalHealthCareEntry
+  | HealthCheckEntry;
+
+
+// Define omit especial para uniones
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+// Define Entry sin la propiedad 'id'
+export type EntryWithoutId = UnionOmit<Entry, 'id'>;
+
+
+interface HealthCheckEntry extends BaseEntry {
+    type: "HealthCheck";
+    healthCheckRating: HealthCheckRating;
+}
+
+interface OccupationalHealthCareEntry extends BaseEntry {
+    // debe ir diagnosiscode
+    type: "OccupationalHealthcare";
+    employerName: string;
+    sickLeave?: {
+        startDate: string;
+        endDate: string;
+    };
+}
+
+interface HospitalEntry extends BaseEntry {
+    // diagnosiscode
+    type: "Hospital";
+    discharge: {
+        date: string;
+        criteria: string;
+    };
+}
+
+
 export interface DiagnoseEntry {
     code: string;
     name: string;
