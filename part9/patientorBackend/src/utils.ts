@@ -1,4 +1,6 @@
-import { NewPatientEntry, Gender, Entry } from "./types";
+// import { parse } from "uuid";
+// import data from "../data/diagnoses";
+import { NewPatientEntry, Gender, Entry, EntryWithoutId, HealthCheckRating, DiagnoseEntry } from "./types";
 
 //IMPORTANTE
 // esta funcion es una guardia de tipo, deveuelve un booleano 
@@ -10,7 +12,7 @@ const isString = (text: unknown): text is string => {
     return typeof text === 'string' || text instanceof String;
 }
 
-const parseName = (name: unknown): string => {
+const parseString = (name: unknown): string => {
     if(!name || !isString(name)) {
         throw new Error('Incorrect or missing name')
     }
@@ -77,6 +79,82 @@ const parseEntries = (entries: unknown): Entry[] => {
     return entries;
 }
 
+
+const parseDischarge = (discharge: unknown): {date: string; criteria: string} => {
+    if(
+        !discharge || 
+        typeof discharge !== 'object' ||
+        !('date' in discharge) || 
+        !('criteria' in discharge)
+    ) {
+        throw new Error('Incorrect or missing discharge information');
+    }
+
+    const dischargeObj = discharge as { date: unknown; criteria: unknown };
+
+    if (!isString(dischargeObj.date) || !isDate(dischargeObj.date)) {
+        throw new Error('Incorrect or missing discharge date')
+    }
+
+    if(!isString(dischargeObj.criteria)) {
+        throw new Error('Incorrect or missing discharge criteria');
+    }
+    
+    return {
+        date: dischargeObj.date,
+        criteria: dischargeObj.criteria
+    };
+
+};
+
+const parseSickLeave = (sickLeave: unknown): { startDate: string; endDate: string } | undefined => 
+    {
+        if(!sickLeave) {
+            return undefined;
+        }
+
+        if(
+            typeof sickLeave !== 'object' || 
+            !('startDate' in sickLeave) || 
+            !('endDate' in sickLeave)
+        ) {
+            throw new Error('Incorrect or missing sickLeave information')
+        }
+
+        const sickLeaveObj = sickLeave as { startDate: unknown; endDate: unknown };
+
+        if(!isString(sickLeaveObj.startDate) || !isDate(sickLeaveObj.startDate)) {
+            throw new Error('incorrect or missing startDate in sickLeave');
+        }
+
+        if(!isString(sickLeaveObj.endDate) || !isDate
+        (sickLeaveObj.endDate)) {
+             throw new Error('incorrect or missing endDate in sickLeave');
+         }
+
+        return {
+            startDate: sickLeaveObj.startDate,
+            endDate: sickLeaveObj.endDate,
+        };
+
+    };
+
+    const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
+        if (rating === undefined ||typeof rating !== 'number' || !Object.values(HealthCheckRating).includes(rating)) {
+          throw new Error('Incorrect or missing health check rating');
+        }
+        return rating as HealthCheckRating;
+      };
+
+
+      const parseDiagnosisCodes = (object: unknown): Array<DiagnoseEntry['code']> => {
+        if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
+            return [];
+        }
+        return object.diagnosisCodes as Array<DiagnoseEntry['code']>;
+      };
+
+      
 const toNewPatientEntry = (object: unknown): NewPatientEntry => {
 
     if(!object || typeof object !== 'object') {
@@ -85,7 +163,7 @@ const toNewPatientEntry = (object: unknown): NewPatientEntry => {
 
     if('occupation' in object && 'gender' in object && 'ssn' in object && 'dateOfBirth' in object && 'name' in object && 'entries' in object){
         const newEntry: NewPatientEntry = {
-            name: parseName(object.name),
+            name: parseString(object.name),
             dateOfBirth: parseDate(object.dateOfBirth),
             ssn: parseSsn(object.ssn),
             gender: parseGender(object.gender),
@@ -99,4 +177,42 @@ const toNewPatientEntry = (object: unknown): NewPatientEntry => {
     throw new Error('Incorrect data: some fields are missing');
 }
 
-export default toNewPatientEntry;
+const toNewEntry = (object: unknown): EntryWithoutId => {
+    if(!object || typeof object !== 'object') {
+    throw new Error('Incorrect or missing data');
+    }
+
+    switch ((object as {type: string}).type) {
+        case "Hospital":
+            return {
+                type: "Hospital",
+                description: parseString((object as { description: unknown }).description),
+                date: parseDate((object as { date: unknown}).date),
+                specialist: parseString((object as { specialist: unknown }).specialist),
+                discharge: parseDischarge((object as {discharge: unknown}).discharge),
+            };
+        case "OccupationalHealthcare":
+            return {
+                type: "OccupationalHealthcare",
+                description: parseString((object as { description: unknown }).description),
+                date: parseDate((object as {date: unknown}).date),
+                specialist: parseString((object as {specialist: unknown}).specialist),
+                employerName: parseString((object as { employerName: unknown }).employerName),
+                sickLeave: parseSickLeave((object as {sickLeave: unknown}).sickLeave),
+            };
+        case "HealthCheck":
+            return {
+                type: "HealthCheck",
+                description: parseString((object as {description: unknown }).description),
+                date: parseDate((object as { date: unknown }).date),
+                specialist: parseString((object as 
+                {specialist: unknown}).specialist),
+                healthCheckRating: parseHealthCheckRating((object as { healthCheckRating: unknown }).healthCheckRating)
+            };
+        default: 
+        throw new Error('Incorrect entry type')
+
+    }
+}
+
+export { toNewPatientEntry, toNewEntry };
