@@ -6,6 +6,10 @@ const getPatients = (): PatientEntry[] => {
     return patients;
 }
 
+export const getPatientById = (id: string): PatientEntry | undefined => {
+    return patients.find((patient) => patient.id === id);
+  };
+
 const getNonSensitivePatientEntries = (): NonSensitivePatientEntry[] => {
     return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
         id,
@@ -40,7 +44,21 @@ const addEntry = (patientId: string, entry: EntryWithoutId ): Entry => {
         throw new Error('Patient not found');
     }
 
-const newEntry = {...entry, id: uuidv4()};
+    console.log("Datos recibidos para agregar la entrada:", entry);
+
+const newEntry: Entry = {
+    ...entry, 
+    id: uuidv4(),
+    diagnosisCodes: entry.diagnosisCodes && entry.diagnosisCodes.length > 0 
+            ? entry.diagnosisCodes 
+            : [] // Si no tiene diagnosisCodes, asignar un array vacío
+};
+
+console.log("Nueva entrada antes de agregarla:", newEntry);
+
+// if (newEntry.type === "Hospital" && 'diagnosisCodes' in newEntry && !newEntry.diagnosisCodes) {
+    // newEntry.diagnosisCodes = [];
+// }
 patient.entries.push(newEntry)
 return newEntry;
 }

@@ -47,6 +47,7 @@ interface HospitalEntry extends BaseEntry {
         date: string;
         criteria: string;
     };
+    
 }
 
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import patientsServices from '../services/patientsServices';
-import {toNewPatientEntry, toNewEntry} from '../utils';
+import {toNewPatientEntry, toNewEntry, parseDiagnosisCodes} from '../utils';
 
 
 
@@ -38,9 +38,14 @@ routerPatient.get('/:id', (_req, res) => {
 
 // POST /api/patients/:id/entries.
 routerPatient.post('/:id/entries', (_req, res) => {
+  console.log('Cuerpo de la solicitud recibido:', _req.body); 
   const { id } = _req.params;
+  
   try {
-    const newEntry = toNewEntry(_req.body);
+    const diagnosisCodes = parseDiagnosisCodes(_req.body);
+
+    const newEntry = toNewEntry({..._req.body, diagnosisCodes});
+    
     const addedEntry = patientsServices.addEntry(id, newEntry)
     res.json(addedEntry);
   } catch (error) {
