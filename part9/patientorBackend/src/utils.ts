@@ -162,8 +162,8 @@ const parseSickLeave = (sickLeave: unknown): { startDate: string; endDate: strin
 
         console.log('diagnosisCodes:', diagnosisCodes);
 
-        if (!Array.isArray(diagnosisCodes) || !diagnosisCodes.every((code) => isString(code))) {
-            throw new Error('Diagnosis codes must be an array of strings');
+        if (!Array.isArray(diagnosisCodes) || !diagnosisCodes.every(isString)) {
+                throw new Error('Diagnosis codes must be an array of strings');
         }
 
         return diagnosisCodes as Array<DiagnoseEntry['code']>
@@ -226,7 +226,7 @@ const toNewEntry = (object: unknown): EntryWithoutId => {
                 healthCheckRating: parseHealthCheckRating((object as { healthCheckRating: unknown }).healthCheckRating),
             };
         default: 
-        throw new Error('Incorrect entry type')
+        throw new Error(`Incorrect entry type: ${(object as { type: unknown }).type}`)
 
     }
 }
