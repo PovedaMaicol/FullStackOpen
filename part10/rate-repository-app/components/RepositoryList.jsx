@@ -1,5 +1,7 @@
 import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet, Text
+
+} from 'react-native';
 
 const styles = StyleSheet.create({
   separator: {
@@ -56,11 +58,42 @@ const repositories = [
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
+const Item = ({fullName, description, language, stargazersCount, forksCount, reviewCount, ratingAverage
+
+ }) => (
+  <View>
+    <Text>
+      Full name: {fullName}{"\n"}
+      Description: {description}{"\n"}
+      Language: {language}{"\n"}
+      Stars: {stargazersCount}{"\n"}
+      Forks: {forksCount}{"\n"}
+      Reviews: {reviewCount}{"\n"}
+      Rating: {ratingAverage}{"\n"}
+    </Text>
+  
+
+  
+
+  </View>
+);
+
 const RepositoryList = () => {
   return (
     <FlatList
       data={repositories}
       ItemSeparatorComponent={ItemSeparator}
+      renderItem={({item}) => 
+      <Item 
+      fullName={item.fullName}
+      description={item.description}
+      language={item.language}
+      stargazersCount={item.stargazersCount}
+      forksCount={item.forksCount}
+      reviewCount={item.reviewCount}
+      ratingAverage={item.ratingAverage}
+      />}
+      keyExtractor={item => item.id}
       // other props
     />
   );
