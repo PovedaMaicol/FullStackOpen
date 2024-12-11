@@ -2,11 +2,13 @@ import React from 'react';
 // import Constants from 'expo-constants';
 import { Text, StyleSheet, View } from 'react-native';
 
-import { Route, Routes, Navigate } from 'react-router-native';
+import {  Route, Routes, NativeRouter } from 'react-router-native';
 
 import RepositoryList  from './RepositoryList';
 import AppBar from './AppBar';
 import theme from '../src/theme'
+import SignIn from './SignIn';
+
 
 
 
@@ -23,19 +25,15 @@ const styles = StyleSheet.create({
 
 const Main = () => {
   return (
-    <View style={styles.container}>
+      <View style={styles.container}>
       <AppBar/>
       <Routes>
-        <Route path='/' element={<RepositoryList/>}/>
-        <Route path='*' element={<Navigate to='/' replace />}/>
-        
+       <Route path='/' element={<RepositoryList/>}/>
+       <Route path='/login' element={<SignIn/>}/>
       </Routes>
-
-      
-  
-    
-    
     </View>
+
+   
   );
 };
 

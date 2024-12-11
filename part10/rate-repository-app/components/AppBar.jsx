@@ -1,12 +1,16 @@
 import React from 'react';
-import { View, StyleSheet, Text, Pressable, Keyboard} from 'react-native';
+import { View, StyleSheet, Text} from 'react-native';
 import Constants from 'expo-constants';
+import { Link } from 'react-router-native';
+import { ScrollView } from 'react-native-web';
 
 const styles = StyleSheet.create({
   container: {
     paddingTop: Constants.statusBarHeight,
     backgroundColor: '#24292e',
     padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-around'
     // ...
   },
   text: {
@@ -19,11 +23,16 @@ const styles = StyleSheet.create({
 
 const AppBar = () => {
   return (
-  <Pressable onPress={() => console.log('hola')} >
-  <View style={styles.container}>
-  <Text style={styles.text}>Repositorios</Text>
-  </View>
-  </Pressable>
+    <View style={styles.container}>
+      <ScrollView horizontal>
+           <Link to='/' style={styles.text}>
+           <Text>Repositories</Text>
+           </Link>
+           <Link to='/login' style={styles.text}>
+           <Text>login</Text>
+           </Link>
+      </ScrollView>
+    </View>
   )
 };
 
