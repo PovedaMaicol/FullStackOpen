@@ -10,13 +10,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#24292e',
     padding: 10,
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
     // ...
   },
   text: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 'bold',
-    color: '#fff'
+    color: '#fff',
+    marginHorizontal: 10,
   }
   // ...
 });
@@ -25,19 +26,12 @@ const AppBar = () => {
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
-           <Link to='/' style={styles.text}>
-           <Text>Repositories</Text>
+           <Link to='/'>
+           <Text style={styles.text}>Repositories</Text>
            </Link>
-           <Link to='/login' style={styles.text}>
-           <Text>login</Text>
+           <Link to='/login'>
+           <Text style={styles.text}>login</Text>
            </Link>
-           <Link>
-           <Text>hola</Text>
-           </Link>
-           <Link>
-           <Text>chao</Text>
-           </Link>
-           
       </ScrollView>
     </View>
   )

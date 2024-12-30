@@ -9,6 +9,12 @@ const styles = StyleSheet.create({
   errorText: {
     marginTop: 5,
   },
+  textInput: {
+    marginBottom: 10,
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+  },
 });
 
 const FormikTextInput = ({ name, ...props }) => {
@@ -18,6 +24,7 @@ const FormikTextInput = ({ name, ...props }) => {
   return (
     <>
       <TextInput
+      style={styles.textInput}
         onChangeText={value => helpers.setValue(value)}
         onBlur={() => helpers.setTouched(true)}
         value={field.value}

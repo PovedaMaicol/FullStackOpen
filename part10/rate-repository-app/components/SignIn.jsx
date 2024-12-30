@@ -2,24 +2,43 @@ import React from 'react';
 import { View, TextInput, Alert, TouchableOpacity, StyleSheet } from 'react-native';
 import Text from './Text';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
+
+
 
 const handleLogin = (values) =>
 {
+  console.log('Login Data:', values);
   Alert.alert('login', `Email: ${values.email}\nPassword: ${values.password}`);
 };
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string()
+  .email('Correo electrónico inválido')
+  .required('El correo electrónico es requerido'),
+  password: Yup.string()
+  .min(6, 'La contraseña debe tener al menos 6 caracteres')
+  .required('La contraseña es requerida'),
+});
+
+
 const SignIn = () => {
-  return <View>
-    <Text>Hola</Text>
+  return <View style={styles.container}>
+    <Text style={styles.title}>Hola</Text>
     <Formik
     initialValues={{email: '', password: ''}}
-    onSubmit={handleLogin}>
+    onSubmit={handleLogin}
+    validationSchema={validationSchema}>
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-        <View>
+        <View style={styles.form}>
         <TextInput
         placeholder='gmail'
+        onChangeText={handleChange('email')}
+        onBlur={handleBlur('email')}
         keyboardType='email-address'
         autoCapitalize='none'
         value={values.email}
+        style={styles.input}
         />
 
         {touched.email && errors.email && <Text>{errors.email}</Text>}
@@ -30,6 +49,7 @@ const SignIn = () => {
         onChangeText={handleChange('password')}
         onBlur={handleBlur('password')}
         value={values.password}
+        style={styles.input}
         />
 
         {touched.password && errors.password && (
