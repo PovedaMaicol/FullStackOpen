@@ -3,12 +3,15 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
 import { NativeRouter } from 'react-router-native';
 import Main from './components/Main';
+import { ThemeProvider } from './src/themeContext';
 
 const App = () => {
   console.log('hola android');
   return (
     <NativeRouter>
+      <ThemeProvider>
       <Main />
+      </ThemeProvider>
     </NativeRouter>
   );
 };
