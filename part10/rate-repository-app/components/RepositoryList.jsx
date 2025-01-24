@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, View, StyleSheet, Text, Image, SafeAreaView } from 'react-native';
-import 'dotenv/config';
+import { BASE_URL } from '@env';
 
 
 // FlatList: Un componente optimizado para listas largas en React Native.
@@ -152,10 +152,18 @@ const RepositoryList = () => {
   const [repositories, setRepositories] = useState();
 
   const fetchRepositories = async () => {
-    const response = await fetch()
-    const json = await response.json(process.env.BASE_URL)
-    console.log(json)
-    setRepositories(json)
+
+    const apiUrl = `${BASE_URL}/repositories`;
+    // console.log('apiUrl es',apiUrl)
+
+    try {
+      const response = await fetch(apiUrl)
+      const json = await response.json()
+      console.log(json)
+      setRepositories(json)
+    } catch (error) {
+      console.error("Error fetching repositories:", error)
+    }
   };
 
   useEffect(() => {
