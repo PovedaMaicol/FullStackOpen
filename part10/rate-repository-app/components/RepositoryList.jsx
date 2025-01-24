@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, View, StyleSheet, Text, Image, SafeAreaView } from 'react-native';
-// import 'dotenv/config';
+import 'dotenv/config';
 
 
 // FlatList: Un componente optimizado para listas largas en React Native.
@@ -153,7 +153,7 @@ const RepositoryList = () => {
 
   const fetchRepositories = async () => {
     const response = await fetch()
-    const json = await response.json(`http://192.168.101.11:5000/api/repositories`)
+    const json = await response.json(process.env.BASE_URL)
     console.log(json)
     setRepositories(json)
   };
