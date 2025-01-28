@@ -1,18 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, View, StyleSheet, Text, Image, SafeAreaView } from 'react-native';
-import { BASE_URL } from '@env';
+import useRepositories from '../src/hooks/useRepositories';
 
 
-// FlatList: Un componente optimizado para listas largas en React Native.
-// // View: Contenedor básico en React Native, similar a una div en HTML.
-// StyleSheet: Utilizado para definir estilos en React Native.
-// Text: Para mostrar texto.
-// Image: Para mostrar imágenes.
-// // SafeAreaView: Asegura que el contenido no se superponga a áreas como la barra de estado en iOS.
-// 
 
-
-// esta linea se usa para crear estilos y luego aplicar a los componentes
 const styles = StyleSheet.create({
   separator: {
     height: 10,
@@ -149,26 +140,7 @@ const Item = ({fullName, description, language, stargazersCount, forksCount, rev
 
 const RepositoryList = () => {
 
-  const [repositories, setRepositories] = useState();
-
-  const fetchRepositories = async () => {
-
-    const apiUrl = `${BASE_URL}/repositories`;
-    // console.log('apiUrl es',apiUrl)
-
-    try {
-      const response = await fetch(apiUrl)
-      const json = await response.json()
-      console.log(json)
-      setRepositories(json)
-    } catch (error) {
-      console.error("Error fetching repositories:", error)
-    }
-  };
-
-  useEffect(() => {
-    fetchRepositories();
-  }, []);
+ const {repositories} = useRepositories();
 
 
   // Get the nodes from the edges array
