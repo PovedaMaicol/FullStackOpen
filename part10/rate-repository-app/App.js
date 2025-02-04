@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
 import { NativeRouter } from 'react-router-native';
 import { ThemeProvider } from './src/themeContext';
-import {ApolloProvider} from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/client';
 
 
 import Main from './components/Main';
@@ -16,11 +16,13 @@ const App = () => {
   console.log('hola android');
   return (
     <NativeRouter>
-      <ApolloProvider client={apolloClient}>
+      
       <ThemeProvider>
+      <ApolloProvider client={apolloClient}>
       <Main />
-      </ThemeProvider>
       </ApolloProvider>
+      </ThemeProvider>
+      
     </NativeRouter>
   );
 };

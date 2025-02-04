@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, View, StyleSheet, Text, Image, SafeAreaView } from 'react-native';
-import useRepositories from '../src/hooks/useRepositories';
+// import useRepositories from '../src/hooks/useRepositories';
 
-
+import useRepositoriesGql from '../src/hooks/useRepositoriesGQL';
 
 const styles = StyleSheet.create({
   separator: {
@@ -140,7 +140,21 @@ const Item = ({fullName, description, language, stargazersCount, forksCount, rev
 
 const RepositoryList = () => {
 
- const {repositories} = useRepositories();
+// GET WITH API REST
+//  const {repositories} = useRepositories();
+//  console.log('los repositorios son', repositories)
+
+
+// GET WITH GRAPHQL
+const { repositories, loading, error } = useRepositoriesGql();
+
+if (loading) return <Text>Loading...</Text>;
+if(error) return <Text>Error</Text>;
+
+console.log('repositories con gql trae', repositories)
+
+
+
 
 
   // Get the nodes from the edges array

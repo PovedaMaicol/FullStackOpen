@@ -1,8 +1,13 @@
-import ApolloClient from 'apollo-boost';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import {BASE_URL_GRAPHQL} from '@env'
 
 const createApolloClient = () => {
+    // console.log('el server de apolo accede a la direccion:', BASE_URL_GRAPHQL)
     return new ApolloClient({
-        uri: 'http://http://192.168.101.19:5000/graphql',
+       
+        uri: `${BASE_URL_GRAPHQL}/graphql`,
+        
+        cache: new InMemoryCache(),
     });
 }
 
