@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { NativeRouter } from 'react-router-native';
 import { ThemeProvider } from './src/themeContext';
 import { ApolloProvider } from '@apollo/client';
+import Constants from 'expo-constants'
 
 
 import Main from './components/Main';
@@ -14,6 +15,8 @@ const apolloClient = createApolloClient();
 
 const App = () => {
   console.log('hola android');
+  console.log('Constant es', Constants.expoConfig.extra.ENV)
+
   return (
     <NativeRouter>
       

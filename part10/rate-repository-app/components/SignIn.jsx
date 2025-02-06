@@ -1,91 +1,91 @@
 import React from 'react';
-import { View, TextInput, Alert, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TextInput, Alert, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import Text from './Text';
-import { Formik, useField } from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
-// FORMIK es una libreria para manejo de formularios
-// sus componentes principales son el contexto y un campo
-// el cotexto contiene el estado del formulario(valores, errores de validación)
-
-//USEFIELD 
-//Se puede hacer referencia a los campos del estado por su nombre utilizando el hook useField o el componente Field.
-
+import useSignIn from '../src/hooks/useSignIn';
 
 // Valores iniciales del formulario
 const initialValues = {
-  email: '',
-  password: ''
-}
-
-
-// Manejo del inicio de sesión
-const handleLogin = (values) =>
-{
-  console.log('Login Data:', values);
-  Alert.alert('login', `Email: ${values.email}\nPassword: ${values.password}`);
+  username: '',
+  password: '',
 };
 
-
 // Esquema de validación con Yup
-
 const validationSchema = Yup.object().shape({
-  email: Yup.string()
-  .email('Correo electrónico inválido')
-  .required('El correo electrónico es requerido'),
+  username: Yup.string().required('El nombre de usuario es requerido'),
   password: Yup.string()
-  .min(6, 'La contraseña debe tener al menos 6 caracteres')
-  .required('La contraseña es requerida'),
+    .min(6, 'La contraseña debe tener al menos 6 caracteres')
+    .required('La contraseña es requerida'),
 });
 
-
 const SignIn = () => {
-  return <View style={styles.container}>
-    <Text style={styles.title}>Iniciar Sesión</Text>
-    <Formik
-    initialValues={initialValues}
-    onSubmit={handleLogin}
-    validationSchema={validationSchema}>
-      {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-        <View style={styles.form}>
-        <TextInput
-        placeholder='Correo electrónico'
-        onChangeText={handleChange('email')}
-        onBlur={handleBlur('email')}
-        keyboardType='email-address'
-        autoCapitalize='none'
-        value={values.email}
-        style={styles.input}
-        />
+  const [signIn, { loading, error }] = useSignIn();
 
-        {touched.email && errors.email && (
-        <Text style={styles.errorText}>{errors.email}</Text>
+  const handleLogin = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const result = await signIn({ username, password });
+      console.log('Respuesta completa:', result); // 
+  
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      Alert.alert('Error', error.message); 
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Iniciar Sesión</Text>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleLogin}
+        validationSchema={validationSchema}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+          <View style={styles.form}>
+            <TextInput
+              placeholder="Nombre de usuario"
+              onChangeText={handleChange('username')}
+              onBlur={handleBlur('username')}
+              value={values.username}
+              style={styles.input}
+            />
+
+            {touched.username && errors.username && (
+              <Text style={styles.errorText}>{errors.username}</Text>
+            )}
+
+            <TextInput
+              placeholder="Contraseña"
+              secureTextEntry
+              onChangeText={handleChange('password')}
+              onBlur={handleBlur('password')}
+              value={values.password}
+              style={styles.input}
+            />
+
+            {touched.password && errors.password && (
+              <Text style={styles.errorText}>{errors.password}</Text>
+            )}
+
+            <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={loading}>
+              {loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>Iniciar Sesión</Text>
+              )}
+            </TouchableOpacity>
+
+            {error && (
+              <Text style={styles.errorText}>Error al iniciar sesión. Inténtalo de nuevo.</Text>
+            )}
+          </View>
         )}
-
-        <TextInput
-        placeholder='password'
-        secureTextEntry
-        onChangeText={handleChange('password')}
-        onBlur={handleBlur('password')}
-        value={values.password}
-        style={styles.input}
-        />
-
-        {touched.password && errors.password && (
-        <Text style={styles.errorText}>{errors.password}</Text>
-        )}
-
-
-        {/* Botón de inicio de sesión */}
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Iniciar Sesión</Text>
-        </TouchableOpacity>
-   
-        </View>
-      )}
-      
-
-    </Formik>
-  </View>
+      </Formik>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
