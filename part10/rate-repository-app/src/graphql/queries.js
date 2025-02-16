@@ -22,4 +22,13 @@ query {
       totalCount
     },
 }
+`
+
+export const ME = gql`
+query {
+  me {
+    id
+    username
+  }
+}
 `;

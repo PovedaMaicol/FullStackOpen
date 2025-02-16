@@ -18,8 +18,7 @@ const useSignIn = () => {
                 variables: {
                     
                         username,
-                        password
-                    ,
+                        password,
                 },
             });
             

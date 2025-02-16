@@ -1,8 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, Text} from 'react-native';
+import { useQuery, useApolloClient } from '@apollo/client';
+import { Link, useNavigate } from 'react-router-native';
+import { ME } from "../src/graphql/queries"
+import { useContext } from 'react';
+import AuthStorageContext from "../src/context/AuthStorageContext";
+import { View, StyleSheet, Text, TouchableOpacity, ActivityIndicator, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
-import { Link } from 'react-router-native';
-import { ScrollView } from 'react-native';
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -23,15 +28,41 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
+  const authStorage = useContext(AuthStorageContext);
+  const apolloClient = useApolloClient()
+  const navigate = useNavigate();
+  const { data, loading, error } = useQuery(ME)
+
+  if (loading) return <ActivityIndicator size="small" color="#0000ff" />;
+  if (error) return <Text>Error: {error.message}</Text>;
+
+
+
+  const handleLogout = async () => {
+    await authStorage.removeAccessToken();
+    await apolloClient.resetStore();
+    navigate("/");
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
            <Link to='/'>
            <Text style={styles.text}>Repositories</Text>
            </Link>
-           <Link to='/login'>
-           <Text style={styles.text}>login</Text>
-           </Link>
+           
+       
+           { data?.me ? (
+            <TouchableOpacity onPress={handleLogout}>
+              <Text style={styles.text}>Sign out</Text>
+            </TouchableOpacity>
+           ) : (
+            <Link to='/login'>
+            <Text style={styles.text}>login</Text>
+            </Link>
+           )
+           }
+         
       </ScrollView>
     </View>
   )

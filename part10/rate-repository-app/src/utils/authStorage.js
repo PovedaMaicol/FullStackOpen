@@ -16,7 +16,9 @@ class AuthStorage {
         if(!token) {
             throw new Error('Token required');
         }
+    
     await AsyncStorage.setItem(`${this.namespace}:token`, JSON.stringify(token));
+    console.log(AsyncStorage)
     }
 
     async removeAccessToken() {

@@ -27,7 +27,8 @@ const SignIn = () => {
 
     try {
       const result = await signIn({ username, password });
-      console.log('Respuesta completa:', result); // 
+      console.log('al hacer login traigo', result)
+      console.log('El usuario logueado es:', result.username); // 
   
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
