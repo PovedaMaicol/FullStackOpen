@@ -20,9 +20,8 @@ const config = [
       "react/prop-types": "off",
       "semi":"error"
     },
-    plugins: {
-      react: require("eslint-plugin-react"),
-    },
+    plugins: ["react", "jest"],
+    extends: ["eslint:recommended", "plugin:react/recommended", "plugin:jest/recommended"],
     settings: {
       react: {
         version: "detect",  // Detecta la versión de React automáticamente
