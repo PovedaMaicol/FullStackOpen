@@ -138,30 +138,8 @@ const Item = ({fullName, description, language, stargazersCount, forksCount, rev
   </View>
 );
 
-const RepositoryList = () => {
-
-// GET WITH API REST
-//  const {repositories} = useRepositories();
-//  console.log('los repositorios son', repositories)
-
-
-// GET WITH GRAPHQL
-const { repositories, loading, error } = useRepositoriesGql();
-
-if (loading) return <Text>Loading...</Text>;
-if(error) return <Text>Error</Text>;
-
-console.log('repositories con gql trae', repositories)
-
-
-
-
-
-  // Get the nodes from the edges array
-  const repositoryNodes = repositories
-    ? repositories.edges.map(edge => edge.node)
-    : [];
-
+export const RepositoryListContainer = ({ repositories }) => {
+  const repositoryNodes = repositories ? repositories.edges.map((edge) => edge.node) : [];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -185,6 +163,26 @@ console.log('repositories con gql trae', repositories)
     />
     </SafeAreaView>
   );
+
+}
+
+const RepositoryList = () => {
+
+// GET WITH API REST
+//  const {repositories} = useRepositories();
+//  console.log('los repositorios son', repositories)
+
+
+// GET WITH GRAPHQL
+const { repositories, loading, error } = useRepositoriesGql();
+
+if (loading) return <Text>Loading...</Text>;
+if(error) return <Text>Error</Text>;
+
+console.log('repositories con gql trae', repositories)
+
+return <RepositoryListContainer repositories={repositories} />
+ 
 };
 
 export default RepositoryList;
