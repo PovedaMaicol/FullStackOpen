@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
     .required('La contraseña es requerida'),
 });
 
-const SignIn = () => {
+export const SignIn = () => {
   const [signIn, { loading, error }] = useSignIn();
 
   const handleLogin = async (values) => {
@@ -27,11 +27,9 @@ const SignIn = () => {
 
     try {
       const result = await signIn({ username, password });
-      console.log('al hacer login traigo', result)
-      console.log('El usuario logueado es:', result.username); // 
+
   
     } catch (error) {
-      console.error('Error al iniciar sesión:', error);
       Alert.alert('Error', error.message); 
     }
   };
@@ -52,6 +50,7 @@ const SignIn = () => {
               onBlur={handleBlur('username')}
               value={values.username}
               style={styles.input}
+              testID='usernameField'
             />
 
             {touched.username && errors.username && (
@@ -65,13 +64,18 @@ const SignIn = () => {
               onBlur={handleBlur('password')}
               value={values.password}
               style={styles.input}
+              testID='passwordField'
             />
 
             {touched.password && errors.password && (
               <Text style={styles.errorText}>{errors.password}</Text>
             )}
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={loading}>
+            <TouchableOpacity 
+            style={styles.button} 
+            onPress={handleSubmit} 
+            testID='submitButton'
+            disabled={loading}>
               {loading ? (
                 <ActivityIndicator color="#fff" />
               ) : (

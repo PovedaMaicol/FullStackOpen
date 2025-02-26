@@ -1,7 +1,7 @@
 import React from 'react';
-import { render } from '@testing-library/react-native'
-
+import { render, screen } from '@testing-library/react-native'
 import { RepositoryListContainer } from "../../../components/RepositoryList";
+
 
 describe('RepositoryList', () => {
     describe('RepositoryListContainer', () => {
@@ -50,7 +50,9 @@ describe('RepositoryList', () => {
         };
   
         // Add your test code here
-        const { getByText, getAllByText } = render(<RepositoryListContainer repositories={repositories} />);
+        const { getByText, getAllByText } = render(<RepositoryListContainer repositories={repositories} />)
+        // -- IMPORTANTE --
+        // screen.debug({ message: 'no es necesario el mensaje, deberias ver el arbol del render'});
 
           // Verifica que el nombre del repositorio esté presente
       expect(getByText('jaredpalmer/formik')).toBeTruthy();
@@ -60,12 +62,12 @@ describe('RepositoryList', () => {
       expect(getByText('Build forms in React, without the tears')).toBeTruthy();
       expect(getByText('Flexible promise-based React data loader')).toBeTruthy();
 
-      // Verifica que el idioma esté presente
+      // Verifica que el lenguaje esté presente
       expect(getByText('TypeScript')).toBeTruthy();
       expect(getByText('JavaScript')).toBeTruthy();
 
       // Verifica que el recuento de bifurcaciones esté presente
-      expect(getByText('1619')).toBeTruthy(); // 1619 bifurcaciones se muestran como 1.6k
+      expect(getByText('1619')).toBeTruthy(); // 1619 bifurcaciones
       //Verifica Forks
       expect(getByText('69')).toBeTruthy();
 
@@ -79,6 +81,10 @@ describe('RepositoryList', () => {
 
       // Verifica que el recuento de reseñas esté presente
       expect(getAllByText('3')).toHaveLength(2);
+
+      // *** IMPORTANTE ***
+      // | getByText --> solo busca un elemento, si ahi    mas de un elemento igual, dara error
+      // | getAllByText --> se usa cuando el texto puede estar mas d euna vez
 
       });
     });

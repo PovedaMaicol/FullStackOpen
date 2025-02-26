@@ -17,7 +17,7 @@
       "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(@react-native|react-native|react-native-vector-icons|@react-navigation|expo|expo-status-bar)/)"
+      "node_modules/(?!(@react-native|react-native|react-native-vector-icons|@react-navigation|expo|expo-status-bar|react-router-native)/)"
     ],
     "setupFilesAfterEnv": [
       "<rootDir>/setupTests.js"
