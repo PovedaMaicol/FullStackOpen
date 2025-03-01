@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, View, StyleSheet, Text, Image, SafeAreaView } from 'react-native';
-// import useRepositories from '../src/hooks/useRepositories';
-
+import { FlatList, View, StyleSheet, Text, Image, SafeAreaView, TouchableOpacity } from 'react-native';
+import { useNavigate } from 'react-router-native';
 import useRepositoriesGql from '../src/hooks/useRepositoriesGQL';
+import RepositoryCard from './RepositoryCard';
+
 
 const styles = StyleSheet.create({
   separator: {
@@ -72,73 +73,73 @@ const styles = StyleSheet.create({
 });
 
 
-
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const Item = ({fullName, description, language, stargazersCount, forksCount, reviewCount, ratingAverage,ownerAvatarUrl }) => (
-  <View style={styles.itemContainer}>
+// const Item = ({fullName, description, language, stargazersCount, forksCount, reviewCount, ratingAverage,ownerAvatarUrl }) => (
+//      <View style={styles.itemContainer}>
 
 
-  <View style={styles.cabezote}>
-    <Image
-    style={styles.tinyProfile}
-    source={{uri: ownerAvatarUrl}}
-    />
+//   <View style={styles.cabezote}>
+//     <Image
+//     style={styles.tinyProfile}
+//     source={{uri: ownerAvatarUrl}}
+//     />
 
-    <View style={styles.texto}>
-    <Text style={styles.title}>{fullName}</Text>
-    <Text style={styles.subtitle}>{description}</Text>
-    <View style={styles.languageTag}>
-    <Text style={styles.languageText}>{language}</Text>
-    </View>
+//     <View style={styles.texto}>
+//     <Text style={styles.title}>{fullName}</Text>
+//     <Text style={styles.subtitle}>{description}</Text>
+//     <View style={styles.languageTag}>
+//     <Text style={styles.languageText}>{language}</Text>
+//     </View>
   
   
 
    
    
-    </View>
-    </View>
+//     </View>
+//     </View>
 
-    <View style={styles.list}>
+//     <View style={styles.list}>
 
-    <Text style={styles.txtList}>
-      <Text style={{fontWeight: 'bold'}}>
-        {stargazersCount}
-      </Text>
-      {"\n"}
-      Stars
-    </Text>
+//     <Text style={styles.txtList}>
+//       <Text style={{fontWeight: 'bold'}}>
+//         {stargazersCount}
+//       </Text>
+//       {"\n"}
+//       Stars
+//     </Text>
 
-    <Text style={styles.txtList}>
-      <Text style={{fontWeight: 'bold'}}>
-        {forksCount}
-      </Text>
-      {"\n"}
-      Forks
-    </Text>
+//     <Text style={styles.txtList}>
+//       <Text style={{fontWeight: 'bold'}}>
+//         {forksCount}
+//       </Text>
+//       {"\n"}
+//       Forks
+//     </Text>
 
-    <Text style={styles.txtList}>
-      <Text style={{fontWeight: 'bold'}}>
-      {reviewCount}
-      </Text>
-      {"\n"}
-      Reviews
-    </Text>
+//     <Text style={styles.txtList}>
+//       <Text style={{fontWeight: 'bold'}}>
+//       {reviewCount}
+//       </Text>
+//       {"\n"}
+//       Reviews
+//     </Text>
 
-    <Text style={styles.txtList}>
-      <Text style={{fontWeight: 'bold'}}>
-      {ratingAverage}
-      </Text>
-      {"\n"}
-      Rating
-    </Text>
-    </View>
+//     <Text style={styles.txtList}>
+//       <Text style={{fontWeight: 'bold'}}>
+//       {ratingAverage}
+//       </Text>
+//       {"\n"}
+//       Rating
+//     </Text>
+//     </View>
     
     
-  </View>
-);
+//   </View>
+// );
 
 export const RepositoryListContainer = ({ repositories }) => {
+  const navigate = useNavigate()
   const repositoryNodes = repositories ? repositories.edges.map((edge) => edge.node) : [];
 
   return (
@@ -147,7 +148,9 @@ export const RepositoryListContainer = ({ repositories }) => {
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
       renderItem={({item}) => 
-      <Item 
+
+     
+      <RepositoryCard
       fullName={item.fullName}
       description={item.description}
       language={item.language}
@@ -156,7 +159,11 @@ export const RepositoryListContainer = ({ repositories }) => {
       reviewCount={item.reviewCount}
       ratingAverage={item.ratingAverage}
       ownerAvatarUrl={item.ownerAvatarUrl}
-      />}
+      onPress={() => navigate(`/repository/${item.id}`)}
+      />
+
+
+      }
       keyExtractor={item => item.id}
      
       // other props
@@ -171,6 +178,7 @@ const RepositoryList = () => {
 // GET WITH API REST
 //  const {repositories} = useRepositories();
 //  console.log('los repositorios son', repositories)
+
 
 
 // GET WITH GRAPHQL

@@ -10,6 +10,7 @@ import RepositoryList  from './RepositoryList';
 import AppBar from './AppBar';
 import theme from '../src/theme'
 import SignIn from './SignIn';
+import RepositoryItem from './RepositoryItem';
 
 
 
@@ -32,6 +33,8 @@ const Main = () => {
       <Routes>
        <Route path='/' element={<RepositoryList/>}/>
        <Route path='/login' element={<SignIn/>}/>
+       <Route path='/repository/:id' element={<RepositoryItem/>}/>
+       
       </Routes>
     </View>
 
