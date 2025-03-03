@@ -9,23 +9,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   cabezote: {
-    marginVertical: 0,
-    marginHorizontal: 10,
     flexDirection: 'row',
-    flex: 1, 
+    alignItems: 'center',
   },
   texto: {
     flex: 1,
-    marginRight: 10,
+    marginLeft: 10,
   },
   title: {
     fontWeight: 'bold',
+    color: 'black',
   },
   subtitle: {
     color: 'gray',
     fontSize: 14,
     lineHeight: 20,
-    flexShrink: 1,
   },
   languageTag: {
     backgroundColor: 'blue',
@@ -40,69 +38,66 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   list: {
-    marginHorizontal: 10,
-    marginVertical: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 10,
   },
   txtList: {
     textAlign: 'center',
-    lineHeight: 20,
   },
   tinyProfile: {
     width: 50,
     height: 50,
     borderRadius: 5,
-    marginRight: 10,
-  }
+  },
 });
 
-const RepositoryCard = ({ 
-  fullName, 
-  description, 
-  language, 
-  stargazersCount, 
-  forksCount, 
-  reviewCount, 
-  ratingAverage, 
-  ownerAvatarUrl, 
-  onPress 
+const RepositoryCard = ({
+  fullName,
+  description,
+  language,
+  stargazersCount,
+  forksCount,
+  reviewCount,
+  ratingAverage,
+  ownerAvatarUrl,
+  onPress,
 }) => {
-  return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.itemContainer}>
-        <View style={styles.cabezote}>
-          <Image style={styles.tinyProfile} source={{ uri: ownerAvatarUrl }} />
-          <View style={styles.texto}>
-            <Text style={styles.title}>{fullName}</Text>
-            <Text style={styles.subtitle}>{description}</Text>
-            <View style={styles.languageTag}>
-              <Text style={styles.languageText}>{language}</Text>
-            </View>
+  const Content = (
+    <View style={styles.itemContainer}>
+      <View style={styles.cabezote}>
+        <Image style={styles.tinyProfile} source={{ uri: ownerAvatarUrl }} />
+        <View style={styles.texto}>
+          <Text style={styles.title}>{fullName}</Text>
+          <Text style={styles.subtitle}>{description}</Text>
+          <View style={styles.languageTag}>
+            <Text style={styles.languageText}>{language}</Text>
           </View>
         </View>
-
-        <View style={styles.list}>
-          <Text style={styles.txtList}>
-            <Text style={{ fontWeight: 'bold' }}>{stargazersCount}</Text>
-            {"\n"}Stars
-          </Text>
-          <Text style={styles.txtList}>
-            <Text style={{ fontWeight: 'bold' }}>{forksCount}</Text>
-            {"\n"}Forks
-          </Text>
-          <Text style={styles.txtList}>
-            <Text style={{ fontWeight: 'bold' }}>{reviewCount}</Text>
-            {"\n"}Reviews
-          </Text>
-          <Text style={styles.txtList}>
-            <Text style={{ fontWeight: 'bold' }}>{ratingAverage}</Text>
-            {"\n"}Rating
-          </Text>
-        </View>
       </View>
-    </TouchableOpacity>
+
+      <View style={styles.list}>
+        <Text style={styles.txtList}>
+          <Text style={{ fontWeight: 'bold' }}>{stargazersCount}</Text>
+          {"\n"}Stars
+        </Text>
+        <Text style={styles.txtList}>
+          <Text style={{ fontWeight: 'bold' }}>{forksCount}</Text>
+          {"\n"}Forks
+        </Text>
+        <Text style={styles.txtList}>
+          <Text style={{ fontWeight: 'bold' }}>{reviewCount}</Text>
+          {"\n"}Reviews
+        </Text>
+        <Text style={styles.txtList}>
+          <Text style={{ fontWeight: 'bold' }}>{ratingAverage}</Text>
+          {"\n"}Rating
+        </Text>
+      </View>
+    </View>
   );
+
+  return onPress ? <TouchableOpacity onPress={onPress}>{Content}</TouchableOpacity> : Content;
 };
 
 export default RepositoryCard;
