@@ -27,6 +27,7 @@ export const SignIn = () => {
 
     try {
       const result = await signIn({ username, password });
+      console.log('login succesfully', result)
 
   
     } catch (error) {

@@ -11,6 +11,7 @@ import AppBar from './AppBar';
 import theme from '../src/theme'
 import SignIn from './SignIn';
 import RepositoryItem from './RepositoryItem';
+import ReviewForm from './ReviewForm';
 
 
 
@@ -34,6 +35,7 @@ const Main = () => {
        <Route path='/' element={<RepositoryList/>}/>
        <Route path='/login' element={<SignIn/>}/>
        <Route path='/repository/:id' element={<RepositoryItem/>}/>
+       <Route path='/review' element={<ReviewForm/>} />
        
       </Routes>
     </View>

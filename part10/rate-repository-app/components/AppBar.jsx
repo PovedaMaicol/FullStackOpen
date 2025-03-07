@@ -23,6 +23,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
     marginHorizontal: 10,
+  },
+  buttonGroup: {
+    flexDirection: 'row',
+    marginHorizontal: 10,
   }
   // ...
 });
@@ -53,9 +57,14 @@ const AppBar = () => {
            
        
            { data?.me ? (
+            <View style={styles.buttonGroup}>
             <TouchableOpacity onPress={handleLogout}>
               <Text style={styles.text}>Sign out</Text>
             </TouchableOpacity>
+            <Link to='/review'>
+              <Text style={styles.text}>create review</Text>
+            </Link>
+            </View>
            ) : (
             <Link to='/login'>
             <Text style={styles.text}>login</Text>
