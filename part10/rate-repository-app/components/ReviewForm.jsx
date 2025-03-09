@@ -14,6 +14,29 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f5f5f5',
   },
+  form: {
+    width: '100%'
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+
+  input: {
+    height: 50,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  errorText: {
+    fontSize: 12,
+    color: 'red',
+    marginBottom: 10,
+  },
 
 })
 
@@ -63,13 +86,14 @@ const ReviewForm = () => {
   
   return (
     <View style={styles.container}> 
+    <Text style={styles.title}>Add repository</Text>
     <Formik
     initialValues={initialValues}
     validationSchema={validationSchema}
     onSubmit={handleReview}
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => 
-        <View>
+        <View style={styles.form}>
             {loading && <Text>Loading...</Text>}
             {error && <Text>Error: {error.message}</Text>}
 
@@ -78,10 +102,11 @@ const ReviewForm = () => {
           onChangeText={handleChange('ownerName')}
           onBlur={handleBlur('ownerName')}
           value={values.ownerName}
+          style={styles.input}
           />
 
         { touched.ownerName && errors.ownerName && (
-          <Text>{errors.ownerName}</Text>
+          <Text style={styles.errorText}>{errors.ownerName}</Text>
         )}
 
         <TextInput
@@ -89,10 +114,11 @@ const ReviewForm = () => {
         onChangeText={handleChange('repositoryName')}
         onBlur={handleBlur('repositoryName')}
         value={values.repositoryName}
+        style={styles.input}
         />
 
         { touched.repositoryName && errors.repositoryName && (
-          <Text>{errors.repositoryName}</Text>
+          <Text style={styles.errorText}>{errors.repositoryName}</Text>
         )}
 
         <TextInput 
@@ -100,21 +126,26 @@ const ReviewForm = () => {
         onChangeText={handleChange('text')}
         multiline
         onBlur={handleBlur('text')}
-        value={values.text}/>
+        value={values.text}
+        style={styles.input}
+        />
 
 
-        {touched.review && errors.review && (
-          <Text>{errors.review}</Text>
+        {touched.text && errors.text && (
+          <Text style={styles.errorText}>{errors.text}</Text>
         )
         }
 
         <TextInput
         placeholder='Rating'
         onChangeText={handleChange('rating')}
-        onBlur={handleBlur('rating')}/>
+        onBlur={handleBlur('rating')}
+        value={values.rating}
+        style={styles.input}
+        />
 
         { touched.rating && errors.rating && (
-          <Text>{errors.rating}</Text>
+          <Text style={styles.errorText}>{errors.rating}</Text>
         )
         }
 
