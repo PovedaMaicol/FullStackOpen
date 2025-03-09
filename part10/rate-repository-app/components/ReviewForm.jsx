@@ -2,6 +2,9 @@ import { Formik } from 'formik'
 import React from 'react'
 import { View, Text, TextInput, Button, StyleSheet} from 'react-native'
 import * as Yup from 'yup'
+import { ADD_REVIEW } from '../src/graphql/mutations'
+import { useMutation } from '@apollo/client'
+import { useNavigate } from 'react-router-native'
 
 const styles = StyleSheet.create({
   container: {
@@ -16,26 +19,48 @@ const styles = StyleSheet.create({
 
 
 const initialValues = {
-  repositoryOwner: '',
+  ownerName: '',
   repositoryName: '',
-  ratingRepository: 0,
-  review: ''
+  rating: 0,
+  text: ''
 }
 
 const validationSchema = Yup.object().shape({
   repositoryName: Yup.string().required('El nombre del repositorio es requerido'),
-  repositoryOwner: Yup.string().required('El dueño del repositorio es requerido'),
-  ratingRepository: Yup.number().required('Añada una calificacion entre 0 y 100'),
-  review: Yup.string().required('El comentario es requerido')
+  ownerName: Yup.string().required('El dueño del repositorio es requerido'),
+  rating: Yup.number().required('Añada una calificacion entre 0 y 100'),
+  text: Yup.string().required('El comentario es requerido')
 
 })
 
+
+
 const ReviewForm = () => {
+  const [createReview, { data, loading, error }] = useMutation(ADD_REVIEW);
+  const navigate = useNavigate()
+
 
   const handleReview = async (values) => {
-    const { repositoryName, repositoryOwner, ratingRepository, review } = values;
-
-  }
+    const { repositoryName, ownerName, rating, text } = values;
+  
+    try {
+      const { data } = await createReview({
+        variables: {
+          review: {
+            repositoryName,
+            ownerName,
+            rating: Number(rating),
+            text,
+          },
+        },
+      });
+      console.log('Review created with repositoryId:', data.createReview.repositoryId);
+      navigate(`/repository/${data.createReview.repositoryId}`)
+    } catch (e) {
+      console.error('Error creating review:', e);
+    }
+  };
+  
   return (
     <View style={styles.container}> 
     <Formik
@@ -45,21 +70,24 @@ const ReviewForm = () => {
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => 
         <View>
+            {loading && <Text>Loading...</Text>}
+            {error && <Text>Error: {error.message}</Text>}
+
           <TextInput
           placeholder='Nombre dueño del repositorio'
-          onChangeText={handleChange('repositoryowner')}
-          onBlur={handleBlur('repositoryowner')}
-          value={values.repositoryOwner}
+          onChangeText={handleChange('ownerName')}
+          onBlur={handleBlur('ownerName')}
+          value={values.ownerName}
           />
 
-        { touched.repositoryOwner && errors.repositoryOwner && (
-          <Text>{errors.repositoryOwner}</Text>
+        { touched.ownerName && errors.ownerName && (
+          <Text>{errors.ownerName}</Text>
         )}
 
         <TextInput
         placeholder='Nombre del repositorio'
-        onChangeText={handleChange('repositoryname')}
-        onBlur={handleBlur('repositoryname')}
+        onChangeText={handleChange('repositoryName')}
+        onBlur={handleBlur('repositoryName')}
         value={values.repositoryName}
         />
 
@@ -69,8 +97,11 @@ const ReviewForm = () => {
 
         <TextInput 
         placeholder='Comentario'
-        onChangeText={handleChange('review')}
-        onBlur={handleBlur('review')}/>
+        onChangeText={handleChange('text')}
+        multiline
+        onBlur={handleBlur('text')}
+        value={values.text}/>
+
 
         {touched.review && errors.review && (
           <Text>{errors.review}</Text>
@@ -79,11 +110,11 @@ const ReviewForm = () => {
 
         <TextInput
         placeholder='Rating'
-        onChangeText={handleChange('reting')}
+        onChangeText={handleChange('rating')}
         onBlur={handleBlur('rating')}/>
 
-        { touched.ratingRepository && errors.ratingRepository && (
-          <Text>{errors.ratingRepository}</Text>
+        { touched.rating && errors.rating && (
+          <Text>{errors.rating}</Text>
         )
         }
 
