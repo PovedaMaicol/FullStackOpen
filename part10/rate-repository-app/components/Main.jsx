@@ -12,6 +12,7 @@ import theme from '../src/theme'
 import SignIn from './SignIn';
 import RepositoryItem from './RepositoryItem';
 import ReviewForm from './ReviewForm';
+import SignApp from './SignApp';
 
 
 
@@ -36,6 +37,7 @@ const Main = () => {
        <Route path='/login' element={<SignIn/>}/>
        <Route path='/repository/:id' element={<RepositoryItem/>}/>
        <Route path='/review' element={<ReviewForm/>} />
+       <Route path='/register' element={<SignApp/>}/>
        
       </Routes>
     </View>
