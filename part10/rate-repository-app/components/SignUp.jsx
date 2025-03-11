@@ -28,6 +28,11 @@ const styles =  StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
   },
+  errorText: {
+    fontSize: 12,
+    color: 'red',
+    marginBottom: 10,
+  },
 
 })
 
@@ -51,13 +56,13 @@ const validationSchema = Yup.object().shape({
     .required('Debes confirmar tu contraseña'),
 })
 
-const SignApp = () => {
+const SignUp = () => {
 
   const [createUser, { data, loading, error}] = useMutation(CREATE_USER);
   const { signIn, loading: signingIn, error: signInError} = useSignIn()
   // const navigate = useNavigate()
 
-  const handleSignApp = async (values) => {
+  const handleSignUp = async (values) => {
     const { password, username } = values;
 
     try {
@@ -85,7 +90,7 @@ const SignApp = () => {
         <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={handleSignApp}>
+        onSubmit={handleSignUp}>
           {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => 
           <View style={styles.form}>
             { loading && <Text>Loading...</Text> }
@@ -99,7 +104,7 @@ const SignApp = () => {
             />
 
             { touched.username && errors.username && (
-              <Text>{errors.username}</Text>
+              <Text style={styles.errorText}>{errors.username}</Text>
             )}
             <TextInput
             placeholder='Contraseña'
@@ -111,7 +116,7 @@ const SignApp = () => {
             />
 
             { touched.password && errors.password && (
-              <Text>{errors.password}</Text>
+              <Text style={styles.errorText}>{errors.password}</Text>
             )}
 
             <TextInput
@@ -143,4 +148,4 @@ const SignApp = () => {
   )
 }
 
-export default SignApp
+export default SignUp

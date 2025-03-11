@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { FlatList, View, StyleSheet, Text, SafeAreaView } from 'react-native';
 import { useNavigate } from 'react-router-native';
+import { useDebounce } from 'use-debounce'
 import useRepositoriesGql from '../src/hooks/useRepositoriesGQL';
 import RepositoryCard from './RepositoryCard';
+import OrderPicker from './OrderPicker';
+import SearchBar from './SearchBar';
 
 const styles = StyleSheet.create({
   separator: {
@@ -12,7 +15,7 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({ repositories }) => {
+export const RepositoryListContainer = ({ repositories,  orderBy, setOrderBy, setOrderDirection, searchKeyword, setSearchKeyword}) => {
   const navigate = useNavigate();
   const repositoryNodes = repositories ? repositories.edges.map((edge) => edge.node) : [];
 
@@ -35,18 +38,51 @@ export const RepositoryListContainer = ({ repositories }) => {
           />
         )}
         keyExtractor={(item) => item.id}
+        ListHeaderComponent={
+        <>
+        <SearchBar
+        searchKeyword={searchKeyword}
+        setSearchKeyword={setSearchKeyword}
+        />
+        
+        <OrderPicker
+        orderBy={orderBy}
+        setOrderBy={setOrderBy}
+        setOrderDirection={setOrderDirection}
+        />
+        </>
+        }
       />
     </SafeAreaView>
   );
 };
 
 const RepositoryList = () => {
-  const { repositories, loading, error } = useRepositoriesGql();
+  const [orderBy, setOrderBy] = useState('CREATED_AT');
+  const [orderDirection, setOrderDirection] = useState('DESC');
+  const [searchKeyword, setSearchKeyword] = useState('')
+
+    // Aplica debouncing a la palabra clave
+    const [debouncedSearchKeyword] = useDebounce(searchKeyword, 500);
+
+
+  const { repositories, loading, error } = useRepositoriesGql({
+    orderBy,
+    orderDirection,
+    searchKeyword: debouncedSearchKeyword,
+  });
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error</Text>;
 
-  return <RepositoryListContainer repositories={repositories} />;
+  return <RepositoryListContainer 
+  repositories={repositories}
+  orderBy={orderBy}
+  setOrderBy={setOrderBy}
+  setOrderDirection={setOrderDirection}
+  searchKeyword={searchKeyword}
+  setSearchKeyword={setSearchKeyword}
+   />;
 };
 
 export default RepositoryList;

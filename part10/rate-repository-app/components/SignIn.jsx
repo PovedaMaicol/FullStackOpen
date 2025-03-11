@@ -20,7 +20,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export const SignIn = () => {
-  const [signIn, { loading, error }] = useSignIn();
+  const {signIn, loading, error}  = useSignIn();
 
   const handleLogin = async (values) => {
     const { username, password } = values;
