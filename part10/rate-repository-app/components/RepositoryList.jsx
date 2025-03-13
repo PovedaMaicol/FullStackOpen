@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({ repositories,  orderBy, setOrderBy, setOrderDirection, searchKeyword, setSearchKeyword}) => {
+export const RepositoryListContainer = ({ repositories,  orderBy, setOrderBy, setOrderDirection, searchKeyword, setSearchKeyword, onEndReach}) => {
   const navigate = useNavigate();
   const repositoryNodes = repositories ? repositories.edges.map((edge) => edge.node) : [];
 
@@ -24,6 +24,8 @@ export const RepositoryListContainer = ({ repositories,  orderBy, setOrderBy, se
       <FlatList
         data={repositoryNodes}
         ItemSeparatorComponent={ItemSeparator}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
         renderItem={({ item }) => (
           <RepositoryCard
             fullName={item.fullName}
@@ -65,12 +67,21 @@ const RepositoryList = () => {
     // Aplica debouncing a la palabra clave
     const [debouncedSearchKeyword] = useDebounce(searchKeyword, 500);
 
-
-  const { repositories, loading, error } = useRepositoriesGql({
+  const { repositories, loading, error, fetchMore } = useRepositoriesGql({
+    first: 8,
     orderBy,
     orderDirection,
     searchKeyword: debouncedSearchKeyword,
   });
+
+  const onEndReach = () => {
+    if (fetchMore) {
+      console.log('si fetchmore', fetchMore)
+      fetchMore()
+    } else {
+      console.log('no fetchmorr')
+    }
+  }
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error</Text>;
@@ -82,6 +93,7 @@ const RepositoryList = () => {
   setOrderDirection={setOrderDirection}
   searchKeyword={searchKeyword}
   setSearchKeyword={setSearchKeyword}
+  onEndReach={onEndReach}
    />;
 };
 
