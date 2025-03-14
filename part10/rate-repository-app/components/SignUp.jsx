@@ -1,12 +1,13 @@
 import { Formik } from 'formik'
 import React from 'react'
-import { Button, TextInput, View, StyleSheet, Text } from 'react-native'
+import { Button, TextInput, View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { CREATE_USER } from '../src/graphql/mutations'
 import useSignIn from '../src/hooks/useSignIn'
 import { useMutation } from '@apollo/client'
 // import { useNavigate } from 'react-router-native'
 
 import * as Yup from 'yup'
+import { ActivityIndicator } from 'react-native-paper'
 
 const styles =  StyleSheet.create({
   container: {
@@ -32,6 +33,24 @@ const styles =  StyleSheet.create({
     fontSize: 12,
     color: 'red',
     marginBottom: 10,
+  },
+  button: {
+    height: 50,
+    backgroundColor: '#4CAF50',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 
 })
@@ -87,6 +106,7 @@ const SignUp = () => {
   }
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Registrarse</Text>
         <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -135,11 +155,22 @@ const SignUp = () => {
           
              {error && <Text style={styles.errorText}>{error.message}</Text>}
 
-            <Button 
-            title={loading ? 'Registrando...' : 'Registrarse'}
+            <TouchableOpacity
+            // title={loading ? 'Registrando...' : 'Registrarse'}
             onPress={handleSubmit}
             disabled={loading}
-            />
+            style={styles.button}
+            >
+              {loading ? (
+                <ActivityIndicator color="#fff"/>
+              ) : (
+              <Text style={styles.buttonText}>{loading ? 'Registrando...' : 'Continuar'}</Text>
+              )}
+            </TouchableOpacity>
+
+            {error && (
+              <Text style={styles.errorText}>Error al registrarse. Inténtalo de nuevo</Text>
+            )}
           </View>}
   
         </Formik>

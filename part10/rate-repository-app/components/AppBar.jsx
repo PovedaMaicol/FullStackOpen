@@ -64,6 +64,9 @@ const AppBar = () => {
             <Link to='/review'>
               <Text style={styles.text}>create review</Text>
             </Link>
+            <Link to='/reviews'>
+              <Text>My reviews</Text>
+            </Link>
             </View>
            ) : (
             <View style={styles.buttonGroup}>
