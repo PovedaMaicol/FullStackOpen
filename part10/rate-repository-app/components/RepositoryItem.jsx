@@ -27,8 +27,9 @@ const ItemSeparator = () => <View style={styles.separator}/>
 
 const RepositoryItem = () => {
   const { id } = useParams();
-  const { data, loading, error } = useQuery(GET_REPOSITORY, {
-    variables: { id },
+  const first = 2; // a cargar por pagina
+  const { data, loading, error, fetchMore } = useQuery(GET_REPOSITORY, {
+    variables: { id, first: 2},
     fetchPolicy: 'cache-and-network',
   });
 
@@ -53,6 +54,33 @@ const RepositoryItem = () => {
   console.log('repositoryItem', repository)
   console.log('reviews', reviews)
 
+  const loadMore = () => {
+    if(repository?.reviews.pageInfo.hasNextPage){
+      fetchMore({
+        variables: {
+          after: repository.reviews.pageInfo.endCursor,
+          first,
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return previousResult;
+          return {
+            repository: {
+              ...previousResult.repository,
+              reviews: {
+                ...fetchMoreResult.repository.reviews,
+                edges: [
+                  ...previousResult.repository.reviews.edges,
+                  ...fetchMoreResult.repository.reviews.edges,
+                ],
+                pageInfo: fetchMoreResult.repository.reviews.pageInfo,
+              },
+            },
+          };
+        },
+      });
+    }
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -61,6 +89,15 @@ const RepositoryItem = () => {
       renderItem={({item}) => <ReviewItem review={item}/>}
       keyExtractor={(item) => item.id}
       ItemSeparatorComponent={ItemSeparator}
+
+      onEndReached={loadMore}
+      onEndReachedThreshold={0.5} // Cuando el usuario llega al 50% del final
+      ListFooterComponent={() =>
+        repository?.reviews.pageInfo.hasNextPage ? (
+          <ActivityIndicator size="small" color="blue" />
+        ) : null
+      }
+
 
       //ListHeaderComponet permite agregar un componente en la parte superior de la lista
       ListHeaderComponent={() => (

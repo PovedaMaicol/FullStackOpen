@@ -68,7 +68,7 @@ const RepositoryList = () => {
     const [debouncedSearchKeyword] = useDebounce(searchKeyword, 500);
 
   const { repositories, loading, error, fetchMore } = useRepositoriesGql({
-    first: 8,
+    first: 12,
     orderBy,
     orderDirection,
     searchKeyword: debouncedSearchKeyword,

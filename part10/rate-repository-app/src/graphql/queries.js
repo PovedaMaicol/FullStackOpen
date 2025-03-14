@@ -30,7 +30,7 @@ query GetRepositories($orderBy: AllRepositoriesOrderBy, $orderDirection: OrderDi
 }
 `
 export const GET_REPOSITORY = gql`
-  query GetRepository($id: ID!) {
+  query GetRepository($id: ID!, $first: Int, $after: String) {
     repository(id: $id) {  
     id
     name
@@ -45,7 +45,7 @@ export const GET_REPOSITORY = gql`
     description
     language
     ownerAvatarUrl,
-      reviews {
+      reviews(first: $first, after: $after) {
       edges {
         node {
           id
@@ -56,7 +56,13 @@ export const GET_REPOSITORY = gql`
             id
             username
           }
-        }
+        }   
+      }
+        pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
       }
     }
     }
