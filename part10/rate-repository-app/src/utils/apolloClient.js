@@ -8,7 +8,7 @@ const createApolloClient = (authStorage) => {
 
     //setting link HTTP
     const httpLink = createHttpLink({
-        uri: `${BASE_URL_GRAPHQL}/graphql`,
+        uri: `${BASE_URL_GRAPHQL}`,
     });
 
   // Configura el enlace de autenticación
@@ -30,6 +30,11 @@ const createApolloClient = (authStorage) => {
     return new ApolloClient({
         link: authLink.concat(httpLink),        
         cache: new InMemoryCache(),
+        credentials: 'include',
+          onError: ({ networkError, graphQLErrors }) => {
+    if (networkError) console.error('Network Error:', networkError);
+    if (graphQLErrors) console.error('GraphQL Errors:', graphQLErrors);
+          }
     });
 }
 

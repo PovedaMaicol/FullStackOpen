@@ -2,9 +2,10 @@ import { useQuery } from '@apollo/client';
 import { GET_REPOSITORIES } from "../graphql/queries";
 
 // obtencion respositorios con apollo client - graphql
-const useRepositoriesGQL = ({ orderBy= 'CREATED_AT', orderDirection= 'DESC', searchKeyword}) => {
+const useRepositoriesGQL = ({  orderBy= 'CREATED_AT', orderDirection= 'DESC', searchKeyword}) => {
     
     const variables = {
+        
         orderBy,
         orderDirection,
         searchKeyword,
