@@ -32,3 +32,10 @@ export const CREATE_USER = gql`
   createdAt
   }
   }`
+
+  // Mutación para borrar una revisión
+export const DELETE_REVIEW = gql`
+  mutation DeleteReview($deleteReviewId: ID!) {
+    deleteReview(id: $deleteReviewId)
+  }
+`;

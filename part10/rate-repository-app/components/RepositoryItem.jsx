@@ -86,7 +86,7 @@ const RepositoryItem = () => {
       <FlatList
       // Queremos mostrar las reseñas como una lista desplazable, lo que hace que FlatList sea un componente adecuado para el trabajo
       data={reviews}
-      renderItem={({item}) => <ReviewItem review={item}/>}
+      renderItem={({item}) => <ReviewItem review={item} refetch={loadMore}/>}
       keyExtractor={(item) => item.id}
       ItemSeparatorComponent={ItemSeparator}
 
@@ -103,14 +103,7 @@ const RepositoryItem = () => {
       ListHeaderComponent={() => (
         <>
         <RepositoryCard
-          fullName={repository.fullName}
-          description={repository.description}
-          language={repository.language}
-          stargazersCount={repository.stargazersCount}
-          forksCount={repository.forksCount}
-          reviewCount={repository.reviewCount}
-          ratingAverage={repository.ratingAverage}
-          ownerAvatarUrl={repository.ownerAvatarUrl}
+        {...repository}
         />
         <Button title="Open in GitHub" onPress={() => Linking.openURL(repository.url)} />
       </>

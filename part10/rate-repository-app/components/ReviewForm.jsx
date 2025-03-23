@@ -1,6 +1,6 @@
 import { Formik } from 'formik'
 import React from 'react'
-import { View, Text, TextInput, Button, StyleSheet} from 'react-native'
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity} from 'react-native'
 import * as Yup from 'yup'
 import { ADD_REVIEW } from '../src/graphql/mutations'
 import { useMutation } from '@apollo/client'
@@ -36,6 +36,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'red',
     marginBottom: 10,
+  },
+  button: {
+    height: 50,
+    backgroundColor: '#4CAF50',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 
 })
@@ -149,7 +162,12 @@ const ReviewForm = () => {
         )
         }
 
-        <Button onPress={handleSubmit} title='Submit'/>
+        <TouchableOpacity 
+        onPress={handleSubmit} 
+        style={styles.button}
+        >
+          <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
         </View>
       }
       

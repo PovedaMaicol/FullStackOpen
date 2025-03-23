@@ -14,7 +14,7 @@ const ItemSeparator = () => <View style={styles.separator}/>
 
 const MyReviews = () => {
 
-    const { reviews, loading, fetchMore } = useReviews();
+    const { reviews, loading, fetchMore, refetch} = useReviews();
 
     console.log('los reviews son', reviews)
 
@@ -30,10 +30,12 @@ const MyReviews = () => {
        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
         <FlatList
         data={reviews}
-        renderItem={({item}) => (<ReviewItem review={item}/>)}
+        renderItem={({item}) => (<ReviewItem review={item} refetch={refetch}/>)}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={ItemSeparator}
         ListFooterComponent={loading ? <ActivityIndicator size="large" /> : null}
+        onEndReached={fetchMore}
+        onEndReachedThreshold={0.5}
         />
         </SafeAreaView>
   )
